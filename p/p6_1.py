@@ -1,0 +1,36 @@
+import numpy as np
+from wave_file import wave_write_16bit_mono
+from oscillator import sine_wave
+
+fs = 44100
+duration = 1
+
+length_of_s = int(fs * duration)
+vco = np.zeros(length_of_s)
+vca = np.zeros(length_of_s)
+
+for n in range(length_of_s):
+    vco[n] = 440
+    vca[n] = 1
+
+s = sine_wave(fs, vco, duration)
+
+for n in range(length_of_s):
+    s[n] *= vca[n]
+
+for n in range(int(fs * 0.01)):
+    s[n] *= n / (fs * 0.01)
+    s[length_of_s - n - 1] *= n / (fs * 0.01)
+
+length_of_s_master = int(fs * (duration + 2))
+s_master = np.zeros(length_of_s_master)
+
+offset = int(fs * 1)
+for n in range(length_of_s):
+    s_master[offset + n] += s[n]
+
+master_volume = 0.5
+s_master /= np.max(np.abs(s_master))
+s_master *= master_volume
+
+wave_write_16bit_mono(fs, s_master.copy(), 'p6_1(output).wav')
