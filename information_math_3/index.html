@@ -64,6 +64,57 @@ a:hover {
   color: var(--color-accent);
 }
 
+.news {
+  margin-bottom: 2rem;
+  padding: 1rem 1.2rem;
+  background: #fffbe6;
+  border: 1px solid #f0e68c;
+  border-radius: 6px;
+}
+.news h2 {
+  font-size: 1rem;
+  color: var(--color-primary);
+  margin-bottom: 0.5rem;
+}
+.news ul {
+  list-style: none;
+  font-size: 0.9rem;
+}
+.news li {
+  margin-bottom: 0.2rem;
+}
+.news .date {
+  color: #888;
+  margin-right: 0.5rem;
+}
+.docs {
+  margin-bottom: 2rem;
+}
+.docs h2 {
+  font-size: 1.1rem;
+  color: var(--color-primary);
+  border-bottom: 2px solid var(--color-light);
+  padding-bottom: 0.4rem;
+  margin-bottom: 0.8rem;
+}
+.docs ul {
+  list-style: none;
+}
+.docs li {
+  margin-bottom: 0.4rem;
+}
+.docs a {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  background: var(--color-light);
+  border-radius: 4px;
+  font-size: 0.95rem;
+  transition: background 0.15s;
+}
+.docs a:hover {
+  background: #d4e6f1;
+  text-decoration: none;
+}
 .lecture-list {
   list-style: none;
 }
@@ -115,8 +166,23 @@ footer {
   </div>
 </header>
 <div class="container">
+  <div class="news">
+  <h2>お知らせ</h2>
+  <ul>
+    <li><span class="date">2026-04-14</span>第1回資料を公開しました</li>
+  </ul>
+</div>
+  <div class="docs">
+  <h2>📋 資料</h2>
+  <ul>
+    <li><a href="docs/講義ルール.pdf" target="_blank">講義ルール</a></li>
+    <li><a href="docs/シラバス_情報数学III（2024）.pdf" target="_blank">シラバス_情報数学III（2024）</a></li>
+    <li><a href="docs/課題提出方法.pdf" target="_blank">課題提出方法</a></li>
+    <li><a href="docs/Googleアカウント作成マニュアル.pdf" target="_blank">Googleアカウント作成マニュアル</a></li>
+  </ul>
+</div>
   <ul class="lecture-list">
-    <li><a class="lecture-card" href="M3_01/"><span class="num">第1回</span><span class="date">（4/14）</span><span class="sections">📝 ✅ 📖</span></a></li>
+    <li><a class="lecture-card" href="M3_01/"><span class="num">第1回</span><span class="date">（4/14）</span><span class="sections">📄 📝 ✅ 📖</span></a></li>
   </ul>
   <footer>
     提出・テストは <a href="https://webclass.kaishi-pu.ac.jp/webclass/">WebClass</a> から行ってください。
