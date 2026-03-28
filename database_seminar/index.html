@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026年度 データベース演習</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-primary: #1a5e45;
+  --color-accent: #27ae60;
+  --color-light: #eafaf1;
+  --color-bg: #fafbfc;
+  --color-text: #2c3e50;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  color: var(--color-text);
+  background: var(--color-bg);
+  line-height: 1.7;
+}
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+header {
+  background: var(--color-primary);
+  color: white;
+  padding: 1.5rem 0;
+  margin-bottom: 2rem;
+}
+header .container {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+header h1 {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+header .subtitle {
+  font-size: 0.9rem;
+  opacity: 0.85;
+  margin-top: 0.25rem;
+}
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+.breadcrumb {
+  font-size: 0.85rem;
+  margin-bottom: 1.5rem;
+  color: #888;
+}
+.breadcrumb a {
+  color: #888;
+}
+.breadcrumb a:hover {
+  color: var(--color-accent);
+}
+
+.news {
+  margin-bottom: 2rem;
+  padding: 1rem 1.2rem;
+  background: #fffbe6;
+  border: 1px solid #f0e68c;
+  border-radius: 6px;
+}
+.news h2 {
+  font-size: 1rem;
+  color: var(--color-primary);
+  margin-bottom: 0.5rem;
+}
+.news ul {
+  list-style: none;
+  font-size: 0.9rem;
+}
+.news li {
+  margin-bottom: 0.2rem;
+}
+.news .date {
+  color: #888;
+  margin-right: 0.5rem;
+}
+.docs {
+  margin-bottom: 2rem;
+}
+.docs h2 {
+  font-size: 1.1rem;
+  color: var(--color-primary);
+  border-bottom: 2px solid var(--color-light);
+  padding-bottom: 0.4rem;
+  margin-bottom: 0.8rem;
+}
+.docs ul {
+  list-style: none;
+}
+.docs li {
+  margin-bottom: 0.4rem;
+}
+.docs a {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  background: var(--color-light);
+  border-radius: 4px;
+  font-size: 0.95rem;
+  transition: background 0.15s;
+}
+.docs a:hover {
+  background: #a9dfbf;
+  text-decoration: none;
+}
+.lecture-list {
+  list-style: none;
+}
+.lecture-list li {
+  margin-bottom: 0.5rem;
+}
+.lecture-card {
+  display: block;
+  padding: 0.9rem 1.2rem;
+  background: white;
+  border: 1px solid #e0e6ed;
+  border-radius: 6px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.lecture-card:hover {
+  border-color: var(--color-accent);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  text-decoration: none;
+}
+.lecture-card .num {
+  font-weight: 700;
+  color: var(--color-primary);
+}
+.lecture-card .date {
+  font-size: 0.85rem;
+  color: #888;
+  margin-left: 0.5rem;
+}
+.lecture-card .topic {
+  display: block;
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 0.2rem;
+}
+.lecture-card .sections {
+  font-size: 0.8rem;
+  color: #aaa;
+  margin-left: 0.75rem;
+}
+footer {
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e6ed;
+  font-size: 0.8rem;
+  color: #aaa;
+}
+
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <h1>データベース演習</h1>
+    <div class="subtitle">2026年度</div>
+  </div>
+</header>
+<div class="container">
+  <div class="breadcrumb"><a href="../">← ポータルに戻る</a></div>
+  
+  
+  <ul class="lecture-list">
+    <li><a class="lecture-card" href="DS_01/"><span class="num">第1回</span><span class="topic">授業の進め方とガイダンス・DBMS環境の構築</span><span class="sections">📄 📝 ✅</span></a></li><li><a class="lecture-card" href="DS_02/"><span class="num">第2回</span><span class="topic">情報システムの構築とデータベース設計</span><span class="sections">📄 📝 ✅</span></a></li><li><a class="lecture-card" href="DS_03/"><span class="num">第3回</span><span class="topic">要件定義と概念設計</span><span class="sections">📄 📝 ✅</span></a></li><li><a class="lecture-card" href="DS_04/"><span class="num">第4回</span><span class="topic">論理設計と正規化・テーブル作成</span><span class="sections">📄 📝 ✅</span></a></li><li><a class="lecture-card" href="DS_05/"><span class="num">第5回</span><span class="topic">論理設計とパフォーマンス・データベース作成</span><span class="sections">📄 📝 ✅</span></a></li><li><a class="lecture-card" href="DS_06/"><span class="num">第6回</span><span class="topic">SQLによるデータ分析</span><span class="sections">📄 📝 ✅</span></a></li><li><a class="lecture-card" href="DS_07/"><span class="num">第7回</span><span class="topic">SQLによる集計</span><span class="sections">📄 📝 ✅</span></a></li><li><a class="lecture-card" href="DS_08/"><span class="num">第8回</span><span class="topic">データベースを活用するアプリケーション構築</span><span class="sections">📄 📝 ✅</span></a></li><li><a class="lecture-card" href="DS_09/"><span class="num">第9回</span><span class="topic">アプリケーション開発フレームワークとデータベース</span><span class="sections">📄 📝 ✅</span></a></li><li><a class="lecture-card" href="DS_10/"><span class="num">第10回</span><span class="topic">SQL応用：関数とジョイン</span><span class="sections">📄 📝 ✅</span></a></li><li><a class="lecture-card" href="DS_11/"><span class="num">第11回</span><span class="topic">SQL応用：様々なジョイン</span><span class="sections">📄 📝 ✅</span></a></li><li><a class="lecture-card" href="DS_12/"><span class="num">第12回</span><span class="topic">SQL応用：サブクエリとウィンドウ関数</span><span class="sections">📄 📝 ✅</span></a></li><li><a class="lecture-card" href="DS_13/"><span class="num">第13回</span><span class="topic">SQL応用：SQLを用いたデータ分析事例</span><span class="sections">📄 📝 ✅</span></a></li><li><a class="lecture-card" href="DS_14/"><span class="num">第14回</span><span class="topic">総合課題：データベースの設計</span><span class="sections">📄 📝 ✅</span></a></li><li><a class="lecture-card" href="DS_15/"><span class="num">第15回</span><span class="topic">総合課題：アプリケーション構築と分析SQL</span><span class="sections">📄 📝 ✅</span></a></li>
+  </ul>
+  <footer>
+    提出・連絡は <a href="https://webclass.kaishi-pu.ac.jp/webclass/">WebClass</a> から行ってください。
+  </footer>
+</div>
+</body>
+</html>
