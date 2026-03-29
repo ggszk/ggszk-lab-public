@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第6回 - データベース演習</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-primary: #1a5e45;
+  --color-accent: #27ae60;
+  --color-light: #eafaf1;
+  --color-bg: #fafbfc;
+  --color-text: #2c3e50;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  color: var(--color-text);
+  background: var(--color-bg);
+  line-height: 1.7;
+}
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+header {
+  background: var(--color-primary);
+  color: white;
+  padding: 1.5rem 0;
+  margin-bottom: 2rem;
+}
+header .container {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+header h1 {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+header .subtitle {
+  font-size: 0.9rem;
+  opacity: 0.85;
+  margin-top: 0.25rem;
+}
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+.breadcrumb {
+  font-size: 0.85rem;
+  margin-bottom: 1.5rem;
+  color: #888;
+}
+.breadcrumb a {
+  color: #888;
+}
+.breadcrumb a:hover {
+  color: var(--color-accent);
+}
+
+.section {
+  margin-bottom: 2rem;
+}
+.section h2 {
+  font-size: 1.1rem;
+  color: var(--color-primary);
+  border-bottom: 2px solid var(--color-light);
+  padding-bottom: 0.4rem;
+  margin-bottom: 0.8rem;
+}
+.section h2 .icon {
+  margin-right: 0.3rem;
+}
+.link-list {
+  list-style: none;
+}
+.link-list li {
+  margin-bottom: 0.4rem;
+}
+.link-list a {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  background: var(--color-light);
+  border-radius: 4px;
+  font-size: 0.95rem;
+  transition: background 0.15s;
+}
+.link-list a:hover {
+  background: #a9dfbf;
+  text-decoration: none;
+}
+
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <h1>データベース演習</h1>
+    <div class="subtitle">2026年度</div>
+  </div>
+</header>
+<div class="container">
+  <div class="breadcrumb"><a href="../../">ポータル</a> &gt; <a href="../">データベース演習</a></div>
+  <h2 style="margin-bottom:1.5rem; color:var(--color-primary);">第6回：SQLによるデータ分析（5/21）</h2>
+  <div class="section">
+  <h2><span class="icon">📄</span>スライド資料</h2>
+  <ul class="link-list">
+    <li><a href="DS_06.pdf" target="_blank">第6回スライド（PDF）</a></li>
+  </ul>
+</div><div class="section">
+  <h2><span class="icon">📝</span>演習問題</h2>
+  <ul class="link-list">
+    <li><a href="https://colab.research.google.com/github/ggszk/ggszk-lab-public/blob/main/database_seminar/DS_06/2012xxxx_DS_06.ipynb" target="_blank">演習問題</a></li>
+  </ul>
+</div><div class="section">
+  <h2><span class="icon">✅</span>回答例</h2>
+  <ul class="link-list">
+    <li><a href="https://colab.research.google.com/github/ggszk/ggszk-lab-public/blob/main/database_seminar/DS_06/DS_06_ANS.ipynb" target="_blank">回答例</a></li>
+  </ul>
+</div>
+</div>
+</body>
+</html>
