@@ -2943,38 +2943,42 @@
 <p>図はコンプレッサーの入出力特性です。閾値（threshold）までは入力がそのまま出力されますが、閾値を超えると傾きが緩やかになり、出力が抑えられます。グレーの破線が圧縮なし（1:1）の場合で、オレンジの領域が圧縮によって削られる量です。圧縮比（ratio）が大きいほど傾きが緩くなり、強く圧縮されます。</p>
 <h3 id="_16">シンプルなコンプレッサーを実装する<a class="headerlink" href="#_16" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">simple_compressor</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="mf">4.0</span><span class="p">,</span>
-<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>                      <span class="n">attack</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">release</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">sample_rate</span><span class="o">=</span><span class="mi">44100</span><span class="p">):</span>
-<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;シンプルなコンプレッサー&quot;&quot;&quot;</span>
-<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">data</span>
-<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>    <span class="n">output</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>    <span class="n">envelope</span> <span class="o">=</span> <span class="mf">0.0</span>
-<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>
-<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>    <span class="c1"># アタック・リリースの係数（指数的な追従）</span>
-<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>    <span class="n">attack_coeff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">attack</span> <span class="o">*</span> <span class="n">sample_rate</span><span class="p">))</span>
-<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a>    <span class="n">release_coeff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">release</span> <span class="o">*</span> <span class="n">sample_rate</span><span class="p">))</span>
-<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a>
-<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a>    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)):</span>
-<a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a>        <span class="n">current_level</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
-<a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a>
-<a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a>        <span class="c1"># エンベロープ追従（音量の包絡線を検出）</span>
-<a id="__codelineno-16-16" name="__codelineno-16-16" href="#__codelineno-16-16"></a>        <span class="k">if</span> <span class="n">current_level</span> <span class="o">&gt;</span> <span class="n">envelope</span><span class="p">:</span>
-<a id="__codelineno-16-17" name="__codelineno-16-17" href="#__codelineno-16-17"></a>            <span class="n">envelope</span> <span class="o">+=</span> <span class="p">(</span><span class="n">current_level</span> <span class="o">-</span> <span class="n">envelope</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">attack_coeff</span><span class="p">)</span>
-<a id="__codelineno-16-18" name="__codelineno-16-18" href="#__codelineno-16-18"></a>        <span class="k">else</span><span class="p">:</span>
-<a id="__codelineno-16-19" name="__codelineno-16-19" href="#__codelineno-16-19"></a>            <span class="n">envelope</span> <span class="o">+=</span> <span class="p">(</span><span class="n">current_level</span> <span class="o">-</span> <span class="n">envelope</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">release_coeff</span><span class="p">)</span>
-<a id="__codelineno-16-20" name="__codelineno-16-20" href="#__codelineno-16-20"></a>
-<a id="__codelineno-16-21" name="__codelineno-16-21" href="#__codelineno-16-21"></a>        <span class="c1"># 閾値を超えた部分を圧縮</span>
-<a id="__codelineno-16-22" name="__codelineno-16-22" href="#__codelineno-16-22"></a>        <span class="k">if</span> <span class="n">envelope</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">:</span>
-<a id="__codelineno-16-23" name="__codelineno-16-23" href="#__codelineno-16-23"></a>            <span class="n">excess</span> <span class="o">=</span> <span class="n">envelope</span> <span class="o">-</span> <span class="n">threshold</span>
-<a id="__codelineno-16-24" name="__codelineno-16-24" href="#__codelineno-16-24"></a>            <span class="n">target</span> <span class="o">=</span> <span class="n">threshold</span> <span class="o">+</span> <span class="n">excess</span> <span class="o">/</span> <span class="n">ratio</span>
-<a id="__codelineno-16-25" name="__codelineno-16-25" href="#__codelineno-16-25"></a>            <span class="n">gain</span> <span class="o">=</span> <span class="n">target</span> <span class="o">/</span> <span class="n">envelope</span>
-<a id="__codelineno-16-26" name="__codelineno-16-26" href="#__codelineno-16-26"></a>        <span class="k">else</span><span class="p">:</span>
-<a id="__codelineno-16-27" name="__codelineno-16-27" href="#__codelineno-16-27"></a>            <span class="n">gain</span> <span class="o">=</span> <span class="mf">1.0</span>
-<a id="__codelineno-16-28" name="__codelineno-16-28" href="#__codelineno-16-28"></a>
-<a id="__codelineno-16-29" name="__codelineno-16-29" href="#__codelineno-16-29"></a>        <span class="n">output</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">*</span> <span class="n">gain</span>
-<a id="__codelineno-16-30" name="__codelineno-16-30" href="#__codelineno-16-30"></a>
-<a id="__codelineno-16-31" name="__codelineno-16-31" href="#__codelineno-16-31"></a>    <span class="k">return</span> <span class="n">AudioSignal</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">)</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>                      <span class="n">attack</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">release</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">makeup_gain</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>                      <span class="n">sample_rate</span><span class="o">=</span><span class="mi">44100</span><span class="p">):</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;シンプルなコンプレッサー&quot;&quot;&quot;</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">data</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>    <span class="n">output</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>    <span class="n">envelope</span> <span class="o">=</span> <span class="mf">0.0</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>    <span class="c1"># アタック・リリースの係数（指数的な追従）</span>
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a>    <span class="n">attack_coeff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">attack</span> <span class="o">*</span> <span class="n">sample_rate</span><span class="p">))</span>
+<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a>    <span class="n">release_coeff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">release</span> <span class="o">*</span> <span class="n">sample_rate</span><span class="p">))</span>
+<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a>
+<a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a>    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)):</span>
+<a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a>        <span class="n">current_level</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
+<a id="__codelineno-16-15" name="__codelineno-16-15" href="#__codelineno-16-15"></a>
+<a id="__codelineno-16-16" name="__codelineno-16-16" href="#__codelineno-16-16"></a>        <span class="c1"># エンベロープ追従（音量の包絡線を検出）</span>
+<a id="__codelineno-16-17" name="__codelineno-16-17" href="#__codelineno-16-17"></a>        <span class="k">if</span> <span class="n">current_level</span> <span class="o">&gt;</span> <span class="n">envelope</span><span class="p">:</span>
+<a id="__codelineno-16-18" name="__codelineno-16-18" href="#__codelineno-16-18"></a>            <span class="n">envelope</span> <span class="o">+=</span> <span class="p">(</span><span class="n">current_level</span> <span class="o">-</span> <span class="n">envelope</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">attack_coeff</span><span class="p">)</span>
+<a id="__codelineno-16-19" name="__codelineno-16-19" href="#__codelineno-16-19"></a>        <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-16-20" name="__codelineno-16-20" href="#__codelineno-16-20"></a>            <span class="n">envelope</span> <span class="o">+=</span> <span class="p">(</span><span class="n">current_level</span> <span class="o">-</span> <span class="n">envelope</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">release_coeff</span><span class="p">)</span>
+<a id="__codelineno-16-21" name="__codelineno-16-21" href="#__codelineno-16-21"></a>
+<a id="__codelineno-16-22" name="__codelineno-16-22" href="#__codelineno-16-22"></a>        <span class="c1"># 閾値を超えた部分を圧縮</span>
+<a id="__codelineno-16-23" name="__codelineno-16-23" href="#__codelineno-16-23"></a>        <span class="k">if</span> <span class="n">envelope</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">:</span>
+<a id="__codelineno-16-24" name="__codelineno-16-24" href="#__codelineno-16-24"></a>            <span class="n">excess</span> <span class="o">=</span> <span class="n">envelope</span> <span class="o">-</span> <span class="n">threshold</span>
+<a id="__codelineno-16-25" name="__codelineno-16-25" href="#__codelineno-16-25"></a>            <span class="n">target</span> <span class="o">=</span> <span class="n">threshold</span> <span class="o">+</span> <span class="n">excess</span> <span class="o">/</span> <span class="n">ratio</span>
+<a id="__codelineno-16-26" name="__codelineno-16-26" href="#__codelineno-16-26"></a>            <span class="n">gain</span> <span class="o">=</span> <span class="n">target</span> <span class="o">/</span> <span class="n">envelope</span>
+<a id="__codelineno-16-27" name="__codelineno-16-27" href="#__codelineno-16-27"></a>        <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-16-28" name="__codelineno-16-28" href="#__codelineno-16-28"></a>            <span class="n">gain</span> <span class="o">=</span> <span class="mf">1.0</span>
+<a id="__codelineno-16-29" name="__codelineno-16-29" href="#__codelineno-16-29"></a>
+<a id="__codelineno-16-30" name="__codelineno-16-30" href="#__codelineno-16-30"></a>        <span class="n">output</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">*</span> <span class="n">gain</span>
+<a id="__codelineno-16-31" name="__codelineno-16-31" href="#__codelineno-16-31"></a>
+<a id="__codelineno-16-32" name="__codelineno-16-32" href="#__codelineno-16-32"></a>    <span class="c1"># メイクアップゲイン: 圧縮で下がった分を底上げする</span>
+<a id="__codelineno-16-33" name="__codelineno-16-33" href="#__codelineno-16-33"></a>    <span class="n">output</span> <span class="o">=</span> <span class="n">output</span> <span class="o">*</span> <span class="n">makeup_gain</span>
+<a id="__codelineno-16-34" name="__codelineno-16-34" href="#__codelineno-16-34"></a>    <span class="k">return</span> <span class="n">AudioSignal</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="n">sample_rate</span><span class="p">)</span>
 </code></pre></div>
 <p>Lesson 8 で学んだエンベロープの概念がここで再登場します。コンプレッサーは入力信号のエンベロープ（音量の包絡線）を検出し、閾値を超えた部分のゲイン（倍率）を下げる仕組みです。</p>
+<p>コンプレッサーは大きな音を抑えるだけなので、そのままでは小さな音は小さいままです。<code>makeup_gain</code> で全体の音量を底上げすることで、大小の差が縮まって音量が揃います。これを<strong>メイクアップゲイン</strong>と呼び、実際のコンプレッサーにも必ずついている機能です。</p>
 <h3 id="_17">動作を確認する<a class="headerlink" href="#_17" title="Permanent link">&para;</a></h3>
 <p>音量が大きく変動する音を作って、コンプレッサーの効果を確認しましょう。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">audio_lib</span><span class="w"> </span><span class="kn">import</span> <span class="n">note_to_frequency</span>
@@ -2992,7 +2996,7 @@
 <a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a>    <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">shaped</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 <a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a>
 <a id="__codelineno-17-15" name="__codelineno-17-15" href="#__codelineno-17-15"></a><span class="n">dynamic</span> <span class="o">=</span> <span class="n">AudioSignal</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">parts</span><span class="p">),</span> <span class="mi">44100</span><span class="p">)</span>
-<a id="__codelineno-17-16" name="__codelineno-17-16" href="#__codelineno-17-16"></a><span class="n">compressed</span> <span class="o">=</span> <span class="n">simple_compressor</span><span class="p">(</span><span class="n">dynamic</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="mf">4.0</span><span class="p">)</span>
+<a id="__codelineno-17-16" name="__codelineno-17-16" href="#__codelineno-17-16"></a><span class="n">compressed</span> <span class="o">=</span> <span class="n">simple_compressor</span><span class="p">(</span><span class="n">dynamic</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="mf">4.0</span><span class="p">,</span> <span class="n">makeup_gain</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
 <a id="__codelineno-17-17" name="__codelineno-17-17" href="#__codelineno-17-17"></a>
 <a id="__codelineno-17-18" name="__codelineno-17-18" href="#__codelineno-17-18"></a><span class="n">display</span><span class="p">(</span><span class="n">play_sound</span><span class="p">(</span><span class="n">dynamic</span><span class="p">,</span> <span class="s2">&quot;元の音（音量バラバラ）&quot;</span><span class="p">))</span>
 <a id="__codelineno-17-19" name="__codelineno-17-19" href="#__codelineno-17-19"></a><span class="n">display</span><span class="p">(</span><span class="n">play_sound</span><span class="p">(</span><span class="n">compressed</span><span class="p">,</span> <span class="s2">&quot;コンプレッサー適用後&quot;</span><span class="p">))</span>
@@ -3019,7 +3023,7 @@
 <a id="__codelineno-18-19" name="__codelineno-18-19" href="#__codelineno-18-19"></a><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </code></pre></div>
 <p><img alt="コンプレッサーの波形比較" src="../../figures/ch09/fig4_compressor_waveform.png" /></p>
-<p>元の音では振幅に大きなばらつきがありますが、コンプレッサーを通すと大きな音が抑えられ、全体の音量が均一に近づいています。</p>
+<p>元の音では振幅に大きなばらつきがありますが、コンプレッサーを通すと大きな音が抑えられ、メイクアップゲインで全体が底上げされて、音量が均一に近づいています。</p>
 <hr />
 <h2 id="97">9.7 エフェクトチェーンの順序<a class="headerlink" href="#97" title="Permanent link">&para;</a></h2>
 <p>複数のエフェクトを組み合わせる場合、適用する<strong>順序</strong>によって結果が変わります。</p>
@@ -3087,7 +3091,7 @@
 </tr>
 <tr>
 <td>コンプレッサー</td>
-<td>エンベロープを検出し、閾値を超えた音量を圧縮する</td>
+<td>エンベロープを検出し、閾値を超えた音量を圧縮する。メイクアップゲインで底上げ</td>
 </tr>
 <tr>
 <td>エフェクトチェーン</td>
