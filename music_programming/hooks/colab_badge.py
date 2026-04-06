@@ -23,10 +23,10 @@ COLAB_BASE = (
 )
 
 BADGE_TEMPLATE = (
-    '[![Open in Colab]'
-    '(https://colab.research.google.com/assets/colab-badge.svg)]'
-    '({url})'
-    '{{ .colab-badge }}\n\n'
+    '<a href="{url}" target="_blank" class="colab-badge">'
+    '<img src="https://colab.research.google.com/assets/colab-badge.svg" '
+    'alt="Open in Colab">'
+    '</a>\n\n'
 )
 
 
