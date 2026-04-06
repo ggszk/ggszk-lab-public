@@ -1,0 +1,3064 @@
+
+<!doctype html>
+<html lang="ja" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Python と Sonic Pi で学ぶ音の科学とライブコーディング">
+      
+      
+      
+        <link rel="canonical" href="https://ggszk.github.io/ggszk-lab-public/music_programming/chapters/ch07_sonic_pi_melody_and_scales/">
+      
+      
+        <link rel="prev" href="../ch06_scales_and_frequency/">
+      
+      
+        <link rel="next" href="../ch08_envelope_adsr/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Lesson 7: Sonic Piでメロディとコード - 音楽プログラミング入門</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#lesson-7-sonic-pi" class="md-skip">
+          コンテンツにスキップ
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="ヘッダー">
+    <a href="../.." title="音楽プログラミング入門" class="md-header__button md-logo" aria-label="音楽プログラミング入門" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            音楽プログラミング入門
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Lesson 7: Sonic Piでメロディとコード
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="検索" placeholder="検索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="検索">
+        
+        <button type="reset" class="md-search__icon md-icon" title="クリア" aria-label="クリア" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            検索を初期化
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="ナビゲーション" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="音楽プログラミング入門" class="md-nav__button md-logo" aria-label="音楽プログラミング入門" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    音楽プログラミング入門
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ホーム
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../preface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    はじめに
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    本編
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    本編
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch01_sound_and_digital_audio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 1: 音とは何か・デジタル音の基礎
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch02_waveforms_and_timbre/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 2: 波形と音色の基礎
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch03_sonic_pi_intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 3: Sonic Pi入門
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch04_harmonics_and_timbre/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 4: 倍音と音色
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch05_sonic_pi_timbre_control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 5: Sonic Piで音色をコントロール
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch06_scales_and_frequency/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 6: 音階と周波数
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 7: Sonic Piでメロディとコード
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 7: Sonic Piでメロディとコード
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        このレッスンで学ぶこと
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#71-midi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 MIDI 番号と音名の復習
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#72" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 配列でスケールを弾く
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7.2 配列でスケールを弾く">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#g" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        G メジャースケール
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#73-scale" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 scale — スケールを自動生成する
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7.3 scale — スケールを自動生成する">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scale" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        scale で演奏する
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#num_octaves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        音数を指定する: num_octaves
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        よく使うスケール
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#74-ring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 リング（ring）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7.4 リング（ring）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        リングとは
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tick-look" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tick と look — リングを順番に取り出す
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scale_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        scale の戻り値はリング
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#75" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.5 スケールを使ったメロディ作り
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7.5 スケールを使ったメロディ作り">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ランダムにスケールの音を選ぶ
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tick" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tick でスケールを上下する
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        リングの操作で変化をつける
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#76-chord" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.6 chord — 和音を鳴らす
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7.6 chord — 和音を鳴らす">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        メジャーとマイナー — たった1半音の違い
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#77" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.7 協和と不協和を聴き比べる
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#78" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.8 転回形 — 同じ和音、違う響き
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#79" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.9 コード進行とテンションコード
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7.9 コード進行とテンションコード">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        基本的なコード進行
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        セブンスコード
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ナインスコード — さらに音を重ねる
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#710" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.10 メロディとコードを組み合わせる
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#711-lesson-6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.11 Lesson 6 の理論との対応
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7.11 Lesson 6 の理論との対応">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scale_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        scale と音程構造
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chord" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        chord と周波数比
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        まとめ
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="まとめ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lesson-6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lesson 6 との対応
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        次回予告
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch08_envelope_adsr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 8: エンベロープ（ADSR）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch09_effects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 9: エフェクトの原理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch10_sonic_pi_envelope_and_fx/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 10: Sonic PiのエンベロープとFX
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch11_rhythm_and_score/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 11: リズムとスコアファイル
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch12_sonic_pi_rhythm_patterns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 12: Sonic Piでリズムパターン
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch13_spectrum_analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 13: 音を周波数で見る
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch14_live_coding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 14: ライブコーディング技法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch15_final_project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 15: 総合演習 — 作品制作
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    演習
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    演習
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch01_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch02_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch03_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch04_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 4
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch05_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 5
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch06_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 6
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch07_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 7
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch08_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 8
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch09_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 9
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch10_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 10
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch11_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 11
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch12_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 12
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch13_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 13
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch14_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 14
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch15_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 15
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    付録
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    付録
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendix/python_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    付録A: Google Colab と audio_lib
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendix/sonicpi_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    付録B: Sonic Pi のセットアップ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendix/references/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    参考文献
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../afterword/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    おわりに
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../author/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    著者紹介
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        このレッスンで学ぶこと
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#71-midi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 MIDI 番号と音名の復習
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#72" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 配列でスケールを弾く
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7.2 配列でスケールを弾く">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#g" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        G メジャースケール
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#73-scale" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 scale — スケールを自動生成する
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7.3 scale — スケールを自動生成する">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scale" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        scale で演奏する
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#num_octaves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        音数を指定する: num_octaves
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        よく使うスケール
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#74-ring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 リング（ring）
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7.4 リング（ring）">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        リングとは
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tick-look" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tick と look — リングを順番に取り出す
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scale_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        scale の戻り値はリング
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#75" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.5 スケールを使ったメロディ作り
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7.5 スケールを使ったメロディ作り">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ランダムにスケールの音を選ぶ
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tick" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tick でスケールを上下する
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        リングの操作で変化をつける
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#76-chord" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.6 chord — 和音を鳴らす
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7.6 chord — 和音を鳴らす">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        メジャーとマイナー — たった1半音の違い
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#77" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.7 協和と不協和を聴き比べる
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#78" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.8 転回形 — 同じ和音、違う響き
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#79" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.9 コード進行とテンションコード
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7.9 コード進行とテンションコード">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        基本的なコード進行
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        セブンスコード
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ナインスコード — さらに音を重ねる
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#710" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.10 メロディとコードを組み合わせる
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#711-lesson-6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.11 Lesson 6 の理論との対応
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7.11 Lesson 6 の理論との対応">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scale_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        scale と音程構造
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chord" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        chord と周波数比
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        まとめ
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="まとめ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lesson-6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lesson 6 との対応
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        次回予告
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="lesson-7-sonic-pi">Lesson 7: Sonic Piでメロディとコード<a class="headerlink" href="#lesson-7-sonic-pi" title="Permanent link">&para;</a></h1>
+<h2 id="_1">このレッスンで学ぶこと<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Sonic Pi の <code>scale</code> と <code>chord</code> でスケールやコードを簡潔に扱う</li>
+<li>リング（ring）の仕組みを理解し、メロディ生成に活用する</li>
+<li>Lesson 6 で学んだ音階の理論を音楽的に応用する</li>
+<li>スケールを使った即興的なメロディ作りを体験する</li>
+<li>和音の響き（協和/不協和、メジャー/マイナー）を聴いて理解する</li>
+<li>転回形やテンションコードで和音の表現を広げる</li>
+</ul>
+<p>Lesson 6 では平均律の仕組みと MIDI 番号の変換式を学びました。C メジャースケールの音程構造が「全全半全全全半」で、MIDI 番号では <code>[60, 62, 64, 65, 67, 69, 71, 72]</code> になることも確認しました。このレッスンでは Sonic Pi に戻り、スケールやコードを使って音楽的な表現に進みます。</p>
+<hr />
+<h2 id="71-midi">7.1 MIDI 番号と音名の復習<a class="headerlink" href="#71-midi" title="Permanent link">&para;</a></h2>
+<p>Lesson 6 で学んだ MIDI 番号と音名の対応を、Sonic Pi で確認しましょう。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># MIDI 番号で指定</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">play</span><span class="w"> </span><span class="mi">60</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">1</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1"># 音名で指定（同じ音）</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="n">play</span><span class="w"> </span><span class="ss">:c4</span>
+</code></pre></div>
+<p>Sonic Pi では <code>:c4</code> と <code>60</code> は同じ音です。ログパネルに表示される情報を見ると、どちらも同じ MIDI 番号として処理されていることがわかります。</p>
+<p>音名には <code>s</code>（シャープ）や <code>b</code>（フラット）もつけられます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">play</span><span class="w"> </span><span class="ss">:cs4</span><span class="w">   </span><span class="c1"># C#4（MIDI 61）</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">play</span><span class="w"> </span><span class="ss">:db4</span><span class="w">   </span><span class="c1"># Db4（MIDI 61、同じ音）</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">play</span><span class="w"> </span><span class="ss">:fs4</span><span class="w">   </span><span class="c1"># F#4（MIDI 66）</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="n">play</span><span class="w"> </span><span class="ss">:bb4</span><span class="w">   </span><span class="c1"># Bb4（MIDI 70）</span>
+</code></pre></div>
+<p><code>:cs4</code> と <code>:db4</code> はどちらも MIDI 61 で、同じ音が鳴ります。Lesson 6 で学んだように、平均律ではシャープとフラットが同じ周波数になるためです（異名同音）。</p>
+<hr />
+<h2 id="72">7.2 配列でスケールを弾く<a class="headerlink" href="#72" title="Permanent link">&para;</a></h2>
+<p>Lesson 3 で学んだ <code>play_pattern_timed</code> を使って、C メジャースケールを鳴らしてみましょう。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">use_synth</span><span class="w"> </span><span class="ss">:piano</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">play_pattern_timed</span><span class="w"> </span><span class="o">[</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:d4</span><span class="p">,</span><span class="w"> </span><span class="ss">:e4</span><span class="p">,</span><span class="w"> </span><span class="ss">:f4</span><span class="p">,</span><span class="w"> </span><span class="ss">:g4</span><span class="p">,</span><span class="w"> </span><span class="ss">:a4</span><span class="p">,</span><span class="w"> </span><span class="ss">:b4</span><span class="p">,</span><span class="w"> </span><span class="ss">:c5</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span><span class="o">]</span>
+</code></pre></div>
+<p>これは Lesson 3 のドレミファソラシドと同じです。では、別の調（キー）にするにはどうすればよいでしょうか。</p>
+<h3 id="g">G メジャースケール<a class="headerlink" href="#g" title="Permanent link">&para;</a></h3>
+<p>G メジャースケール（ソラシドレミファ#ソ）は、F がシャープになります。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">use_synth</span><span class="w"> </span><span class="ss">:piano</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">play_pattern_timed</span><span class="w"> </span><span class="o">[</span><span class="ss">:g4</span><span class="p">,</span><span class="w"> </span><span class="ss">:a4</span><span class="p">,</span><span class="w"> </span><span class="ss">:b4</span><span class="p">,</span><span class="w"> </span><span class="ss">:c5</span><span class="p">,</span><span class="w"> </span><span class="ss">:d5</span><span class="p">,</span><span class="w"> </span><span class="ss">:e5</span><span class="p">,</span><span class="w"> </span><span class="ss">:fs5</span><span class="p">,</span><span class="w"> </span><span class="ss">:g5</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span><span class="o">]</span>
+</code></pre></div>
+<p>音名を1つずつ書くのは手間がかかりますし、間違いも起きやすいです。ここで Sonic Pi の <code>scale</code> が活躍します。</p>
+<hr />
+<h2 id="73-scale">7.3 scale — スケールを自動生成する<a class="headerlink" href="#73-scale" title="Permanent link">&para;</a></h2>
+<p><code>scale</code> はスケール（音階）の音を自動的に生成する関数です。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nb">puts</span><span class="w"> </span><span class="n">scale</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:major</span><span class="p">)</span>
+</code></pre></div>
+<p>ログに <code>(ring &lt;60, 62, 64, 65, 67, 69, 71, 72&gt;)</code> と表示されます。これは C メジャースケールの MIDI 番号のリストです。Lesson 6 で Python を使って確認した <code>[60, 62, 64, 65, 67, 69, 71, 72]</code> と同じ値が並んでいます。</p>
+<h3 id="scale">scale で演奏する<a class="headerlink" href="#scale" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">use_synth</span><span class="w"> </span><span class="ss">:piano</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">play_pattern_timed</span><span class="w"> </span><span class="n">scale</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:major</span><span class="p">),</span><span class="w"> </span><span class="o">[</span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span><span class="o">]</span>
+</code></pre></div>
+<p>たった1行で C メジャースケールが鳴ります。調やスケールの種類を変えるのも簡単です。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">use_synth</span><span class="w"> </span><span class="ss">:piano</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="c1"># G メジャースケール</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="n">play_pattern_timed</span><span class="w"> </span><span class="n">scale</span><span class="p">(</span><span class="ss">:g4</span><span class="p">,</span><span class="w"> </span><span class="ss">:major</span><span class="p">),</span><span class="w"> </span><span class="o">[</span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span><span class="o">]</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">1</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="c1"># D マイナースケール</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="n">play_pattern_timed</span><span class="w"> </span><span class="n">scale</span><span class="p">(</span><span class="ss">:d4</span><span class="p">,</span><span class="w"> </span><span class="ss">:minor</span><span class="p">),</span><span class="w"> </span><span class="o">[</span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span><span class="o">]</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">1</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="c1"># A マイナーペンタトニック</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="n">play_pattern_timed</span><span class="w"> </span><span class="n">scale</span><span class="p">(</span><span class="ss">:a4</span><span class="p">,</span><span class="w"> </span><span class="ss">:minor_pentatonic</span><span class="p">),</span><span class="w"> </span><span class="o">[</span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span><span class="o">]</span>
+</code></pre></div>
+<h3 id="num_octaves">音数を指定する: num_octaves<a class="headerlink" href="#num_octaves" title="Permanent link">&para;</a></h3>
+<p>デフォルトでは1オクターブ分の音が生成されます。<code>num_octaves</code> で範囲を広げられます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">use_synth</span><span class="w"> </span><span class="ss">:piano</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="c1"># 2オクターブ分</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="n">play_pattern_timed</span><span class="w"> </span><span class="n">scale</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:major</span><span class="p">,</span><span class="w"> </span><span class="ss">num_octaves</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">),</span><span class="w"> </span><span class="o">[</span><span class="mi">0</span><span class="o">.</span><span class="mi">3</span><span class="o">]</span>
+</code></pre></div>
+<h3 id="_2">よく使うスケール<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<p>Sonic Pi には非常に多くのスケールが用意されています。代表的なものを紹介します。</p>
+<table>
+<thead>
+<tr>
+<th>スケール名</th>
+<th>説明</th>
+<th>音程構造（半音数）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:major</code></td>
+<td>長音階（ドレミファソラシド）</td>
+<td>0, 2, 4, 5, 7, 9, 11, 12</td>
+</tr>
+<tr>
+<td><code>:minor</code></td>
+<td>自然短音階（ラシドレミファソラ）</td>
+<td>0, 2, 3, 5, 7, 8, 10, 12</td>
+</tr>
+<tr>
+<td><code>:minor_pentatonic</code></td>
+<td>マイナーペンタトニック</td>
+<td>0, 3, 5, 7, 10, 12</td>
+</tr>
+<tr>
+<td><code>:major_pentatonic</code></td>
+<td>メジャーペンタトニック</td>
+<td>0, 2, 4, 7, 9, 12</td>
+</tr>
+<tr>
+<td><code>:blues_minor</code></td>
+<td>ブルーススケール</td>
+<td>0, 3, 5, 6, 7, 10, 12</td>
+</tr>
+<tr>
+<td><code>:chromatic</code></td>
+<td>半音階（12音すべて）</td>
+<td>0, 1, 2, ..., 12</td>
+</tr>
+</tbody>
+</table>
+<p><code>:chromatic</code>（半音階）は Lesson 6 で学んだ12平均律の全12音を含みます。<code>:major</code> はその中から7音を選んだものです。</p>
+<p><strong>ヒント</strong>: Sonic Pi のヘルプパネル（Lang タブ → <code>scale</code>）で全スケールの一覧を確認できます。</p>
+<hr />
+<h2 id="74-ring">7.4 リング（ring）<a class="headerlink" href="#74-ring" title="Permanent link">&para;</a></h2>
+<p><code>scale</code> の出力をログで見ると <code>(ring ...)</code> と表示されました。これは Sonic Pi の<strong>リング</strong>（ring）というデータ構造です。</p>
+<h3 id="_3">リングとは<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<p>リングは配列の一種ですが、末尾に達すると先頭に戻るという特別な性質を持っています（図7.1 左）。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">notes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">ring</span><span class="w"> </span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:e4</span><span class="p">,</span><span class="w"> </span><span class="ss">:g4</span><span class="p">)</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="nb">puts</span><span class="w"> </span><span class="n">notes</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span><span class="w">   </span><span class="c1"># :c4</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="nb">puts</span><span class="w"> </span><span class="n">notes</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span><span class="w">   </span><span class="c1"># :e4</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="nb">puts</span><span class="w"> </span><span class="n">notes</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span><span class="w">   </span><span class="c1"># :g4</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="nb">puts</span><span class="w"> </span><span class="n">notes</span><span class="o">[</span><span class="mi">3</span><span class="o">]</span><span class="w">   </span><span class="c1"># :c4（先頭に戻る）</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="nb">puts</span><span class="w"> </span><span class="n">notes</span><span class="o">[</span><span class="mi">4</span><span class="o">]</span><span class="w">   </span><span class="c1"># :e4</span>
+</code></pre></div>
+<p>Python のリストなら <code>notes[3]</code> は <code>IndexError</code> になりますが、リングでは先頭に戻って <code>:c4</code> が返ります。この「ぐるぐる回る」性質がリングの名前の由来です。</p>
+<h3 id="tick-look">tick と look — リングを順番に取り出す<a class="headerlink" href="#tick-look" title="Permanent link">&para;</a></h3>
+<p>リングを順番に取り出すには <code>tick</code> を使います。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">use_synth</span><span class="w"> </span><span class="ss">:pluck</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="n">notes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">ring</span><span class="w"> </span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:e4</span><span class="p">,</span><span class="w"> </span><span class="ss">:g4</span><span class="p">)</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="n">live_loop</span><span class="w"> </span><span class="ss">:arpeggio</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="n">notes</span><span class="o">.</span><span class="n">tick</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="k">end</span>
+</code></pre></div>
+<p><code>tick</code> は呼ばれるたびにカウンタを1つ進めて、対応する要素を返します。リングなので3つ目の次は先頭に戻り、ド・ミ・ソ・ド・ミ・ソ……と無限に繰り返されます（図7.1 右）。</p>
+<p><img alt="リングの循環構造と tick の動き" src="../../figures/ch07/fig1_ring.png" /></p>
+<p><code>look</code> は <code>tick</code> と似ていますが、カウンタを進めずに現在の値を返します。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">live_loop</span><span class="w"> </span><span class="ss">:demo</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="n">notes</span><span class="o">.</span><span class="n">tick</span><span class="w">   </span><span class="c1"># カウンタを進めて再生</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">  </span><span class="nb">puts</span><span class="w"> </span><span class="n">notes</span><span class="o">.</span><span class="n">look</span><span class="w">   </span><span class="c1"># 同じ値をもう一度確認（カウンタは進まない）</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="k">end</span>
+</code></pre></div>
+<h3 id="scale_1">scale の戻り値はリング<a class="headerlink" href="#scale_1" title="Permanent link">&para;</a></h3>
+<p><code>scale</code> が返すのもリングなので、<code>tick</code> と組み合わせるとスケールの音を順番に繰り返し演奏できます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">use_synth</span><span class="w"> </span><span class="ss">:piano</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="n">live_loop</span><span class="w"> </span><span class="ss">:scale_loop</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="n">scale</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:major</span><span class="p">)</span><span class="o">.</span><span class="n">tick</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">25</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="k">end</span>
+</code></pre></div>
+<p>C メジャースケールの8音（ド〜ド）が延々と繰り返されます。</p>
+<hr />
+<h2 id="75">7.5 スケールを使ったメロディ作り<a class="headerlink" href="#75" title="Permanent link">&para;</a></h2>
+<h3 id="_4">ランダムにスケールの音を選ぶ<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<p>Lesson 3 で学んだ <code>.choose</code> をスケールと組み合わせると、スケール内の音だけを使ったランダムメロディが作れます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">use_synth</span><span class="w"> </span><span class="ss">:pluck</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="n">live_loop</span><span class="w"> </span><span class="ss">:random_melody</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="n">scale</span><span class="p">(</span><span class="ss">:a4</span><span class="p">,</span><span class="w"> </span><span class="ss">:minor_pentatonic</span><span class="p">)</span><span class="o">.</span><span class="n">choose</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">25</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="k">end</span>
+</code></pre></div>
+<p>マイナーペンタトニックスケールは5音しかないため、ランダムに選んでも不協和な組み合わせが起きにくく、それらしいメロディに聞こえます。ペンタトニックスケールが即興演奏の入門として人気がある理由です。</p>
+<p>スケールを変えるだけで雰囲気がガラッと変わります。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">use_synth</span><span class="w"> </span><span class="ss">:pluck</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="n">live_loop</span><span class="w"> </span><span class="ss">:random_blues</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="n">scale</span><span class="p">(</span><span class="ss">:e3</span><span class="p">,</span><span class="w"> </span><span class="ss">:blues_minor</span><span class="p">)</span><span class="o">.</span><span class="n">choose</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="o">[</span><span class="mi">0</span><span class="o">.</span><span class="mi">25</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">25</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span><span class="o">].</span><span class="n">choose</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="k">end</span>
+</code></pre></div>
+<h3 id="tick">tick でスケールを上下する<a class="headerlink" href="#tick" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="n">use_synth</span><span class="w"> </span><span class="ss">:saw</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="n">use_bpm</span><span class="w"> </span><span class="mi">120</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="n">notes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scale</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:minor</span><span class="p">,</span><span class="w"> </span><span class="ss">num_octaves</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="n">live_loop</span><span class="w"> </span><span class="ss">:ascending</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="n">notes</span><span class="o">.</span><span class="n">tick</span><span class="p">,</span><span class="w"> </span><span class="ss">cutoff</span><span class="p">:</span><span class="w"> </span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="ss">release</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">3</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">25</span>
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="k">end</span>
+</code></pre></div>
+<p><code>tick</code> はリングを順番に進むので、スケールを上昇し、最高音に達したら最低音に戻ってまた上昇します。</p>
+<h3 id="_5">リングの操作で変化をつける<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
+<p>リングには便利なメソッドがたくさんあります。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="n">notes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scale</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:major</span><span class="p">)</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="nb">puts</span><span class="w"> </span><span class="n">notes</span><span class="w">               </span><span class="c1"># 元のスケール（上昇）</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="nb">puts</span><span class="w"> </span><span class="n">notes</span><span class="o">.</span><span class="n">reverse</span><span class="w">       </span><span class="c1"># 逆順（下降）</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="nb">puts</span><span class="w"> </span><span class="n">notes</span><span class="o">.</span><span class="n">shuffle</span><span class="w">       </span><span class="c1"># シャッフル（ランダム並べ替え）</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="nb">puts</span><span class="w"> </span><span class="n">notes</span><span class="o">.</span><span class="n">mirror</span><span class="w">        </span><span class="c1"># 上昇→下降（折り返し）</span>
+</code></pre></div>
+<p><code>.mirror</code> を使うと、スケールを上がって下がるフレーズが簡単に作れます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="n">use_synth</span><span class="w"> </span><span class="ss">:piano</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="n">play_pattern_timed</span><span class="w"> </span><span class="n">scale</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:major</span><span class="p">)</span><span class="o">.</span><span class="n">mirror</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="mi">0</span><span class="o">.</span><span class="mi">3</span><span class="o">]</span>
+</code></pre></div>
+<p>ド・レ・ミ・ファ・ソ・ラ・シ・ド・シ・ラ・ソ・ファ・ミ・レ・ドと、上昇してから下降します。</p>
+<hr />
+<h2 id="76-chord">7.6 chord — 和音を鳴らす<a class="headerlink" href="#76-chord" title="Permanent link">&para;</a></h2>
+<p><code>scale</code> がスケール（音階）を生成するのに対し、<code>chord</code> は和音（コード）を生成します。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="n">play</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:major</span><span class="p">)</span>
+</code></pre></div>
+<p>C メジャーコード（ド・ミ・ソ）が同時に鳴ります。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="nb">puts</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:major</span><span class="p">)</span><span class="w">   </span><span class="c1"># (ring 60, 64, 67) — ド・ミ・ソ</span>
+</code></pre></div>
+<p>Lesson 6 の MIDI 番号で確認すると、60（C4）、64（E4）、67（G4）です。C4 から長3度（4半音）上が E4、そこから短3度（3半音）上が G4 で、合わせて完全5度（7半音）——Lesson 6 の音程の表と一致します。</p>
+<h3 id="1">メジャーとマイナー — たった1半音の違い<a class="headerlink" href="#1" title="Permanent link">&para;</a></h3>
+<p>和音の中で最も基本的な区別が、メジャー（長三和音）とマイナー（短三和音）です。まず聴き比べてみましょう。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="n">use_synth</span><span class="w"> </span><span class="ss">:piano</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="n">play</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:major</span><span class="p">)</span><span class="w">    </span><span class="c1"># Cメジャー（ド・ミ・ソ）</span>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="n">play</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:minor</span><span class="p">)</span><span class="w">    </span><span class="c1"># Cマイナー（ド・ミb・ソ）</span>
+</code></pre></div>
+<p>メジャーは明るく、マイナーは暗く聞こえるはずです。では、構成音を比べてみましょう。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="nb">puts</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:major</span><span class="p">)</span><span class="w">   </span><span class="c1"># (ring 60, 64, 67) — ド・ミ・ソ</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="nb">puts</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:minor</span><span class="p">)</span><span class="w">   </span><span class="c1"># (ring 60, 63, 67) — ド・ミb・ソ</span>
+</code></pre></div>
+<p>違いは真ん中の音だけです。メジャーの 64（ミ）がマイナーでは 63（ミb）になっています。ルート（ド）と5度（ソ）はまったく同じで、<strong>3度の音が1半音違うだけ</strong>で響きの印象がガラッと変わるのです。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>ルート</th>
+<th>3度</th>
+<th>5度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>メジャー</td>
+<td>C4（60）</td>
+<td>E4（64）— 長3度（4半音）</td>
+<td>G4（67）</td>
+</tr>
+<tr>
+<td>マイナー</td>
+<td>C4（60）</td>
+<td>Eb4（63）— 短3度（3半音）</td>
+<td>G4（67）</td>
+</tr>
+</tbody>
+</table>
+<p>この違いを体で覚えるために、交互に鳴らしてみてください。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="n">use_synth</span><span class="w"> </span><span class="ss">:piano</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="mi">4</span><span class="o">.</span><span class="n">times</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:major</span><span class="p">)</span>
+<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">1</span><span class="o">.</span><span class="mi">5</span>
+<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:minor</span><span class="p">)</span>
+<a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">1</span><span class="o">.</span><span class="mi">5</span>
+<a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a><span class="k">end</span>
+</code></pre></div>
+<p>同じルートで交互に聴くと、1半音の差がいかに大きいかがよくわかります。</p>
+<hr />
+<h2 id="77">7.7 協和と不協和を聴き比べる<a class="headerlink" href="#77" title="Permanent link">&para;</a></h2>
+<p>和音が「きれい」に響くか「ぶつかって」聞こえるかは、音同士の間隔（音程）によって決まります。Lesson 6 で学んだ音程を、2音の重なりとして実際に聴いてみましょう。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="n">use_synth</span><span class="w"> </span><span class="ss">:piano</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="c1"># 協和音程</span>
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="n">play</span><span class="w"> </span><span class="o">[</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:g4</span><span class="o">]</span><span class="w">      </span><span class="c1"># 完全5度（7半音）— とても澄んだ響き</span>
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="n">play</span><span class="w"> </span><span class="o">[</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:f4</span><span class="o">]</span><span class="w">      </span><span class="c1"># 完全4度（5半音）— 安定した響き</span>
+<a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a><span class="n">play</span><span class="w"> </span><span class="o">[</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:e4</span><span class="o">]</span><span class="w">      </span><span class="c1"># 長3度（4半音）— 明るく柔らかい</span>
+<a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-22-10" name="__codelineno-22-10" href="#__codelineno-22-10"></a>
+<a id="__codelineno-22-11" name="__codelineno-22-11" href="#__codelineno-22-11"></a><span class="c1"># 不協和音程</span>
+<a id="__codelineno-22-12" name="__codelineno-22-12" href="#__codelineno-22-12"></a><span class="n">play</span><span class="w"> </span><span class="o">[</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:db4</span><span class="o">]</span><span class="w">     </span><span class="c1"># 短2度（1半音）— 強い緊張感</span>
+<a id="__codelineno-22-13" name="__codelineno-22-13" href="#__codelineno-22-13"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-22-14" name="__codelineno-22-14" href="#__codelineno-22-14"></a><span class="n">play</span><span class="w"> </span><span class="o">[</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:fs4</span><span class="o">]</span><span class="w">     </span><span class="c1"># 増4度/トライトーン（6半音）— 不安定</span>
+</code></pre></div>
+<p>完全5度はとても澄んで聞こえますが、短2度（隣り合う鍵盤を同時に押す状態）は「ぶつかる」ように感じるはずです。</p>
+<p>Lesson 6 で、協和する音程ほど周波数比が単純な整数比に近いことを学びました。</p>
+<table>
+<thead>
+<tr>
+<th>音程</th>
+<th>半音数</th>
+<th>近似整数比</th>
+<th>響き</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>完全5度</td>
+<td>7</td>
+<td>3:2</td>
+<td>とても協和</td>
+</tr>
+<tr>
+<td>完全4度</td>
+<td>5</td>
+<td>4:3</td>
+<td>協和</td>
+</tr>
+<tr>
+<td>長3度</td>
+<td>4</td>
+<td>5:4</td>
+<td>協和（柔らかい）</td>
+</tr>
+<tr>
+<td>短2度</td>
+<td>1</td>
+<td>16:15</td>
+<td>不協和（緊張）</td>
+</tr>
+<tr>
+<td>増4度</td>
+<td>6</td>
+<td>45:32</td>
+<td>不協和（不安定）</td>
+</tr>
+</tbody>
+</table>
+<p>不協和が「悪い」わけではありません。音楽では緊張（不協和）と解決（協和）の交代がドラマを生みます。増4度（トライトーン）はドミナントセブンスコード（<code>:dom7</code>）の中に含まれており、次のコードへ「解決したい」という推進力を作っています。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="n">use_synth</span><span class="w"> </span><span class="ss">:piano</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="c1"># C7 → F の解決感を聴く</span>
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="n">play</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:dom7</span><span class="p">)</span><span class="w">     </span><span class="c1"># C7: ミとシbの間が増4度 → 緊張</span>
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a><span class="n">play</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:f3</span><span class="p">,</span><span class="w"> </span><span class="ss">:major</span><span class="p">)</span><span class="w">    </span><span class="c1"># F: 解決</span>
+</code></pre></div>
+<hr />
+<h2 id="78">7.8 転回形 — 同じ和音、違う響き<a class="headerlink" href="#78" title="Permanent link">&para;</a></h2>
+<p>C メジャーコードの構成音はド・ミ・ソですが、どの音を一番下（最低音）に置くかで響きが変わります。これを<strong>転回形</strong>（inversion）と呼びます。</p>
+<p><code>chord</code> が返すリングに <code>.rotate</code> を使うと、転回形を簡単に作れます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="n">use_synth</span><span class="w"> </span><span class="ss">:piano</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="n">play</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:major</span><span class="p">)</span><span class="w">              </span><span class="c1"># 基本形: ド・ミ・ソ</span>
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="n">play</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:major</span><span class="p">)</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w">    </span><span class="c1"># 第1転回形: ミ・ソ・ド</span>
+<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="n">play</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:major</span><span class="p">)</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w">    </span><span class="c1"># 第2転回形: ソ・ド・ミ</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="nb">puts</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:major</span><span class="p">)</span><span class="w">              </span><span class="c1"># (ring 60, 64, 67)</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="nb">puts</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:major</span><span class="p">)</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w">    </span><span class="c1"># (ring 64, 67, 72)</span>
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="nb">puts</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:major</span><span class="p">)</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w">    </span><span class="c1"># (ring 67, 72, 76)</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>転回形</th>
+<th>最低音</th>
+<th>MIDI</th>
+<th>響きの特徴</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>基本形</td>
+<td>ド</td>
+<td>60, 64, 67</td>
+<td>安定、堂々とした響き</td>
+</tr>
+<tr>
+<td>第1転回形</td>
+<td>ミ</td>
+<td>64, 67, 72</td>
+<td>少し軽く、流れるような響き</td>
+</tr>
+<tr>
+<td>第2転回形</td>
+<td>ソ</td>
+<td>67, 72, 76</td>
+<td>浮遊感がある、次に進みたい響き</td>
+</tr>
+</tbody>
+</table>
+<p>構成音は同じド・ミ・ソなのに、最低音が変わるだけで印象が違います。コード進行では転回形を使うと、ベース音（最低音）の動きをなめらかにできます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="n">use_synth</span><span class="w"> </span><span class="ss">:piano</span>
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="n">live_loop</span><span class="w"> </span><span class="ss">:smooth_bass</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:major</span><span class="p">)</span><span class="w">              </span><span class="c1"># C: ド・ミ・ソ</span>
+<a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:f3</span><span class="p">,</span><span class="w"> </span><span class="ss">:major</span><span class="p">)</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w">    </span><span class="c1"># F/C: ド・ファ・ラ（ベースがドのまま）</span>
+<a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-26-8" name="__codelineno-26-8" href="#__codelineno-26-8"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:g3</span><span class="p">,</span><span class="w"> </span><span class="ss">:major</span><span class="p">)</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w">    </span><span class="c1"># G/B: シ・レ・ソ（ベースが半音下がる）</span>
+<a id="__codelineno-26-9" name="__codelineno-26-9" href="#__codelineno-26-9"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-26-10" name="__codelineno-26-10" href="#__codelineno-26-10"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:major</span><span class="p">)</span><span class="w">              </span><span class="c1"># C に戻る</span>
+<a id="__codelineno-26-11" name="__codelineno-26-11" href="#__codelineno-26-11"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-26-12" name="__codelineno-26-12" href="#__codelineno-26-12"></a><span class="k">end</span>
+</code></pre></div>
+<hr />
+<h2 id="79">7.9 コード進行とテンションコード<a class="headerlink" href="#79" title="Permanent link">&para;</a></h2>
+<h3 id="_6">基本的なコード進行<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<p>和音を順番に鳴らすとコード進行になります。C メジャーキーの定番進行（I-V-vi-IV）を演奏してみましょう。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="n">use_synth</span><span class="w"> </span><span class="ss">:piano</span>
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>
+<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="n">live_loop</span><span class="w"> </span><span class="ss">:chord_progression</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:major</span><span class="p">)</span><span class="w">    </span><span class="c1"># I: C</span>
+<a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:g3</span><span class="p">,</span><span class="w"> </span><span class="ss">:major</span><span class="p">)</span><span class="w">    </span><span class="c1"># V: G</span>
+<a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:a3</span><span class="p">,</span><span class="w"> </span><span class="ss">:minor</span><span class="p">)</span><span class="w">    </span><span class="c1"># vi: Am</span>
+<a id="__codelineno-27-9" name="__codelineno-27-9" href="#__codelineno-27-9"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-27-10" name="__codelineno-27-10" href="#__codelineno-27-10"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:f3</span><span class="p">,</span><span class="w"> </span><span class="ss">:major</span><span class="p">)</span><span class="w">    </span><span class="c1"># IV: F</span>
+<a id="__codelineno-27-11" name="__codelineno-27-11" href="#__codelineno-27-11"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-27-12" name="__codelineno-27-12" href="#__codelineno-27-12"></a><span class="k">end</span>
+</code></pre></div>
+<p>ポップスでよく聞くコード進行です。</p>
+<h3 id="_7">セブンスコード<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
+<p>3音の和音（三和音）にもう1つ3度上の音を重ねると、4音の<strong>セブンスコード</strong>（七の和音）になります。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="n">use_synth</span><span class="w"> </span><span class="ss">:piano</span>
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="n">play</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:major</span><span class="p">)</span><span class="w">    </span><span class="c1"># Cメジャー（3音: ド・ミ・ソ）</span>
+<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a><span class="n">play</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:maj7</span><span class="p">)</span><span class="w">     </span><span class="c1"># Cmaj7（4音: ド・ミ・ソ・シ）</span>
+<a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a><span class="n">play</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:dom7</span><span class="p">)</span><span class="w">     </span><span class="c1"># C7（4音: ド・ミ・ソ・シb）</span>
+<a id="__codelineno-28-8" name="__codelineno-28-8" href="#__codelineno-28-8"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-28-9" name="__codelineno-28-9" href="#__codelineno-28-9"></a><span class="n">play</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:a3</span><span class="p">,</span><span class="w"> </span><span class="ss">:minor7</span><span class="p">)</span><span class="w">   </span><span class="c1"># Am7（4音: ラ・ド・ミ・ソ）</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>コード名</th>
+<th>構成</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:major</code></td>
+<td>ルート + 長3度 + 完全5度</td>
+<td>基本の明るい響き</td>
+</tr>
+<tr>
+<td><code>:minor</code></td>
+<td>ルート + 短3度 + 完全5度</td>
+<td>基本の暗い響き</td>
+</tr>
+<tr>
+<td><code>:maj7</code></td>
+<td>メジャー + 長7度</td>
+<td>おしゃれで柔らかい</td>
+</tr>
+<tr>
+<td><code>:dom7</code></td>
+<td>メジャー + 短7度</td>
+<td>ブルージー、解決を求める</td>
+</tr>
+<tr>
+<td><code>:minor7</code></td>
+<td>マイナー + 短7度</td>
+<td>柔らかく暗い</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_8">ナインスコード — さらに音を重ねる<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
+<p>セブンスコードの上にさらに3度を重ねると<strong>ナインスコード</strong>になります。ジャズやシティポップでよく使われる、豊かな響きです。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="n">use_synth</span><span class="w"> </span><span class="ss">:piano</span>
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>
+<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a><span class="n">play</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:major</span><span class="p">)</span><span class="w">     </span><span class="c1"># C（3音）</span>
+<a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a><span class="n">play</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:maj7</span><span class="p">)</span><span class="w">      </span><span class="c1"># Cmaj7（4音）</span>
+<a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-29-7" name="__codelineno-29-7" href="#__codelineno-29-7"></a><span class="n">play</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:major9</span><span class="p">)</span><span class="w">    </span><span class="c1"># Cmaj9（5音: ド・ミ・ソ・シ・レ）</span>
+</code></pre></div>
+<p>音が増えるほど響きが複雑で豊かになるのがわかります。三和音 → セブンス → ナインスと、3度の積み重ねで和音が拡張されていく仕組みです。</p>
+<p>セブンスやナインスを使ったコード進行も試してみましょう。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="n">use_synth</span><span class="w"> </span><span class="ss">:piano</span>
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a>
+<a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a><span class="n">live_loop</span><span class="w"> </span><span class="ss">:jazzy</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:d4</span><span class="p">,</span><span class="w"> </span><span class="ss">:minor7</span><span class="p">),</span><span class="w"> </span><span class="ss">amp</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">6</span>
+<a id="__codelineno-30-5" name="__codelineno-30-5" href="#__codelineno-30-5"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-30-6" name="__codelineno-30-6" href="#__codelineno-30-6"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:g3</span><span class="p">,</span><span class="w"> </span><span class="ss">:dom7</span><span class="p">),</span><span class="w"> </span><span class="ss">amp</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">6</span>
+<a id="__codelineno-30-7" name="__codelineno-30-7" href="#__codelineno-30-7"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-30-8" name="__codelineno-30-8" href="#__codelineno-30-8"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:major9</span><span class="p">),</span><span class="w"> </span><span class="ss">amp</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">6</span>
+<a id="__codelineno-30-9" name="__codelineno-30-9" href="#__codelineno-30-9"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-30-10" name="__codelineno-30-10" href="#__codelineno-30-10"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:major9</span><span class="p">),</span><span class="w"> </span><span class="ss">amp</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">6</span>
+<a id="__codelineno-30-11" name="__codelineno-30-11" href="#__codelineno-30-11"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-30-12" name="__codelineno-30-12" href="#__codelineno-30-12"></a><span class="k">end</span>
+</code></pre></div>
+<p>Dm7 → G7 → Cmaj9 は「ツーファイブワン」（ii-V-I）と呼ばれる、ジャズの最も基本的な進行です。</p>
+<hr />
+<h2 id="710">7.10 メロディとコードを組み合わせる<a class="headerlink" href="#710" title="Permanent link">&para;</a></h2>
+<p><code>live_loop</code> を2つ使って、メロディとコードを同時に鳴らしてみましょう。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="n">use_bpm</span><span class="w"> </span><span class="mi">100</span>
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>
+<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a><span class="n">live_loop</span><span class="w"> </span><span class="ss">:chords</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a><span class="w">  </span><span class="n">use_synth</span><span class="w"> </span><span class="ss">:piano</span>
+<a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:a3</span><span class="p">,</span><span class="w"> </span><span class="ss">:minor</span><span class="p">),</span><span class="w"> </span><span class="ss">amp</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span>
+<a id="__codelineno-31-6" name="__codelineno-31-6" href="#__codelineno-31-6"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-31-7" name="__codelineno-31-7" href="#__codelineno-31-7"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:f3</span><span class="p">,</span><span class="w"> </span><span class="ss">:major</span><span class="p">),</span><span class="w"> </span><span class="ss">amp</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span>
+<a id="__codelineno-31-8" name="__codelineno-31-8" href="#__codelineno-31-8"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-31-9" name="__codelineno-31-9" href="#__codelineno-31-9"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:major</span><span class="p">),</span><span class="w"> </span><span class="ss">amp</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span>
+<a id="__codelineno-31-10" name="__codelineno-31-10" href="#__codelineno-31-10"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-31-11" name="__codelineno-31-11" href="#__codelineno-31-11"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="n">chord</span><span class="p">(</span><span class="ss">:g3</span><span class="p">,</span><span class="w"> </span><span class="ss">:major</span><span class="p">),</span><span class="w"> </span><span class="ss">amp</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span>
+<a id="__codelineno-31-12" name="__codelineno-31-12" href="#__codelineno-31-12"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-31-13" name="__codelineno-31-13" href="#__codelineno-31-13"></a><span class="k">end</span>
+<a id="__codelineno-31-14" name="__codelineno-31-14" href="#__codelineno-31-14"></a>
+<a id="__codelineno-31-15" name="__codelineno-31-15" href="#__codelineno-31-15"></a><span class="n">live_loop</span><span class="w"> </span><span class="ss">:melody</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-31-16" name="__codelineno-31-16" href="#__codelineno-31-16"></a><span class="w">  </span><span class="n">use_synth</span><span class="w"> </span><span class="ss">:pluck</span>
+<a id="__codelineno-31-17" name="__codelineno-31-17" href="#__codelineno-31-17"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="n">scale</span><span class="p">(</span><span class="ss">:a4</span><span class="p">,</span><span class="w"> </span><span class="ss">:minor_pentatonic</span><span class="p">)</span><span class="o">.</span><span class="n">choose</span><span class="p">,</span><span class="w"> </span><span class="ss">amp</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">7</span>
+<a id="__codelineno-31-18" name="__codelineno-31-18" href="#__codelineno-31-18"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="o">[</span><span class="mi">0</span><span class="o">.</span><span class="mi">25</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span><span class="o">].</span><span class="n">choose</span>
+<a id="__codelineno-31-19" name="__codelineno-31-19" href="#__codelineno-31-19"></a><span class="k">end</span>
+</code></pre></div>
+<p>コード進行（Am → F → C → G）の上で、マイナーペンタトニックのランダムメロディが鳴ります。2つの <code>live_loop</code> は独立に動くため、ループの長さが異なっていても問題ありません。</p>
+<hr />
+<h2 id="711-lesson-6">7.11 Lesson 6 の理論との対応<a class="headerlink" href="#711-lesson-6" title="Permanent link">&para;</a></h2>
+<p>ここまでの内容を Lesson 6 の理論と照らし合わせましょう。</p>
+<h3 id="scale_2">scale と音程構造<a class="headerlink" href="#scale_2" title="Permanent link">&para;</a></h3>
+<p>Lesson 6 で C メジャースケールの音程構造が「全全半全全全半」（半音数で 0, 2, 4, 5, 7, 9, 11, 12）であることを学びました。<code>scale(:c4, :major)</code> はまさにこの構造に従って MIDI 番号を生成しています。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="c1"># scale の中身を確認</span>
+<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scale</span><span class="p">(</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:major</span><span class="p">)</span>
+<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="nb">puts</span><span class="w"> </span><span class="n">s</span><span class="w">                </span><span class="c1"># (ring 60, 62, 64, 65, 67, 69, 71, 72)</span>
+<a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a>
+<a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a><span class="c1"># 隣接する音の差（半音数）を確認</span>
+<a id="__codelineno-32-6" name="__codelineno-32-6" href="#__codelineno-32-6"></a><span class="n">s</span><span class="o">.</span><span class="n">length</span><span class="o">.</span><span class="n">times</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">i</span><span class="o">|</span>
+<a id="__codelineno-32-7" name="__codelineno-32-7" href="#__codelineno-32-7"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span>
+<a id="__codelineno-32-8" name="__codelineno-32-8" href="#__codelineno-32-8"></a><span class="w">    </span><span class="nb">puts</span><span class="w"> </span><span class="n">s</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">s</span><span class="o">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="o">]</span><span class="w">   </span><span class="c1"># 2, 2, 1, 2, 2, 2, 1 と表示される</span>
+<a id="__codelineno-32-9" name="__codelineno-32-9" href="#__codelineno-32-9"></a><span class="w">  </span><span class="k">end</span>
+<a id="__codelineno-32-10" name="__codelineno-32-10" href="#__codelineno-32-10"></a><span class="k">end</span>
+</code></pre></div>
+<p>全音は MIDI 番号の差が 2、半音は差が 1 です。Lesson 6 の表そのままの値が出ています。</p>
+<h3 id="chord">chord と周波数比<a class="headerlink" href="#chord" title="Permanent link">&para;</a></h3>
+<p>Lesson 6 で「完全5度は7半音、長3度は4半音」と学びました。<code>chord(:c4, :major)</code> は MIDI 60, 64, 67 を返しますが、これは 60 → 64（4半音 = 長3度）→ 67（さらに3半音 = 短3度）という構造です。ルートから見ると、64 は長3度（4半音）、67 は完全5度（7半音）上にあります。</p>
+<p>Lesson 6 で求めた周波数比に換算すると：</p>
+<table>
+<thead>
+<tr>
+<th>音</th>
+<th>MIDI</th>
+<th>周波数比</th>
+<th>近似整数比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C4</td>
+<td>60</td>
+<td>1.000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>E4</td>
+<td>64</td>
+<td>1.260</td>
+<td>5:4</td>
+</tr>
+<tr>
+<td>G4</td>
+<td>67</td>
+<td>1.498</td>
+<td>3:2</td>
+</tr>
+</tbody>
+</table>
+<p>和音が美しく響くのは、構成音の周波数比が単純な整数比に近いからです。これも Lesson 6 で学んだ純正律の考え方と一致します。</p>
+<hr />
+<h2 id="_9">まとめ<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
+<p>このレッスンで学んだことを整理します。</p>
+<table>
+<thead>
+<tr>
+<th>コマンド / メソッド</th>
+<th>役割</th>
+<th>例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>scale</code></td>
+<td>スケールの音をリングで生成</td>
+<td><code>scale(:c4, :major)</code></td>
+</tr>
+<tr>
+<td><code>chord</code></td>
+<td>和音の音をリングで生成</td>
+<td><code>chord(:c4, :major)</code></td>
+</tr>
+<tr>
+<td><code>.rotate</code></td>
+<td>リングの要素を回転（転回形に使う）</td>
+<td><code>chord(:c4, :major).rotate(1)</code></td>
+</tr>
+<tr>
+<td><code>(ring ...)</code></td>
+<td>末尾→先頭に戻る配列</td>
+<td><code>(ring :c4, :e4, :g4)</code></td>
+</tr>
+<tr>
+<td><code>.tick</code></td>
+<td>リングを順番に取り出す</td>
+<td><code>notes.tick</code></td>
+</tr>
+<tr>
+<td><code>.look</code></td>
+<td>カウンタを進めず現在値を返す</td>
+<td><code>notes.look</code></td>
+</tr>
+<tr>
+<td><code>.reverse</code></td>
+<td>リングを逆順にする</td>
+<td><code>notes.reverse</code></td>
+</tr>
+<tr>
+<td><code>.mirror</code></td>
+<td>上昇→下降の折り返し</td>
+<td><code>notes.mirror</code></td>
+</tr>
+<tr>
+<td><code>.shuffle</code></td>
+<td>リングをシャッフル</td>
+<td><code>notes.shuffle</code></td>
+</tr>
+<tr>
+<td><code>.choose</code></td>
+<td>ランダムに1つ選ぶ（復習）</td>
+<td><code>notes.choose</code></td>
+</tr>
+<tr>
+<td><code>num_octaves:</code></td>
+<td>スケールのオクターブ数</td>
+<td><code>scale(:c4, :major, num_octaves: 2)</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>スケール</td>
+<td>音階。<code>scale</code> で自動生成できる</td>
+</tr>
+<tr>
+<td>コード</td>
+<td>和音。<code>chord</code> で自動生成できる</td>
+</tr>
+<tr>
+<td>協和/不協和</td>
+<td>周波数比が単純なほど協和。緊張と解決が音楽のドラマを生む</td>
+</tr>
+<tr>
+<td>転回形</td>
+<td>和音の最低音を変えること。<code>.rotate</code> で実現</td>
+</tr>
+<tr>
+<td>セブンス/ナインス</td>
+<td>3度を積み重ねて和音を拡張。響きが豊かになる</td>
+</tr>
+<tr>
+<td>リング</td>
+<td>末尾から先頭に巡回するデータ構造</td>
+</tr>
+<tr>
+<td>ペンタトニック</td>
+<td>5音スケール。ランダムでも不協和になりにくい</td>
+</tr>
+<tr>
+<td>コード進行</td>
+<td>和音を順番に並べたもの</td>
+</tr>
+</tbody>
+</table>
+<h3 id="lesson-6">Lesson 6 との対応<a class="headerlink" href="#lesson-6" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Lesson 6（Python）</th>
+<th>Lesson 7（Sonic Pi）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C メジャースケール <code>[60, 62, 64, 65, 67, 69, 71, 72]</code></td>
+<td><code>scale(:c4, :major)</code> で同じ値を生成</td>
+</tr>
+<tr>
+<td>音程構造「全全半全全全半」</td>
+<td><code>scale</code> が内部で自動計算</td>
+</tr>
+<tr>
+<td>長3度 = 4半音、完全5度 = 7半音</td>
+<td><code>chord(:c4, :major)</code> の構成音に反映</td>
+</tr>
+<tr>
+<td>協和音程の周波数比（3:2、5:4 など）</td>
+<td>2音の重なりとして聴いて体感</td>
+</tr>
+<tr>
+<td>MIDI 番号と音名の対応</td>
+<td><code>:c4</code> = <code>60</code>、<code>:a4</code> = <code>69</code></td>
+</tr>
+<tr>
+<td>平均律の変換式 <span class="arithmatex">\(f = 440 \times 2^{(n-69)/12}\)</span></td>
+<td>Sonic Pi が内部で同じ計算を実行</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_10">次回予告<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
+<p>Lesson 8 では Python に戻り、<strong>エンベロープ（ADSR）</strong> を学びます。音の「立ち上がり」「減衰」「持続」「余韻」の4つの段階を制御し、音に表情をつける方法を理解します。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  ページトップへ戻る
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.code.copy", "navigation.sections", "navigation.top", "search.highlight", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

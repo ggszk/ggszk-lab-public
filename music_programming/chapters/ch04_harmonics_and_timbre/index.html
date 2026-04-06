@@ -1,0 +1,2561 @@
+
+<!doctype html>
+<html lang="ja" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Python と Sonic Pi で学ぶ音の科学とライブコーディング">
+      
+      
+      
+        <link rel="canonical" href="https://ggszk.github.io/ggszk-lab-public/music_programming/chapters/ch04_harmonics_and_timbre/">
+      
+      
+        <link rel="prev" href="../ch03_sonic_pi_intro/">
+      
+      
+        <link rel="next" href="../ch05_sonic_pi_timbre_control/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Lesson 4: 倍音と音色 - 音楽プログラミング入門</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#lesson-4" class="md-skip">
+          コンテンツにスキップ
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="ヘッダー">
+    <a href="../.." title="音楽プログラミング入門" class="md-header__button md-logo" aria-label="音楽プログラミング入門" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            音楽プログラミング入門
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Lesson 4: 倍音と音色
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="検索" placeholder="検索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="検索">
+        
+        <button type="reset" class="md-search__icon md-icon" title="クリア" aria-label="クリア" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            検索を初期化
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="ナビゲーション" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="音楽プログラミング入門" class="md-nav__button md-logo" aria-label="音楽プログラミング入門" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    音楽プログラミング入門
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ホーム
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../preface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    はじめに
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    本編
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    本編
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch01_sound_and_digital_audio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 1: 音とは何か・デジタル音の基礎
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch02_waveforms_and_timbre/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 2: 波形と音色の基礎
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch03_sonic_pi_intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 3: Sonic Pi入門
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 4: 倍音と音色
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 4: 倍音と音色
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        このレッスンで学ぶこと
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        セットアップ
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 倍音列とは
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 加算合成で音色を作る
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 倍音の構成を変えて音色を作る
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#44" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 加算合成で「楽器っぽい音」を作る
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.4 加算合成で「楽器っぽい音」を作る">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        クラリネット風の音
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        オルガン風の音
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ベル風の音（非整数倍音）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#45-additive_synth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 additive_synth() の中身を見る
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#46" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.6 フーリエ級数 — 波形を倍音に分解する
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.6 フーリエ級数 — 波形を倍音に分解する">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        フーリエ級数の考え方
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lesson-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lesson 2 の公式を振り返る
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        加算合成で3つの波形を再現する
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#47" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.7 倍音の数と波形の関係を観察する
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#48" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.8 ギブス現象 — 不連続点の「ひげ」
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#49" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.9 帯域制限と加算合成の関係
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.9 帯域制限と加算合成の関係">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        エイリアシングの問題
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        帯域制限付き加算合成
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#410" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.10 分析と合成 — フーリエ変換の予告
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        まとめ
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="まとめ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#audio_lib" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        使った audio_lib の関数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        次回予告
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch05_sonic_pi_timbre_control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 5: Sonic Piで音色をコントロール
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch06_scales_and_frequency/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 6: 音階と周波数
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch07_sonic_pi_melody_and_scales/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 7: Sonic Piでメロディとコード
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch08_envelope_adsr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 8: エンベロープ（ADSR）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch09_effects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 9: エフェクトの原理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch10_sonic_pi_envelope_and_fx/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 10: Sonic PiのエンベロープとFX
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch11_rhythm_and_score/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 11: リズムとスコアファイル
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch12_sonic_pi_rhythm_patterns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 12: Sonic Piでリズムパターン
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch13_spectrum_analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 13: 音を周波数で見る
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch14_live_coding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 14: ライブコーディング技法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch15_final_project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 15: 総合演習 — 作品制作
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    演習
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    演習
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch01_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch02_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch03_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch04_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 4
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch05_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 5
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch06_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 6
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch07_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 7
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch08_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 8
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch09_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 9
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch10_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 10
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch11_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 11
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch12_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 12
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch13_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 13
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch14_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 14
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch15_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 15
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    付録
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    付録
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendix/python_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    付録A: Google Colab と audio_lib
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendix/sonicpi_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    付録B: Sonic Pi のセットアップ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendix/references/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    参考文献
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../afterword/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    おわりに
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../author/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    著者紹介
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        このレッスンで学ぶこと
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        セットアップ
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 倍音列とは
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 加算合成で音色を作る
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#43" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 倍音の構成を変えて音色を作る
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#44" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 加算合成で「楽器っぽい音」を作る
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.4 加算合成で「楽器っぽい音」を作る">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        クラリネット風の音
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        オルガン風の音
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ベル風の音（非整数倍音）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#45-additive_synth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 additive_synth() の中身を見る
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#46" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.6 フーリエ級数 — 波形を倍音に分解する
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.6 フーリエ級数 — 波形を倍音に分解する">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        フーリエ級数の考え方
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lesson-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lesson 2 の公式を振り返る
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        加算合成で3つの波形を再現する
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#47" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.7 倍音の数と波形の関係を観察する
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#48" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.8 ギブス現象 — 不連続点の「ひげ」
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#49" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.9 帯域制限と加算合成の関係
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4.9 帯域制限と加算合成の関係">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        エイリアシングの問題
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        帯域制限付き加算合成
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#410" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.10 分析と合成 — フーリエ変換の予告
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        まとめ
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="まとめ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#audio_lib" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        使った audio_lib の関数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        次回予告
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="lesson-4">Lesson 4: 倍音と音色<a class="headerlink" href="#lesson-4" title="Permanent link">&para;</a></h1>
+<h2 id="_1">このレッスンで学ぶこと<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<ul>
+<li>倍音列の概念を理解する</li>
+<li>加算合成（サイン波の重ね合わせ）で音色を作る原理を学ぶ</li>
+<li>フーリエ級数の直感的な意味を理解する</li>
+<li>倍音の構成が音色を決めることを実験で確かめる</li>
+</ul>
+<p>Lesson 2 では「波形の形が違うと音色が変わる」ことを体験し、その理由が倍音にあることに触れました。このレッスンでは倍音を正面から扱い、「サイン波を足し合わせて音色を作る」加算合成を実践します。</p>
+<h2 id="_2">セットアップ<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>新しいノートブックを開き、最初に Lesson 1 と同じセットアップセル（audio_lib のインストールと <code>setup_environment()</code>）を実行してください。続けて、今回使うライブラリを読み込みます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">display</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">audio_lib</span><span class="w"> </span><span class="kn">import</span> <span class="n">sine_wave</span><span class="p">,</span> <span class="n">additive_synth</span><span class="p">,</span> <span class="n">AudioSignal</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">audio_lib.notebook</span><span class="w"> </span><span class="kn">import</span> <span class="n">play_sound</span><span class="p">,</span> <span class="n">plot_waveform</span><span class="p">,</span> <span class="n">plot_spectrum</span><span class="p">,</span> <span class="n">plot_harmonics</span>
+</code></pre></div>
+<hr />
+<h2 id="41">4.1 倍音列とは<a class="headerlink" href="#41" title="Permanent link">&para;</a></h2>
+<p>ギターの弦を弾くと、弦全体が振動して基本的な音の高さ（<strong>基本周波数</strong>）が決まります。しかし実際には、弦は全体の振動だけでなく、2分の1、3分の1、4分の1…の長さでも同時に振動しています。</p>
+<p>この結果、基本周波数 <span class="arithmatex">\(f\)</span> に対して <span class="arithmatex">\(2f\)</span>、<span class="arithmatex">\(3f\)</span>、<span class="arithmatex">\(4f\)</span>、… という周波数の成分が同時に鳴ります。これが<strong>倍音列</strong>（harmonic series）です。</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>周波数</th>
+<th>440Hz の場合</th>
+<th>音程の関係</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>基本波（第1倍音）</td>
+<td><span class="arithmatex">\(f\)</span></td>
+<td>440 Hz</td>
+<td>ユニゾン</td>
+</tr>
+<tr>
+<td>第2倍音</td>
+<td><span class="arithmatex">\(2f\)</span></td>
+<td>880 Hz</td>
+<td>1オクターブ上</td>
+</tr>
+<tr>
+<td>第3倍音</td>
+<td><span class="arithmatex">\(3f\)</span></td>
+<td>1320 Hz</td>
+<td>1オクターブ+完全5度上</td>
+</tr>
+<tr>
+<td>第4倍音</td>
+<td><span class="arithmatex">\(4f\)</span></td>
+<td>1760 Hz</td>
+<td>2オクターブ上</td>
+</tr>
+<tr>
+<td>第5倍音</td>
+<td><span class="arithmatex">\(5f\)</span></td>
+<td>2200 Hz</td>
+<td>2オクターブ+長3度上</td>
+</tr>
+<tr>
+<td>第6倍音</td>
+<td><span class="arithmatex">\(6f\)</span></td>
+<td>2640 Hz</td>
+<td>2オクターブ+完全5度上</td>
+</tr>
+</tbody>
+</table>
+<p>倍音列を聞いてみましょう。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">f0</span> <span class="o">=</span> <span class="mi">440</span>  <span class="c1"># 基本周波数</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">dur</span> <span class="o">=</span> <span class="mf">1.5</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">):</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="n">sig</span> <span class="o">=</span> <span class="n">sine_wave</span><span class="p">(</span><span class="n">f0</span> <span class="o">*</span> <span class="n">k</span><span class="p">,</span> <span class="n">dur</span><span class="p">)</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="n">display</span><span class="p">(</span><span class="n">play_sound</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;第</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">倍音: </span><span class="si">{</span><span class="n">f0</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">k</span><span class="si">}</span><span class="s2">Hz&quot;</span><span class="p">))</span>
+</code></pre></div>
+<p>第2倍音は基本波の1オクターブ上で「同じ音」に聞こえ、第3倍音は完全5度の関係にあります。倍音列は音楽の音程関係（ハーモニー）の物理的な基盤でもあるのです。音程と周波数比の関係は Lesson 6 で詳しく扱います。</p>
+<hr />
+<h2 id="42">4.2 加算合成で音色を作る<a class="headerlink" href="#42" title="Permanent link">&para;</a></h2>
+<p><strong>加算合成</strong>（additive synthesis）とは、複数のサイン波を足し合わせて複雑な音色を作る方法です。Lesson 2 で「あらゆる周期的な波形はサイン波の重ね合わせで表現できる」というフーリエの原理を紹介しました。加算合成はその逆の操作——サイン波を組み合わせて望みの音色を作る——です。</p>
+<p>audio_lib の <code>additive_synth()</code> を使えば、倍音の「レシピ」を<strong>辞書</strong>（<code>dict</code>）で渡すだけで音色を作れます。辞書は <code>{キー: 値}</code> の形式でデータのペアを格納する Python の仕組みです。ここではキーが基本周波数に対する倍率、値が振幅を表します。</p>
+<p>まず、倍音を1つずつ加えていく過程を聞いてみましょう。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">f0</span> <span class="o">=</span> <span class="mi">440</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># 基本波だけ</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">display</span><span class="p">(</span><span class="n">play_sound</span><span class="p">(</span><span class="n">additive_synth</span><span class="p">(</span><span class="n">f0</span><span class="p">,</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">}),</span> <span class="s2">&quot;第1倍音のみ&quot;</span><span class="p">))</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="c1"># 基本波 + 第2倍音</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="n">display</span><span class="p">(</span><span class="n">play_sound</span><span class="p">(</span><span class="n">additive_synth</span><span class="p">(</span><span class="n">f0</span><span class="p">,</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">}),</span> <span class="s2">&quot;第1〜第2倍音&quot;</span><span class="p">))</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="c1"># 基本波 + 第2〜第3倍音</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="n">display</span><span class="p">(</span><span class="n">play_sound</span><span class="p">(</span><span class="n">additive_synth</span><span class="p">(</span><span class="n">f0</span><span class="p">,</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="mf">0.33</span><span class="p">}),</span> <span class="s2">&quot;第1〜第3倍音&quot;</span><span class="p">))</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="c1"># 基本波 + 第2〜第5倍音</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="n">display</span><span class="p">(</span><span class="n">play_sound</span><span class="p">(</span><span class="n">additive_synth</span><span class="p">(</span><span class="n">f0</span><span class="p">,</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="mf">0.33</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mi">5</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">}),</span> <span class="s2">&quot;第1〜第5倍音&quot;</span><span class="p">))</span>
+</code></pre></div>
+<p>倍音が増えるにつれて音が豊かになり、ノコギリ波に近づいていくのがわかります。これは偶然ではありません。ノコギリ波のフーリエ級数がまさにすべての倍音を <span class="arithmatex">\(1/k\)</span> の振幅で含んでいるからです。</p>
+<hr />
+<h2 id="43">4.3 倍音の構成を変えて音色を作る<a class="headerlink" href="#43" title="Permanent link">&para;</a></h2>
+<p>加算合成の面白さは、倍音のレシピを変えるだけで、まったく異なる音色が生まれることです。</p>
+<p><code>{k: 1.0 for k in range(1, 11)}</code> は<strong>辞書内包表記</strong>と呼ばれる書き方で、for ループを使って辞書を一気に作れます。ここでは「キー 1〜10 に対して、すべて値 1.0」という辞書を生成しています。通常の for ループで書くと次のようになります。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">harmonics</span> <span class="o">=</span> <span class="p">{}</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">):</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="n">harmonics</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+</code></pre></div>
+<p>辞書内包表記はこの処理を1行で書く便利な記法です。以降のコードでも頻繁に使います。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># すべての倍音を等しい振幅で</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">sig_equal</span> <span class="o">=</span> <span class="n">additive_synth</span><span class="p">(</span><span class="n">f0</span><span class="p">,</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="mf">1.0</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)})</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">display</span><span class="p">(</span><span class="n">play_sound</span><span class="p">(</span><span class="n">sig_equal</span><span class="p">,</span> <span class="s2">&quot;等振幅（10倍音）&quot;</span><span class="p">))</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="c1"># 奇数次倍音のみ（矩形波的）</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="n">sig_odd</span> <span class="o">=</span> <span class="n">additive_synth</span><span class="p">(</span><span class="n">f0</span><span class="p">,</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">2</span><span class="p">)})</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="n">display</span><span class="p">(</span><span class="n">play_sound</span><span class="p">(</span><span class="n">sig_odd</span><span class="p">,</span> <span class="s2">&quot;奇数次倍音のみ&quot;</span><span class="p">))</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="c1"># 高次倍音を強調（金属的な音）</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="n">sig_metal</span> <span class="o">=</span> <span class="n">additive_synth</span><span class="p">(</span><span class="n">f0</span><span class="p">,</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)})</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="n">display</span><span class="p">(</span><span class="n">play_sound</span><span class="p">(</span><span class="n">sig_metal</span><span class="p">,</span> <span class="s2">&quot;高次倍音強調（金属的）&quot;</span><span class="p">))</span>
+</code></pre></div>
+<p><code>plot_harmonics()</code> で倍音の構成を棒グラフで確認してみましょう。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">plot_harmonics</span><span class="p">(</span><span class="n">sig_equal</span><span class="p">,</span> <span class="n">max_freq</span><span class="o">=</span><span class="mi">6000</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;等振幅&quot;</span><span class="p">)</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">plot_harmonics</span><span class="p">(</span><span class="n">sig_odd</span><span class="p">,</span>   <span class="n">max_freq</span><span class="o">=</span><span class="mi">6000</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;奇数次倍音のみ&quot;</span><span class="p">)</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">plot_harmonics</span><span class="p">(</span><span class="n">sig_metal</span><span class="p">,</span> <span class="n">max_freq</span><span class="o">=</span><span class="mi">6000</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;高次倍音強調&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>スペクトラム全体を見たい場合は <code>plot_spectrum()</code> を使います。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">plot_spectrum</span><span class="p">(</span><span class="n">sig_equal</span><span class="p">,</span> <span class="n">max_freq</span><span class="o">=</span><span class="mi">6000</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;等振幅&quot;</span><span class="p">)</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">plot_spectrum</span><span class="p">(</span><span class="n">sig_odd</span><span class="p">,</span>   <span class="n">max_freq</span><span class="o">=</span><span class="mi">6000</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;奇数次倍音のみ&quot;</span><span class="p">)</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="n">plot_spectrum</span><span class="p">(</span><span class="n">sig_metal</span><span class="p">,</span> <span class="n">max_freq</span><span class="o">=</span><span class="mi">6000</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;高次倍音強調&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><img alt="3種類の加算合成のスペクトラム" src="../../figures/ch04/fig1_additive_spectra.png" /></p>
+<p>倍音のレシピ（どの倍音をどれだけの振幅で含めるか）が音色を決めている、ということが視覚的にも確認できます。</p>
+<hr />
+<h2 id="44">4.4 加算合成で「楽器っぽい音」を作る<a class="headerlink" href="#44" title="Permanent link">&para;</a></h2>
+<p>倍音のレシピを工夫すれば、単なる基本波形だけでなく、楽器に近い音色を作ることもできます。</p>
+<h3 id="_3">クラリネット風の音<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<p>クラリネットは管の構造上、奇数次倍音が強い特徴があります。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># クラリネット風: 奇数次倍音が支配的、偶数次は弱い</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="n">sig_clarinet</span> <span class="o">=</span> <span class="n">additive_synth</span><span class="p">(</span><span class="n">f0</span><span class="p">,</span> <span class="p">{</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    <span class="mi">1</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mi">5</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    <span class="mi">6</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mi">7</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mi">8</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mi">9</span><span class="p">:</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mi">10</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="p">})</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="n">display</span><span class="p">(</span><span class="n">play_sound</span><span class="p">(</span><span class="n">sig_clarinet</span><span class="p">,</span> <span class="s2">&quot;クラリネット風&quot;</span><span class="p">))</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="n">plot_harmonics</span><span class="p">(</span><span class="n">sig_clarinet</span><span class="p">,</span> <span class="n">max_freq</span><span class="o">=</span><span class="mi">6000</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;クラリネット風の倍音構成&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="_4">オルガン風の音<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<p>パイプオルガンは、複数のパイプ（レジスター）を組み合わせて音色を作ります。各パイプは特定の倍音に対応します。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># オルガン風: 基本波と低次倍音が均等に強い</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="n">sig_organ</span> <span class="o">=</span> <span class="n">additive_synth</span><span class="p">(</span><span class="n">f0</span><span class="p">,</span> <span class="p">{</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>    <span class="mi">1</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">5</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mi">6</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mi">8</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="p">})</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="n">display</span><span class="p">(</span><span class="n">play_sound</span><span class="p">(</span><span class="n">sig_organ</span><span class="p">,</span> <span class="s2">&quot;オルガン風&quot;</span><span class="p">))</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="n">plot_harmonics</span><span class="p">(</span><span class="n">sig_organ</span><span class="p">,</span> <span class="n">max_freq</span><span class="o">=</span><span class="mi">6000</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;オルガン風の倍音構成&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="_5">ベル風の音（非整数倍音）<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
+<p>ここまで倍音は基本周波数の「整数倍」でした。しかし、鐘やシンバルなどの打楽器では、<strong>非整数倍</strong>の周波数成分（<strong>非調和倍音</strong>、inharmonic partials）が含まれます。<code>additive_synth()</code> は非整数の倍率もそのまま指定できます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># ベル風: 非整数倍の周波数を含む</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="n">sig_bell</span> <span class="o">=</span> <span class="n">additive_synth</span><span class="p">(</span><span class="n">f0</span><span class="p">,</span> <span class="p">{</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>    <span class="mf">1.0</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">2.76</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">3.95</span><span class="p">:</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">5.14</span><span class="p">:</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mf">6.58</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="p">})</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="n">display</span><span class="p">(</span><span class="n">play_sound</span><span class="p">(</span><span class="n">sig_bell</span><span class="p">,</span> <span class="s2">&quot;ベル風&quot;</span><span class="p">))</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="n">plot_spectrum</span><span class="p">(</span><span class="n">sig_bell</span><span class="p">,</span> <span class="n">max_freq</span><span class="o">=</span><span class="mi">4000</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;ベル風のスペクトラム&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><img alt="楽器風の音色のスペクトラム" src="../../figures/ch04/fig5_instrument_spectra.png" /></p>
+<p>整数倍の倍音だけだと「音階感のある」音に聞こえますが、非整数倍の成分が入ると金属的で複雑な響きになります。ベルの「キーン」という音色の秘密はここにあります。</p>
+<hr />
+<h2 id="45-additive_synth">4.5 additive_synth() の中身を見る<a class="headerlink" href="#45-additive_synth" title="Permanent link">&para;</a></h2>
+<p>ここまで <code>additive_synth()</code> を使って加算合成を体験しました。では、この関数は中で何をしているのでしょうか。実は非常にシンプルです。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">sample_rate</span> <span class="o">=</span> <span class="mi">44100</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="n">dur</span> <span class="o">=</span> <span class="mf">2.0</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">dur</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">sample_rate</span> <span class="o">*</span> <span class="n">dur</span><span class="p">),</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="c1"># additive_synth() の中身と同じ処理</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="n">harmonics</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">}</span>  <span class="c1"># レシピ</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="k">for</span> <span class="n">ratio</span><span class="p">,</span> <span class="n">amp</span> <span class="ow">in</span> <span class="n">harmonics</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>  <span class="c1"># .items() でキーと値のペアを順に取り出す</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>    <span class="n">data</span> <span class="o">+=</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">ratio</span> <span class="o">*</span> <span class="n">f0</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="c1"># 最大振幅を 1.0 に正規化</span>
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a><span class="n">data</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="n">sig</span> <span class="o">=</span> <span class="n">AudioSignal</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">)</span>
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a><span class="n">display</span><span class="p">(</span><span class="n">play_sound</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="s2">&quot;手書き加算合成&quot;</span><span class="p">))</span>
+</code></pre></div>
+<p><code>np.sin(2 * np.pi * ratio * f0 * t)</code> は Lesson 1 で学んだサイン波の数式そのものです。それを振幅 <code>amp</code> をかけて足し合わせているだけ——加算合成の原理はこれだけです。</p>
+<hr />
+<h2 id="46">4.6 フーリエ級数 — 波形を倍音に分解する<a class="headerlink" href="#46" title="Permanent link">&para;</a></h2>
+<p>ここまで「サイン波を足して波形を作る」方向で加算合成を学びました。逆に、<strong>ある波形がどんな倍音を含んでいるか</strong>を数学的に表現するのが<strong>フーリエ級数</strong>（Fourier series）です。</p>
+<h3 id="_6">フーリエ級数の考え方<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<p>周期 <span class="arithmatex">\(T\)</span> の波形 <span class="arithmatex">\(y(t)\)</span> は、次のように無限個のサイン波とコサイン波の和で表せます。</p>
+<div class="arithmatex">\[y(t) = \frac{a_0}{2} + \sum_{k=1}^{\infty} \left[ a_k \cos(2\pi k f t) + b_k \sin(2\pi k f t) \right]\]</div>
+<p>ここで:</p>
+<ul>
+<li><span class="arithmatex">\(f = 1/T\)</span> は基本周波数</li>
+<li><span class="arithmatex">\(a_0/2\)</span> は波形の平均値（直流成分）</li>
+<li><span class="arithmatex">\(a_k\)</span>, <span class="arithmatex">\(b_k\)</span> は第 <span class="arithmatex">\(k\)</span> 倍音のコサイン成分・サイン成分の振幅</li>
+</ul>
+<p>難しそうに見えますが、要するに「どんな複雑な波形でも、周波数の異なるサイン波を適切な割合で混ぜれば再現できる」ということです。</p>
+<h3 id="lesson-2">Lesson 2 の公式を振り返る<a class="headerlink" href="#lesson-2" title="Permanent link">&para;</a></h3>
+<p>Lesson 2 で示した各波形のフーリエ級数を、この視点で整理してみましょう。</p>
+<p><strong>ノコギリ波</strong>:</p>
+<div class="arithmatex">\[y(t) = -\frac{2}{\pi}\sum_{k=1}^{\infty} \frac{(-1)^k}{k} \sin(2\pi k f t)\]</div>
+<p>→ すべての整数次倍音を含み、<span class="arithmatex">\(k\)</span> 番目の倍音の振幅は <span class="arithmatex">\(1/k\)</span> に比例する。</p>
+<p><strong>矩形波</strong>:</p>
+<div class="arithmatex">\[y(t) = \frac{4}{\pi}\sum_{k=1,3,5,...} \frac{1}{k} \sin(2\pi k f t)\]</div>
+<p>→ 奇数次倍音のみを含み、振幅は <span class="arithmatex">\(1/k\)</span> に比例する。</p>
+<p><strong>三角波</strong>:</p>
+<div class="arithmatex">\[y(t) = \frac{8}{\pi^2}\sum_{k=1,3,5,...} \frac{(-1)^{(k-1)/2}}{k^2} \sin(2\pi k f t)\]</div>
+<p>→ 奇数次倍音のみだが、振幅は <span class="arithmatex">\(1/k^2\)</span> に比例する（矩形波より速く減衰）。</p>
+<h3 id="3">加算合成で3つの波形を再現する<a class="headerlink" href="#3" title="Permanent link">&para;</a></h3>
+<p>公式どおりにサイン波を足し合わせて、各波形を再現してみましょう。ここでは <code>additive_synth()</code> ではなくフーリエ級数の公式に忠実に書きます（符号や係数の意味を確認するため）。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">N</span> <span class="o">=</span> <span class="mi">20</span>  <span class="c1"># 足し合わせる倍音の数</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="c1"># ノコギリ波</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="n">data_saw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>    <span class="n">data_saw</span> <span class="o">+=</span> <span class="p">((</span><span class="o">-</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">**</span> <span class="n">k</span> <span class="o">/</span> <span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">k</span> <span class="o">*</span> <span class="n">f0</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="n">data_saw</span> <span class="o">*=</span> <span class="o">-</span><span class="mf">2.0</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="c1"># 矩形波</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="n">data_sq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>  <span class="c1"># 奇数次のみ</span>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a>    <span class="n">data_sq</span> <span class="o">+=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">k</span> <span class="o">*</span> <span class="n">f0</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span>
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="n">data_sq</span> <span class="o">*=</span> <span class="mf">4.0</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a>
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a><span class="c1"># 三角波</span>
+<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a><span class="n">data_tri</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>  <span class="c1"># 奇数次のみ</span>
+<a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a>    <span class="n">n_idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+<a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a>    <span class="n">data_tri</span> <span class="o">+=</span> <span class="p">((</span><span class="o">-</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">**</span> <span class="n">n_idx</span> <span class="o">/</span> <span class="n">k</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">k</span> <span class="o">*</span> <span class="n">f0</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span>
+<a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a><span class="n">data_tri</span> <span class="o">*=</span> <span class="mf">8.0</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">**</span> <span class="mi">2</span>
+<a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a>
+<a id="__codelineno-11-22" name="__codelineno-11-22" href="#__codelineno-11-22"></a><span class="c1"># 波形を表示</span>
+<a id="__codelineno-11-23" name="__codelineno-11-23" href="#__codelineno-11-23"></a><span class="n">show_samples</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sample_rate</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">f0</span><span class="p">)</span>
+<a id="__codelineno-11-24" name="__codelineno-11-24" href="#__codelineno-11-24"></a><span class="n">t_show</span> <span class="o">=</span> <span class="n">t</span><span class="p">[:</span><span class="n">show_samples</span><span class="p">]</span> <span class="o">*</span> <span class="mi">1000</span>
+<a id="__codelineno-11-25" name="__codelineno-11-25" href="#__codelineno-11-25"></a>
+<a id="__codelineno-11-26" name="__codelineno-11-26" href="#__codelineno-11-26"></a><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-11-27" name="__codelineno-11-27" href="#__codelineno-11-27"></a><span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="p">[</span>
+<a id="__codelineno-11-28" name="__codelineno-11-28" href="#__codelineno-11-28"></a>    <span class="p">(</span><span class="n">data_saw</span><span class="p">,</span> <span class="s2">&quot;ノコギリ波&quot;</span><span class="p">),</span>
+<a id="__codelineno-11-29" name="__codelineno-11-29" href="#__codelineno-11-29"></a>    <span class="p">(</span><span class="n">data_sq</span><span class="p">,</span> <span class="s2">&quot;矩形波&quot;</span><span class="p">),</span>
+<a id="__codelineno-11-30" name="__codelineno-11-30" href="#__codelineno-11-30"></a>    <span class="p">(</span><span class="n">data_tri</span><span class="p">,</span> <span class="s2">&quot;三角波&quot;</span><span class="p">),</span>
+<a id="__codelineno-11-31" name="__codelineno-11-31" href="#__codelineno-11-31"></a><span class="p">]):</span>
+<a id="__codelineno-11-32" name="__codelineno-11-32" href="#__codelineno-11-32"></a>    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_show</span><span class="p">,</span> <span class="n">data</span><span class="p">[:</span><span class="n">show_samples</span><span class="p">])</span>
+<a id="__codelineno-11-33" name="__codelineno-11-33" href="#__codelineno-11-33"></a>    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<a id="__codelineno-11-34" name="__codelineno-11-34" href="#__codelineno-11-34"></a>    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">)</span>
+<a id="__codelineno-11-35" name="__codelineno-11-35" href="#__codelineno-11-35"></a>    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<a id="__codelineno-11-36" name="__codelineno-11-36" href="#__codelineno-11-36"></a>
+<a id="__codelineno-11-37" name="__codelineno-11-37" href="#__codelineno-11-37"></a><span class="n">axes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;時間 (ms)&quot;</span><span class="p">)</span>
+<a id="__codelineno-11-38" name="__codelineno-11-38" href="#__codelineno-11-38"></a><span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;フーリエ級数による波形再現（倍音</span><span class="si">{</span><span class="n">N</span><span class="si">}</span><span class="s2">個）&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<a id="__codelineno-11-39" name="__codelineno-11-39" href="#__codelineno-11-39"></a><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<a id="__codelineno-11-40" name="__codelineno-11-40" href="#__codelineno-11-40"></a><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+<p><img alt="フーリエ級数による3波形の再現" src="../../figures/ch04/fig2_fourier_reconstruction.png" /></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">display</span><span class="p">(</span><span class="n">play_sound</span><span class="p">(</span><span class="n">AudioSignal</span><span class="p">(</span><span class="n">data_saw</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">),</span> <span class="s2">&quot;ノコギリ波（加算合成）&quot;</span><span class="p">))</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="n">display</span><span class="p">(</span><span class="n">play_sound</span><span class="p">(</span><span class="n">AudioSignal</span><span class="p">(</span><span class="n">data_sq</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">),</span>  <span class="s2">&quot;矩形波（加算合成）&quot;</span><span class="p">))</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="n">display</span><span class="p">(</span><span class="n">play_sound</span><span class="p">(</span><span class="n">AudioSignal</span><span class="p">(</span><span class="n">data_tri</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">),</span> <span class="s2">&quot;三角波（加算合成）&quot;</span><span class="p">))</span>
+</code></pre></div>
+<p><span class="arithmatex">\(N = 20\)</span> でも十分それらしく聞こえます。足し合わせる倍音の数を増やすほど理想的な波形に近づきます。</p>
+<hr />
+<h2 id="47">4.7 倍音の数と波形の関係を観察する<a class="headerlink" href="#47" title="Permanent link">&para;</a></h2>
+<p>倍音の数を変えたときに波形がどう変化するか、じっくり観察しましょう。ノコギリ波で試します。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">harmonics_list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">]</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">harmonics_list</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">N</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="n">harmonics_list</span><span class="p">):</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>        <span class="n">data</span> <span class="o">+=</span> <span class="p">((</span><span class="o">-</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">**</span> <span class="n">k</span> <span class="o">/</span> <span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">k</span> <span class="o">*</span> <span class="n">f0</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>    <span class="n">data</span> <span class="o">*=</span> <span class="o">-</span><span class="mf">2.0</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a>    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_show</span><span class="p">,</span> <span class="n">data</span><span class="p">[:</span><span class="n">show_samples</span><span class="p">])</span>
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;N=</span><span class="si">{</span><span class="n">N</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a>    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.3</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">)</span>
+<a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a>    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a>
+<a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a><span class="n">axes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;時間 (ms)&quot;</span><span class="p">)</span>
+<a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a><span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;ノコギリ波: 倍音の数による変化&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<a id="__codelineno-13-19" name="__codelineno-13-19" href="#__codelineno-13-19"></a><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+<p><img alt="倍音の数とノコギリ波の変化" src="../../figures/ch04/fig3_sawtooth_harmonics.png" /></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">for</span> <span class="n">N</span> <span class="ow">in</span> <span class="n">harmonics_list</span><span class="p">:</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>        <span class="n">data</span> <span class="o">+=</span> <span class="p">((</span><span class="o">-</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">**</span> <span class="n">k</span> <span class="o">/</span> <span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">k</span> <span class="o">*</span> <span class="n">f0</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>    <span class="n">data</span> <span class="o">*=</span> <span class="o">-</span><span class="mf">2.0</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>    <span class="n">display</span><span class="p">(</span><span class="n">play_sound</span><span class="p">(</span><span class="n">AudioSignal</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;ノコギリ波 N=</span><span class="si">{</span><span class="n">N</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
+</code></pre></div>
+<ul>
+<li><span class="arithmatex">\(N=1\)</span>: 純粋なサイン波（「ピー」）</li>
+<li><span class="arithmatex">\(N=2\)</span>: 第2倍音が加わり、わずかに鼻にかかった音に</li>
+<li><span class="arithmatex">\(N=3\)</span>: 音色がはっきり変わり始める</li>
+<li><span class="arithmatex">\(N=5\)</span>: ノコギリ波の特徴的な明るさが出てくる</li>
+<li><span class="arithmatex">\(N=10\)</span>: ほぼノコギリ波</li>
+<li><span class="arithmatex">\(N=50\)</span>: Lesson 2 の <code>sawtooth_wave()</code> とほぼ同じ音</li>
+</ul>
+<p><span class="arithmatex">\(N=50\)</span> は audio_lib の <code>sawtooth_wave()</code> が内部で行っている処理とほぼ同じです（Lesson 2 の 2.3 節で触れた「帯域制限付き加算合成」の正体がこれです）。</p>
+<hr />
+<h2 id="48">4.8 ギブス現象 — 不連続点の「ひげ」<a class="headerlink" href="#48" title="Permanent link">&para;</a></h2>
+<p>矩形波やノコギリ波のように不連続点（値が急に跳ぶ場所）を持つ波形をフーリエ級数で近似すると、不連続点の付近に約9%のオーバーシュート（行き過ぎ）が生じます。これを<strong>ギブス現象</strong>（Gibbs phenomenon）と呼びます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">title</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">200</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;N=20&quot;</span><span class="p">,</span> <span class="s2">&quot;N=200&quot;</span><span class="p">]):</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>        <span class="n">data</span> <span class="o">+=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">k</span> <span class="o">*</span> <span class="n">f0</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a>    <span class="n">data</span> <span class="o">*=</span> <span class="mf">4.0</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a>    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t_show</span><span class="p">,</span> <span class="n">data</span><span class="p">[:</span><span class="n">show_samples</span><span class="p">])</span>
+<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a>    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a>    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">)</span>
+<a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a>    <span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a>    <span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a>    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a>
+<a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a><span class="n">axes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;時間 (ms)&quot;</span><span class="p">)</span>
+<a id="__codelineno-15-17" name="__codelineno-15-17" href="#__codelineno-15-17"></a><span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;ギブス現象: 矩形波の不連続点付近のオーバーシュート&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<a id="__codelineno-15-18" name="__codelineno-15-18" href="#__codelineno-15-18"></a><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<a id="__codelineno-15-19" name="__codelineno-15-19" href="#__codelineno-15-19"></a><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div>
+<p><img alt="ギブス現象の例" src="../../figures/ch04/fig4_gibbs.png" /></p>
+<p>赤い点線が理想的な矩形波の上限（+1）と下限（−1）です。<span class="arithmatex">\(N\)</span> を増やしても、不連続点の近くでは約 1.09 まで飛び出す「ひげ」が消えません。これはフーリエ級数の数学的性質であり、バグではありません。</p>
+<p>三角波にはギブス現象が起きません。三角波は値そのものは連続（つながっている）で、不連続なのは傾きの変化だけだからです。</p>
+<hr />
+<h2 id="49">4.9 帯域制限と加算合成の関係<a class="headerlink" href="#49" title="Permanent link">&para;</a></h2>
+<p>Lesson 2 で「audio_lib の <code>sawtooth_wave()</code> は帯域制限付き加算合成で生成している」と説明しました。ここでその意味を詳しく見ましょう。</p>
+<h3 id="_7">エイリアシングの問題<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
+<p>Lesson 1 で学んだナイキスト周波数（サンプリングレートの半分 = 22050Hz）を超える周波数成分は正しく記録できず、<strong>エイリアシング</strong>（折り返し歪み）を起こします。</p>
+<p>単純な数式でノコギリ波を生成する（<code>2 * phase - 1</code>）と、理論上は無限個の倍音を含むため、高次倍音がナイキスト周波数を超えてエイリアシングが発生します。</p>
+<h3 id="_8">帯域制限付き加算合成<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
+<p>解決策は、ナイキスト周波数以下の倍音だけをサイン波で足し合わせることです。これが<strong>帯域制限付き加算合成</strong>（band-limited additive synthesis）です。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># 帯域制限付きノコギリ波: ナイキスト周波数以下の倍音のみ</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="n">nyquist</span> <span class="o">=</span> <span class="n">sample_rate</span> <span class="o">/</span> <span class="mf">2.0</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="n">max_harmonic</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">nyquist</span> <span class="o">/</span> <span class="n">f0</span><span class="p">)</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="n">data_bl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_harmonic</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a>    <span class="n">data_bl</span> <span class="o">+=</span> <span class="p">((</span><span class="o">-</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">**</span> <span class="n">k</span> <span class="o">/</span> <span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">k</span> <span class="o">*</span> <span class="n">f0</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a><span class="n">data_bl</span> <span class="o">*=</span> <span class="o">-</span><span class="mf">2.0</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;基本周波数: </span><span class="si">{</span><span class="n">f0</span><span class="si">}</span><span class="s2">Hz&quot;</span><span class="p">)</span>
+<a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ナイキスト周波数: </span><span class="si">{</span><span class="n">nyquist</span><span class="si">}</span><span class="s2">Hz&quot;</span><span class="p">)</span>
+<a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;使用する倍音の数: </span><span class="si">{</span><span class="n">max_harmonic</span><span class="si">}</span><span class="s2">個&quot;</span><span class="p">)</span>
+<a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;最高倍音の周波数: </span><span class="si">{</span><span class="n">max_harmonic</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">f0</span><span class="si">}</span><span class="s2">Hz&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>audio_lib の <code>sawtooth_wave()</code> はまさにこの処理を行っています。倍音の数は周波数に応じて自動的に決まるため、高い音ほど倍音が少なく（音色がサイン波に近く）なります。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1"># 低い音と高い音で倍音の数を比較</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="k">for</span> <span class="n">freq</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">440</span><span class="p">,</span> <span class="mi">2000</span><span class="p">,</span> <span class="mi">8000</span><span class="p">]:</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>    <span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">nyquist</span> <span class="o">/</span> <span class="n">freq</span><span class="p">)</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">freq</span><span class="si">:</span><span class="s2">&gt;5</span><span class="si">}</span><span class="s2">Hz → 倍音 </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">個（最高 </span><span class="si">{</span><span class="n">n</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">freq</span><span class="si">}</span><span class="s2">Hz）&quot;</span><span class="p">)</span>
+</code></pre></div>
+<hr />
+<h2 id="410">4.10 分析と合成 — フーリエ変換の予告<a class="headerlink" href="#410" title="Permanent link">&para;</a></h2>
+<p>このレッスンでは：</p>
+<ol>
+<li><strong>合成</strong>（synthesis）: サイン波を足し合わせて波形を作る（加算合成）</li>
+<li><strong>分析</strong>（analysis）: 波形に含まれる倍音を調べる（スペクトラム表示）</li>
+</ol>
+<p>の両方を行いました。<code>plot_spectrum()</code> が内部で使っているのが<strong>フーリエ変換</strong>（Fourier transform）というアルゴリズムで、任意の波形をサイン波成分に分解します。コンピュータで高速に実行するバージョンを <strong>FFT</strong>（高速フーリエ変換）と呼びます。</p>
+<p>ここでは「フーリエ級数 = 理論的な分解」「フーリエ変換 = コンピュータで実行する分解」くらいの理解で十分です。Lesson 13 で FFT の仕組みと使い方を本格的に学び、<code>plot_spectrum()</code> の中身を1行ずつ読み解きます。</p>
+<hr />
+<h2 id="_9">まとめ<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
+<p>このレッスンで学んだことを整理します。</p>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>倍音列</td>
+<td>基本周波数の整数倍の周波数成分。<span class="arithmatex">\(f, 2f, 3f, 4f, \ldots\)</span></td>
+</tr>
+<tr>
+<td>基本波（第1倍音）</td>
+<td>音の高さを決める最も低い周波数成分</td>
+</tr>
+<tr>
+<td>加算合成</td>
+<td>サイン波を足し合わせて音色を作る方法</td>
+</tr>
+<tr>
+<td>フーリエ級数</td>
+<td>周期的な波形をサイン波の和として表現する数学的手法</td>
+</tr>
+<tr>
+<td>ギブス現象</td>
+<td>不連続点付近のオーバーシュート（約9%）。倍音を増やしても消えない</td>
+</tr>
+<tr>
+<td>非調和倍音</td>
+<td>整数倍でない周波数成分。金属音や打楽器に特有</td>
+</tr>
+<tr>
+<td>帯域制限付き加算合成</td>
+<td>ナイキスト周波数以下の倍音のみで合成し、エイリアシングを防ぐ</td>
+</tr>
+</tbody>
+</table>
+<h3 id="audio_lib">使った audio_lib の関数<a class="headerlink" href="#audio_lib" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>関数</th>
+<th>役割</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sine_wave(freq, duration)</code></td>
+<td>サイン波を生成（加算合成の基本部品）</td>
+</tr>
+<tr>
+<td><code>additive_synth(freq, harmonics)</code></td>
+<td>倍音レシピ（辞書）から加算合成で音を生成</td>
+</tr>
+<tr>
+<td><code>AudioSignal(data, sample_rate)</code></td>
+<td>NumPy 配列を音声信号としてラップ</td>
+</tr>
+<tr>
+<td><code>plot_spectrum(signal, max_freq)</code></td>
+<td>周波数スペクトラムを表示</td>
+</tr>
+<tr>
+<td><code>plot_harmonics(signal, max_freq)</code></td>
+<td>倍音の相対振幅を棒グラフで表示</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_10">次回予告<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
+<p>Lesson 5 では <strong>Sonic Pi</strong> に戻り、ここで学んだ倍音と音色の知識を実践に結びつけます。Sonic Pi のシンセパラメータ（<code>cutoff</code>、<code>res</code> など）やフィルターが、倍音をどうコントロールしているかを体験しましょう。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  ページトップへ戻る
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.code.copy", "navigation.sections", "navigation.top", "search.highlight", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

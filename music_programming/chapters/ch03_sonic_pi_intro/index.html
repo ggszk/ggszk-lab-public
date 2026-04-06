@@ -1,0 +1,2724 @@
+
+<!doctype html>
+<html lang="ja" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Python と Sonic Pi で学ぶ音の科学とライブコーディング">
+      
+      
+      
+        <link rel="canonical" href="https://ggszk.github.io/ggszk-lab-public/music_programming/chapters/ch03_sonic_pi_intro/">
+      
+      
+        <link rel="prev" href="../ch02_waveforms_and_timbre/">
+      
+      
+        <link rel="next" href="../ch04_harmonics_and_timbre/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Lesson 3: Sonic Pi入門 - 音楽プログラミング入門</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#lesson-3-sonic-pi" class="md-skip">
+          コンテンツにスキップ
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="ヘッダー">
+    <a href="../.." title="音楽プログラミング入門" class="md-header__button md-logo" aria-label="音楽プログラミング入門" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            音楽プログラミング入門
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Lesson 3: Sonic Pi入門
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="検索" placeholder="検索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="検索">
+        
+        <button type="reset" class="md-search__icon md-icon" title="クリア" aria-label="クリア" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            検索を初期化
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="ナビゲーション" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="音楽プログラミング入門" class="md-nav__button md-logo" aria-label="音楽プログラミング入門" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    音楽プログラミング入門
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ホーム
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../preface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    はじめに
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    本編
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    本編
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch01_sound_and_digital_audio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 1: 音とは何か・デジタル音の基礎
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch02_waveforms_and_timbre/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 2: 波形と音色の基礎
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 3: Sonic Pi入門
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 3: Sonic Pi入門
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        このレッスンで学ぶこと
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        環境セットアップ
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="環境セットアップ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sonic-pi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sonic Piのインストール
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        画面の構成
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 最初の音を鳴らす
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.1 最初の音を鳴らす">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        音名で指定する
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#32-sleep" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 sleep — 音と音の間に間を置く
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.2 sleep — 音と音の間に間を置く">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ドレミファソラシドを鳴らす
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#33-use_synth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 use_synth — 音色を変える
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.3 use_synth — 音色を変える">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        その他のシンセ
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#34" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 繰り返し
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.4 繰り返し">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#times-do" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        回数を指定する繰り返し: times do
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#live_loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        無限に繰り返す: live_loop
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#35-use_bpm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 テンポを指定する: use_bpm
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#36-play_pattern_timed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6 play_pattern_timed — 配列でメロディを書く
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.6 play_pattern_timed — 配列でメロディを書く">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        基本の使い方
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        メロディを打ち込んでみる
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#live_loop_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        live_loop と組み合わせる
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#37" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.7 メロディに変化を加える
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.7 メロディに変化を加える">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#choose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ランダムに音を選ぶ: choose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use_transpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        時々移調する: use_transpose
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#38-rubypython" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.8 RubyとPythonの対応
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#39-define" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.9 関数を定義する: define
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.9 関数を定義する: define">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        引数を使う
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        まとめ
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="まとめ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lesson-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lesson 1〜2 との対応
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        次回予告
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch04_harmonics_and_timbre/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 4: 倍音と音色
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch05_sonic_pi_timbre_control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 5: Sonic Piで音色をコントロール
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch06_scales_and_frequency/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 6: 音階と周波数
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch07_sonic_pi_melody_and_scales/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 7: Sonic Piでメロディとコード
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch08_envelope_adsr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 8: エンベロープ（ADSR）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch09_effects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 9: エフェクトの原理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch10_sonic_pi_envelope_and_fx/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 10: Sonic PiのエンベロープとFX
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch11_rhythm_and_score/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 11: リズムとスコアファイル
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch12_sonic_pi_rhythm_patterns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 12: Sonic Piでリズムパターン
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch13_spectrum_analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 13: 音を周波数で見る
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch14_live_coding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 14: ライブコーディング技法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch15_final_project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 15: 総合演習 — 作品制作
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    演習
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    演習
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch01_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch02_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch03_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch04_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 4
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch05_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 5
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch06_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 6
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch07_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 7
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch08_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 8
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch09_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 9
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch10_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 10
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch11_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 11
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch12_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 12
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch13_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 13
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch14_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 14
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch15_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 15
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    付録
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    付録
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendix/python_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    付録A: Google Colab と audio_lib
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendix/sonicpi_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    付録B: Sonic Pi のセットアップ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendix/references/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    参考文献
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../afterword/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    おわりに
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../author/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    著者紹介
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        このレッスンで学ぶこと
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        環境セットアップ
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="環境セットアップ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sonic-pi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sonic Piのインストール
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        画面の構成
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 最初の音を鳴らす
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.1 最初の音を鳴らす">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        音名で指定する
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#32-sleep" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 sleep — 音と音の間に間を置く
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.2 sleep — 音と音の間に間を置く">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ドレミファソラシドを鳴らす
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#33-use_synth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 use_synth — 音色を変える
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.3 use_synth — 音色を変える">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        その他のシンセ
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#34" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 繰り返し
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.4 繰り返し">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#times-do" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        回数を指定する繰り返し: times do
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#live_loop" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        無限に繰り返す: live_loop
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#35-use_bpm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5 テンポを指定する: use_bpm
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#36-play_pattern_timed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.6 play_pattern_timed — 配列でメロディを書く
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.6 play_pattern_timed — 配列でメロディを書く">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        基本の使い方
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        メロディを打ち込んでみる
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#live_loop_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        live_loop と組み合わせる
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#37" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.7 メロディに変化を加える
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.7 メロディに変化を加える">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#choose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ランダムに音を選ぶ: choose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use_transpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        時々移調する: use_transpose
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#38-rubypython" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.8 RubyとPythonの対応
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#39-define" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.9 関数を定義する: define
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.9 関数を定義する: define">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        引数を使う
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        まとめ
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="まとめ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lesson-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lesson 1〜2 との対応
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        次回予告
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="lesson-3-sonic-pi">Lesson 3: Sonic Pi入門<a class="headerlink" href="#lesson-3-sonic-pi" title="Permanent link">&para;</a></h1>
+<h2 id="_1">このレッスンで学ぶこと<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Sonic Piの基本操作（起動、コード入力、実行）を習得する</li>
+<li><code>play</code> と <code>sleep</code> で音を順番に鳴らす</li>
+<li>Lesson 1〜2 で学んだ波形や音名を Sonic Pi のシンセで確認する</li>
+<li>繰り返し（<code>times do</code>、<code>live_loop</code>）でメロディを構成する</li>
+<li><code>play_pattern_timed</code> で配列を使ったメロディ記述を学ぶ</li>
+</ul>
+<p>ここからは Sonic Pi を使います。Lesson 1〜2 で Python を通じて学んだ「音の仕組み」を、今度は音楽として鳴らしていきましょう。</p>
+<h2 id="_2">環境セットアップ<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h3 id="sonic-pi">Sonic Piのインストール<a class="headerlink" href="#sonic-pi" title="Permanent link">&para;</a></h3>
+<p>Sonic Pi は公式サイト（<a href="https://sonic-pi.net/">https://sonic-pi.net/</a>）からダウンロードできます。Windows、macOS、Linux に対応しています。インストール手順の詳細は付録を参照してください。</p>
+<h3 id="_3">画面の構成<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<p>Sonic Pi を起動すると、次のような画面が表示されます（図3.1）。</p>
+<p><img alt="Sonic Piの画面構成" src="../../figures/ch03/fig1_sonic_pi_screen.png" /></p>
+<ul>
+<li><strong>コードエディタ</strong>（左側）: ここにコードを書きます</li>
+<li><strong>Run / Stop ボタン</strong>（上部）: コードの実行と停止を行います</li>
+<li><strong>ログ</strong>（右中央）: 実行中に鳴らした音のシンセ名や音名が表示されます</li>
+<li><strong>スコープ</strong>（右上）: 音の波形がリアルタイムに表示されます</li>
+<li><strong>キュー</strong>（右下）: 実行中のループの状態が表示されます</li>
+</ul>
+<p>コードを書いて Run を押すとすぐに音が鳴ります。この即時性が Sonic Pi の魅力です。</p>
+<hr />
+<h2 id="31">3.1 最初の音を鳴らす<a class="headerlink" href="#31" title="Permanent link">&para;</a></h2>
+<p>エディタに次のコードを入力して、Run を押してみてください。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">play</span><span class="w"> </span><span class="mi">60</span>
+</code></pre></div>
+<p>「ポーン」という音が1つ鳴ります。<code>play</code> は音を鳴らすコマンドで、<code>60</code> は<strong>MIDI番号</strong>です。Lesson 1 で「A4（ラ）が69番、C4（ド）が60番」と確認したことを思い出してください。つまり <code>play 60</code> は「ドの音を鳴らす」という意味です。</p>
+<h3 id="_4">音名で指定する<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<p>MIDI番号の代わりに、音名をシンボル（<code>:</code> 付きの名前）で指定することもできます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">play</span><span class="w"> </span><span class="ss">:c4</span>
+</code></pre></div>
+<p>これも同じ C4（ド）の音が鳴ります。<code>:c4</code> は Sonic Pi で「C4の音」を表すシンボルです。番号より直感的なので、本書では基本的にこちらの書き方を使います。</p>
+<p>いくつかの音を試してみましょう。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">play</span><span class="w"> </span><span class="ss">:c4</span><span class="w">   </span><span class="c1"># ド</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">play</span><span class="w"> </span><span class="ss">:e4</span><span class="w">   </span><span class="c1"># ミ</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">play</span><span class="w"> </span><span class="ss">:g4</span><span class="w">   </span><span class="c1"># ソ</span>
+</code></pre></div>
+<p>3つの音が同時に鳴ります。Run を押した瞬間に <code>play</code> が3つ続けて実行されるため、ほぼ同時に発音されるのです。音を順番に鳴らすには、次に紹介する <code>sleep</code> が必要です。</p>
+<hr />
+<h2 id="32-sleep">3.2 sleep — 音と音の間に間を置く<a class="headerlink" href="#32-sleep" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">play</span><span class="w"> </span><span class="ss">:c4</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">1</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">play</span><span class="w"> </span><span class="ss">:e4</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">1</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">play</span><span class="w"> </span><span class="ss">:g4</span>
+</code></pre></div>
+<p>今度は「ド」「ミ」「ソ」が1つずつ順番に鳴ります。<code>sleep 1</code> は「1拍待つ」という意味です。</p>
+<p><code>sleep</code> の値を変えると、音の間隔が変わります。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">play</span><span class="w"> </span><span class="ss">:c4</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">play</span><span class="w"> </span><span class="ss">:e4</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="n">play</span><span class="w"> </span><span class="ss">:g4</span>
+</code></pre></div>
+<p><code>sleep 0.5</code> にすると倍の速さで鳴ります。逆に <code>sleep 2</code> にすればゆっくりになります。</p>
+<h3 id="_5">ドレミファソラシドを鳴らす<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
+<p>Lesson 1 で Python を使って周波数からドレミを生成しました。Sonic Pi なら音名を並べるだけです。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">play</span><span class="w"> </span><span class="ss">:c4</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">play</span><span class="w"> </span><span class="ss">:d4</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="n">play</span><span class="w"> </span><span class="ss">:e4</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="n">play</span><span class="w"> </span><span class="ss">:f4</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="n">play</span><span class="w"> </span><span class="ss">:g4</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="n">play</span><span class="w"> </span><span class="ss">:a4</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="n">play</span><span class="w"> </span><span class="ss">:b4</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="n">play</span><span class="w"> </span><span class="ss">:c5</span>
+</code></pre></div>
+<p>C4 から C5 まで、1オクターブのドレミが聞こえます。</p>
+<hr />
+<h2 id="33-use_synth">3.3 use_synth — 音色を変える<a class="headerlink" href="#33-use_synth" title="Permanent link">&para;</a></h2>
+<p>Lesson 2 では、サイン波・矩形波・ノコギリ波・三角波を Python で生成し、波形の違いが音色の違いになることを学びました。Sonic Pi にはさまざまな<strong>シンセ</strong>（音源）が用意されており、<code>use_synth</code> で切り替えられます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">use_synth</span><span class="w"> </span><span class="ss">:beep</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">play</span><span class="w"> </span><span class="ss">:c4</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">1</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="n">use_synth</span><span class="w"> </span><span class="ss">:saw</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="n">play</span><span class="w"> </span><span class="ss">:c4</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">1</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="n">use_synth</span><span class="w"> </span><span class="ss">:square</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="n">play</span><span class="w"> </span><span class="ss">:c4</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">1</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="n">use_synth</span><span class="w"> </span><span class="ss">:tri</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="n">play</span><span class="w"> </span><span class="ss">:c4</span>
+</code></pre></div>
+<p>同じ C4 でも、シンセによって音色がまったく違います。</p>
+<table>
+<thead>
+<tr>
+<th>シンセ名</th>
+<th>波形</th>
+<th>音の特徴</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:beep</code></td>
+<td>サイン波</td>
+<td>純粋で素朴な「ピー」という音（デフォルト）</td>
+</tr>
+<tr>
+<td><code>:saw</code></td>
+<td>ノコギリ波</td>
+<td>明るく鋭い音</td>
+</tr>
+<tr>
+<td><code>:square</code></td>
+<td>矩形波</td>
+<td>中空で硬い音。レトロゲーム風</td>
+</tr>
+<tr>
+<td><code>:tri</code></td>
+<td>三角波</td>
+<td>サイン波に近いが少し角がある柔らかい音</td>
+</tr>
+</tbody>
+</table>
+<p>Lesson 2 で <code>sawtooth_wave()</code> や <code>square_wave()</code> を使って聞き比べた波形が、Sonic Pi ではシンセ名を1つ変えるだけで使えます。Python で学んだ「波形 → 音色」の対応を、ここで体感してください。</p>
+<h3 id="_6">その他のシンセ<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<p>Sonic Pi には楽器を模したシンセも多数あります。いくつか試してみましょう。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">use_synth</span><span class="w"> </span><span class="ss">:piano</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="n">play</span><span class="w"> </span><span class="ss">:c4</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">1</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="n">use_synth</span><span class="w"> </span><span class="ss">:pluck</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="n">play</span><span class="w"> </span><span class="ss">:c4</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">1</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="n">use_synth</span><span class="w"> </span><span class="ss">:prophet</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="n">play</span><span class="w"> </span><span class="ss">:c4</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>シンセ名</th>
+<th>音の特徴</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:piano</code></td>
+<td>ピアノのような柔らかい音</td>
+</tr>
+<tr>
+<td><code>:pluck</code></td>
+<td>弦をはじくような軽い音</td>
+</tr>
+<tr>
+<td><code>:prophet</code></td>
+<td>温かみのあるアナログシンセ風</td>
+</tr>
+<tr>
+<td><code>:blade</code></td>
+<td>透明感のある幻想的な音</td>
+</tr>
+<tr>
+<td><code>:pretty_bell</code></td>
+<td>ベルのような澄んだ音</td>
+</tr>
+</tbody>
+</table>
+<p>シンセの全リストは Sonic Pi のヘルプパネル（Synths タブ）で確認できます。気になるシンセを見つけたら、どんどん試してみてください。</p>
+<hr />
+<h2 id="34">3.4 繰り返し<a class="headerlink" href="#34" title="Permanent link">&para;</a></h2>
+<p>同じフレーズを何度も繰り返すのは音楽の基本です。Sonic Pi では繰り返しを簡潔に書けます。</p>
+<h3 id="times-do">回数を指定する繰り返し: times do<a class="headerlink" href="#times-do" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="mi">3</span><span class="o">.</span><span class="n">times</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="ss">:c4</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="ss">:e4</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="k">end</span>
+</code></pre></div>
+<p><code>3.times do ... end</code> で、中のコードが3回繰り返されます。ドとミが交互に3回鳴ります。</p>
+<p>繰り返しの中に繰り返しを入れることもできます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="mi">2</span><span class="o">.</span><span class="n">times</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="mi">3</span><span class="o">.</span><span class="n">times</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">    </span><span class="n">play</span><span class="w"> </span><span class="ss">:c4</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">    </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">25</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">  </span><span class="k">end</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="ss">:g4</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="k">end</span>
+</code></pre></div>
+<p>内側のループ（ドを3回素早く）が終わったらソが鳴り、それが2回繰り返されます。</p>
+<h3 id="live_loop">無限に繰り返す: live_loop<a class="headerlink" href="#live_loop" title="Permanent link">&para;</a></h3>
+<p>音楽は繰り返しの芸術です。ずっと繰り返し続けるには <code>live_loop</code> を使います。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">live_loop</span><span class="w"> </span><span class="ss">:melody</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="ss">:c4</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="ss">:e4</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="k">end</span>
+</code></pre></div>
+<p><code>live_loop :melody do ... end</code> で、<code>:melody</code> という名前のループが無限に繰り返されます。Stop ボタンを押すまで鳴り続けます。</p>
+<p><code>:melody</code> の部分はループの名前で、自由につけられます。この名前は複数のループを管理するときに重要になります（Lesson 12 で詳しく扱います）。</p>
+<p><strong>注意</strong>: <code>live_loop</code> の中には必ず <code>sleep</code> を入れてください。<code>sleep</code> がないとループが一瞬で回り続け、Sonic Pi がフリーズします。</p>
+<hr />
+<h2 id="35-use_bpm">3.5 テンポを指定する: use_bpm<a class="headerlink" href="#35-use_bpm" title="Permanent link">&para;</a></h2>
+<p><code>sleep 1</code> は「1拍待つ」と説明しましたが、1拍の長さはテンポ（BPM: Beats Per Minute）で決まります。デフォルトは 60 BPM（1拍 = 1秒）です。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">use_bpm</span><span class="w"> </span><span class="mi">120</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="n">live_loop</span><span class="w"> </span><span class="ss">:fast_melody</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="ss">:c4</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="ss">:e4</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="ss">:g4</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="ss">:e4</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="k">end</span>
+</code></pre></div>
+<p><code>use_bpm 120</code> でテンポを120 BPM（1拍 = 0.5秒）に設定しています。<code>sleep</code> の値はそのままで、全体のテンポだけが変わります。</p>
+<p>数値を変えて試してみてください。<code>use_bpm 60</code> ならゆったり、<code>use_bpm 180</code> なら駆け足のテンポになります。</p>
+<hr />
+<h2 id="36-play_pattern_timed">3.6 play_pattern_timed — 配列でメロディを書く<a class="headerlink" href="#36-play_pattern_timed" title="Permanent link">&para;</a></h2>
+<p>ドレミファソラシドを1音ずつ <code>play</code> と <code>sleep</code> で書くのは冗長です。<code>play_pattern_timed</code> を使うと、音の列と間隔をまとめて指定できます。</p>
+<h3 id="_7">基本の使い方<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">play_pattern_timed</span><span class="w"> </span><span class="o">[</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:d4</span><span class="p">,</span><span class="w"> </span><span class="ss">:e4</span><span class="p">,</span><span class="w"> </span><span class="ss">:f4</span><span class="p">,</span><span class="w"> </span><span class="ss">:g4</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span><span class="o">]</span>
+</code></pre></div>
+<p>1つ目の配列が音の並び、2つ目の配列が各音のあとの待ち時間（拍数）です。</p>
+<p>間隔がすべて同じなら、2つ目の配列は1つの値だけでも構いません。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">play_pattern_timed</span><span class="w"> </span><span class="o">[</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:d4</span><span class="p">,</span><span class="w"> </span><span class="ss">:e4</span><span class="p">,</span><span class="w"> </span><span class="ss">:f4</span><span class="p">,</span><span class="w"> </span><span class="ss">:g4</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span><span class="o">]</span>
+</code></pre></div>
+<h3 id="_8">メロディを打ち込んでみる<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
+<p>「かえるの歌」の最初のフレーズ（ドレミファミレド）を打ち込んでみましょう。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="n">use_synth</span><span class="w"> </span><span class="ss">:piano</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="n">play_pattern_timed</span><span class="w"> </span><span class="o">[</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:d4</span><span class="p">,</span><span class="w"> </span><span class="ss">:e4</span><span class="p">,</span><span class="w"> </span><span class="ss">:f4</span><span class="p">,</span><span class="w"> </span><span class="ss">:e4</span><span class="p">,</span><span class="w"> </span><span class="ss">:d4</span><span class="p">,</span><span class="w"> </span><span class="ss">:c4</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span><span class="o">]</span>
+</code></pre></div>
+<p>たった2行でメロディが鳴ります。音名の配列を書き換えるだけで別の曲になるので、好きなメロディを試してみてください。</p>
+<h3 id="live_loop_1">live_loop と組み合わせる<a class="headerlink" href="#live_loop_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="n">use_synth</span><span class="w"> </span><span class="ss">:piano</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="n">live_loop</span><span class="w"> </span><span class="ss">:kaeru</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">  </span><span class="n">play_pattern_timed</span><span class="w"> </span><span class="o">[</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:d4</span><span class="p">,</span><span class="w"> </span><span class="ss">:e4</span><span class="p">,</span><span class="w"> </span><span class="ss">:f4</span><span class="p">,</span><span class="w"> </span><span class="ss">:e4</span><span class="p">,</span><span class="w"> </span><span class="ss">:d4</span><span class="p">,</span><span class="w"> </span><span class="ss">:c4</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span><span class="o">]</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="k">end</span>
+</code></pre></div>
+<p>かえるの歌がずっと繰り返されます。</p>
+<hr />
+<h2 id="37">3.7 メロディに変化を加える<a class="headerlink" href="#37" title="Permanent link">&para;</a></h2>
+<h3 id="choose">ランダムに音を選ぶ: choose<a class="headerlink" href="#choose" title="Permanent link">&para;</a></h3>
+<p>配列から1つの音をランダムに選んで鳴らすことができます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="n">live_loop</span><span class="w"> </span><span class="ss">:random_melody</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="o">[</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:e4</span><span class="p">,</span><span class="w"> </span><span class="ss">:g4</span><span class="o">].</span><span class="n">choose</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="k">end</span>
+</code></pre></div>
+<p><code>.choose</code> は配列の中からランダムに1つの要素を選ぶメソッドです。実行するたびに違うメロディが生まれます。</p>
+<p>ただし、もう一度 Run を押すと同じメロディが再生されます。これは Sonic Pi がランダムシードを固定しているためです。毎回違う結果にしたい場合は、次のようにシードを変えます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="n">use_random_seed</span><span class="w"> </span><span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">to_i</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="n">live_loop</span><span class="w"> </span><span class="ss">:random_melody</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="o">[</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:e4</span><span class="p">,</span><span class="w"> </span><span class="ss">:g4</span><span class="o">].</span><span class="n">choose</span>
+<a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="o">[</span><span class="mi">0</span><span class="o">.</span><span class="mi">25</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">].</span><span class="n">choose</span>
+<a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="k">end</span>
+</code></pre></div>
+<p><code>sleep</code> にも <code>.choose</code> を使うと、リズムもランダムになります。</p>
+<h3 id="use_transpose">時々移調する: use_transpose<a class="headerlink" href="#use_transpose" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="n">live_loop</span><span class="w"> </span><span class="ss">:melody</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="n">one_in</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">    </span><span class="n">use_transpose</span><span class="w"> </span><span class="mi">2</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="w">  </span><span class="k">else</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="w">    </span><span class="n">use_transpose</span><span class="w"> </span><span class="mi">0</span>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="w">  </span><span class="k">end</span>
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="w">  </span><span class="n">play_pattern_timed</span><span class="w"> </span><span class="o">[</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:e4</span><span class="p">,</span><span class="w"> </span><span class="ss">:g4</span><span class="p">,</span><span class="w"> </span><span class="ss">:e4</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="mi">0</span><span class="o">.</span><span class="mi">25</span><span class="o">]</span>
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a><span class="k">end</span>
+</code></pre></div>
+<p><code>one_in(4)</code> は「4回に1回の確率で true を返す」関数です。<code>use_transpose 2</code> は以降の音を半音2つ分（全音1つ分）上げます。ループのたびに確率で移調が起きるので、同じフレーズに微妙な変化が生まれます。</p>
+<hr />
+<h2 id="38-rubypython">3.8 RubyとPythonの対応<a class="headerlink" href="#38-rubypython" title="Permanent link">&para;</a></h2>
+<p>Sonic Pi で使われるプログラミング言語は <strong>Ruby</strong> です。Python を習得済みであれば、基本的な構文はすぐに馴染めます。主な違いを確認しておきましょう。</p>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>Python</th>
+<th>Sonic Pi (Ruby)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>繰り返し（回数指定）</td>
+<td><code>for i in range(3):</code></td>
+<td><code>3.times do ... end</code></td>
+</tr>
+<tr>
+<td>無限ループ</td>
+<td><code>while True:</code></td>
+<td><code>live_loop :name do ... end</code></td>
+</tr>
+<tr>
+<td>配列（リスト）</td>
+<td><code>[1, 2, 3]</code></td>
+<td><code>[1, 2, 3]</code></td>
+</tr>
+<tr>
+<td>条件分岐</td>
+<td><code>if x == 1:</code></td>
+<td><code>if x == 1 ... end</code></td>
+</tr>
+<tr>
+<td>ブロックの区切り</td>
+<td>インデント</td>
+<td><code>do ... end</code></td>
+</tr>
+<tr>
+<td>コメント</td>
+<td><code># コメント</code></td>
+<td><code># コメント</code></td>
+</tr>
+<tr>
+<td>シンボル</td>
+<td>なし</td>
+<td><code>:c4</code>, <code>:piano</code> など</td>
+</tr>
+</tbody>
+</table>
+<p>最大の違いは<strong>ブロックの区切り方</strong>です。Python はインデント（字下げ）でブロックを表しますが、Ruby は <code>do ... end</code> で囲みます。Sonic Pi のコードでインデントしているのは読みやすさのためで、動作には影響しません（ただし、読みやすさのために揃えることを強くお勧めします）。</p>
+<p><strong>シンボル</strong>は Ruby 特有の概念です。<code>:c4</code> や <code>:piano</code> のように <code>:</code> で始まる名前で、音名やシンセ名の指定に使われます。Python の文字列に似ていますが、変更不可で軽量な「ラベル」と考えてください。</p>
+<hr />
+<h2 id="39-define">3.9 関数を定義する: define<a class="headerlink" href="#39-define" title="Permanent link">&para;</a></h2>
+<p>繰り返し使うフレーズは関数にまとめると便利です。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="n">define</span><span class="w"> </span><span class="ss">:kaeru</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="w">  </span><span class="n">play_pattern_timed</span><span class="w"> </span><span class="o">[</span><span class="ss">:c4</span><span class="p">,</span><span class="w"> </span><span class="ss">:d4</span><span class="p">,</span><span class="w"> </span><span class="ss">:e4</span><span class="p">,</span><span class="w"> </span><span class="ss">:f4</span><span class="p">,</span><span class="w"> </span><span class="ss">:e4</span><span class="p">,</span><span class="w"> </span><span class="ss">:d4</span><span class="p">,</span><span class="w"> </span><span class="ss">:c4</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span><span class="o">]</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="k">end</span>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="n">kaeru</span>
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="nb">sleep</span><span class="w"> </span><span class="mi">1</span>
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="n">kaeru</span>
+</code></pre></div>
+<p><code>define :kaeru do ... end</code> で <code>:kaeru</code> という関数を定義し、<code>kaeru</code> と書くだけで呼び出せます。</p>
+<p><strong>注意</strong>: Sonic Pi の <code>define</code> は Sonic Pi 独自のコマンドです。Ruby の標準的な関数定義は <code>def ... end</code> ですが、Sonic Pi では <code>define :名前 do ... end</code> を使います。</p>
+<h3 id="_9">引数を使う<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="n">define</span><span class="w"> </span><span class="ss">:play_note</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">note</span><span class="o">|</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">  </span><span class="n">play</span><span class="w"> </span><span class="n">note</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="w">  </span><span class="nb">sleep</span><span class="w"> </span><span class="mi">0</span><span class="o">.</span><span class="mi">5</span>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="k">end</span>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="n">play_note</span><span class="w"> </span><span class="ss">:c4</span>
+<a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="n">play_note</span><span class="w"> </span><span class="ss">:e4</span>
+<a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a><span class="n">play_note</span><span class="w"> </span><span class="ss">:g4</span>
+</code></pre></div>
+<p><code>|note|</code> が引数です。Python の <code>def play_note(note):</code> に対応します。</p>
+<hr />
+<h2 id="_10">まとめ<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h2>
+<p>このレッスンで学んだことを整理します。</p>
+<table>
+<thead>
+<tr>
+<th>コマンド</th>
+<th>役割</th>
+<th>例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>play</code></td>
+<td>音を鳴らす</td>
+<td><code>play :c4</code>, <code>play 60</code></td>
+</tr>
+<tr>
+<td><code>sleep</code></td>
+<td>拍数だけ待つ</td>
+<td><code>sleep 0.5</code></td>
+</tr>
+<tr>
+<td><code>use_synth</code></td>
+<td>シンセ（音色）を切り替える</td>
+<td><code>use_synth :piano</code></td>
+</tr>
+<tr>
+<td><code>use_bpm</code></td>
+<td>テンポを設定する</td>
+<td><code>use_bpm 120</code></td>
+</tr>
+<tr>
+<td><code>N.times do ... end</code></td>
+<td>N回繰り返す</td>
+<td><code>3.times do ... end</code></td>
+</tr>
+<tr>
+<td><code>live_loop :name do ... end</code></td>
+<td>無限ループ</td>
+<td><code>live_loop :melody do ... end</code></td>
+</tr>
+<tr>
+<td><code>play_pattern_timed</code></td>
+<td>配列でメロディを鳴らす</td>
+<td><code>play_pattern_timed [:c4, :e4], [0.5]</code></td>
+</tr>
+<tr>
+<td><code>.choose</code></td>
+<td>配列からランダムに選ぶ</td>
+<td><code>[:c4, :e4, :g4].choose</code></td>
+</tr>
+<tr>
+<td><code>use_transpose</code></td>
+<td>移調する</td>
+<td><code>use_transpose 2</code></td>
+</tr>
+<tr>
+<td><code>one_in(N)</code></td>
+<td>N回に1回 true</td>
+<td><code>one_in(4)</code></td>
+</tr>
+<tr>
+<td><code>define :name do ... end</code></td>
+<td>関数を定義する</td>
+<td><code>define :kaeru do ... end</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="lesson-12">Lesson 1〜2 との対応<a class="headerlink" href="#lesson-12" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Pythonで学んだこと</th>
+<th>Sonic Piでの対応</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>周波数 440Hz → ラの音</td>
+<td><code>play :a4</code> または <code>play 69</code></td>
+</tr>
+<tr>
+<td>サイン波・ノコギリ波・矩形波・三角波</td>
+<td><code>:beep</code>, <code>:saw</code>, <code>:square</code>, <code>:tri</code></td>
+</tr>
+<tr>
+<td>MIDI番号（C4 = 60）</td>
+<td><code>play 60</code> と <code>play :c4</code> は同じ</td>
+</tr>
+<tr>
+<td>NumPy配列で音を表現</td>
+<td>配列 <code>[:c4, :e4, :g4]</code> でメロディを表現</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_11">次回予告<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h3>
+<p>Lesson 4 では Python に戻り、<strong>倍音と音色</strong>を扱います。なぜノコギリ波はサイン波と音色が違うのか、その原理を周波数分析で解き明かします。Lesson 5 では、その知識を使って Sonic Pi のシンセパラメータをより深くコントロールします。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  ページトップへ戻る
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.code.copy", "navigation.sections", "navigation.top", "search.highlight", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

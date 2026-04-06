@@ -1,0 +1,2533 @@
+
+<!doctype html>
+<html lang="ja" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Python と Sonic Pi で学ぶ音の科学とライブコーディング">
+      
+      
+      
+        <link rel="canonical" href="https://ggszk.github.io/ggszk-lab-public/music_programming/chapters/ch01_sound_and_digital_audio/">
+      
+      
+        <link rel="prev" href="../preface/">
+      
+      
+        <link rel="next" href="../ch02_waveforms_and_timbre/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Lesson 1: 音とは何か・デジタル音の基礎 - 音楽プログラミング入門</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#lesson-1" class="md-skip">
+          コンテンツにスキップ
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="ヘッダー">
+    <a href="../.." title="音楽プログラミング入門" class="md-header__button md-logo" aria-label="音楽プログラミング入門" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            音楽プログラミング入門
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Lesson 1: 音とは何か・デジタル音の基礎
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="検索" placeholder="検索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="検索">
+        
+        <button type="reset" class="md-search__icon md-icon" title="クリア" aria-label="クリア" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            検索を初期化
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="ナビゲーション" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="音楽プログラミング入門" class="md-nav__button md-logo" aria-label="音楽プログラミング入門" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    音楽プログラミング入門
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ホーム
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../preface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    はじめに
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    本編
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    本編
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 1: 音とは何か・デジタル音の基礎
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 1: 音とは何か・デジタル音の基礎
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        このレッスンで学ぶこと
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        環境セットアップ
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 音とは何か
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 最初の音を鳴らそう
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.2 最初の音を鳴らそう">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        波形を見る
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        音を再生する
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 中身を見てみよう — サイン波の原理
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.3 中身を見てみよう — サイン波の原理">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        時間軸の配列
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        サイン波の計算
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#audio_lib" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        audio_lib との対応
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 アナログとデジタル — 音のデータとは
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.4 アナログとデジタル — 音のデータとは">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        アナログからデジタルへの変換
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5 サンプリング
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.5 サンプリング">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#44100hz" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        なぜ44100Hz なのか
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        サンプリングレートの違いを体験する
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        エイリアシング
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6 周波数と音の高さ
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.7 振幅と音の大きさ
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#18-wav" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.8 WAVファイルへの保存
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.8 WAVファイルへの保存">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#audio_lib_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        audio_lib で保存
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        素のPythonで保存
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#19" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.9 音名と周波数
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        まとめ
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="まとめ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#audio_lib_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        使った audio_lib の関数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        次回予告
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch02_waveforms_and_timbre/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 2: 波形と音色の基礎
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch03_sonic_pi_intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 3: Sonic Pi入門
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch04_harmonics_and_timbre/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 4: 倍音と音色
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch05_sonic_pi_timbre_control/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 5: Sonic Piで音色をコントロール
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch06_scales_and_frequency/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 6: 音階と周波数
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch07_sonic_pi_melody_and_scales/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 7: Sonic Piでメロディとコード
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch08_envelope_adsr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 8: エンベロープ（ADSR）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch09_effects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 9: エフェクトの原理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch10_sonic_pi_envelope_and_fx/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 10: Sonic PiのエンベロープとFX
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch11_rhythm_and_score/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 11: リズムとスコアファイル
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch12_sonic_pi_rhythm_patterns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 12: Sonic Piでリズムパターン
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch13_spectrum_analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 13: 音を周波数で見る
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch14_live_coding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 14: ライブコーディング技法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ch15_final_project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 15: 総合演習 — 作品制作
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    演習
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    演習
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch01_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 1
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch02_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch03_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch04_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 4
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch05_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 5
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch06_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 6
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch07_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 7
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch08_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 8
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch09_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 9
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch10_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 10
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch11_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 11
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch12_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 12
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch13_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 13
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch14_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 14
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exercises/ch15_exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lesson 15
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    付録
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    付録
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendix/python_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    付録A: Google Colab と audio_lib
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendix/sonicpi_setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    付録B: Sonic Pi のセットアップ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendix/references/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    参考文献
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../afterword/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    おわりに
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../author/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    著者紹介
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目次">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目次
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        このレッスンで学ぶこと
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        環境セットアップ
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 音とは何か
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 最初の音を鳴らそう
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.2 最初の音を鳴らそう">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        波形を見る
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        音を再生する
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 中身を見てみよう — サイン波の原理
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.3 中身を見てみよう — サイン波の原理">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        時間軸の配列
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        サイン波の計算
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#audio_lib" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        audio_lib との対応
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 アナログとデジタル — 音のデータとは
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.4 アナログとデジタル — 音のデータとは">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        アナログからデジタルへの変換
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5 サンプリング
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.5 サンプリング">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#44100hz" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        なぜ44100Hz なのか
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        サンプリングレートの違いを体験する
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        エイリアシング
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6 周波数と音の高さ
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#17" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.7 振幅と音の大きさ
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#18-wav" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.8 WAVファイルへの保存
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1.8 WAVファイルへの保存">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#audio_lib_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        audio_lib で保存
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        素のPythonで保存
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#19" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.9 音名と周波数
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        まとめ
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="まとめ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#audio_lib_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        使った audio_lib の関数
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        次回予告
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="lesson-1">Lesson 1: 音とは何か・デジタル音の基礎<a class="headerlink" href="#lesson-1" title="Permanent link">&para;</a></h1>
+<h2 id="_1">このレッスンで学ぶこと<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<ul>
+<li>音の物理的性質（振動、周波数、振幅）を理解する</li>
+<li>Pythonでサイン波を生成し、音を鳴らす</li>
+<li>アナログ音声とデジタル音声の違いを理解する</li>
+<li>サンプリングと量子化の仕組みを知る</li>
+</ul>
+<p>まず「音とは何か」を理解し、Pythonで最初の音を鳴らすところまで進みましょう。</p>
+<h2 id="_2">環境セットアップ<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>Python回は <strong>Google Colab</strong> 上で実行します。ブラウザだけで動くので、環境構築は不要です。Sonic Pi を使う回ではローカル環境が必要になりますが、それは Lesson 3 で案内します。</p>
+<p>Colab のノートブックを開いたら、最初に以下のセルを実行してください。本書の付属ライブラリ <strong>audio_lib</strong> がインストールされ、音の生成・再生・可視化がすぐに使えるようになります。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># --- 最初に1回だけ実行 ---</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="kn">import</span><span class="w"> </span><span class="nn">google.colab</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="err">!</span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">q</span> <span class="n">japanize</span><span class="o">-</span><span class="n">matplotlib</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="err">!</span><span class="n">git</span> <span class="n">clone</span> <span class="o">-</span><span class="n">q</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">ggszk</span><span class="o">/</span><span class="n">simple</span><span class="o">-</span><span class="n">sound</span><span class="o">-</span><span class="n">programming</span><span class="o">.</span><span class="n">git</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;/content/simple-sound-programming&#39;</span><span class="p">)</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="c1"># ローカル環境の場合（付録参照）</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">)</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="kn">from</span><span class="w"> </span><span class="nn">audio_lib.notebook</span><span class="w"> </span><span class="kn">import</span> <span class="n">setup_environment</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="n">setup_environment</span><span class="p">()</span>
+</code></pre></div>
+<p>続けて、今回使うライブラリを読み込みます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">display</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">audio_lib</span><span class="w"> </span><span class="kn">import</span> <span class="n">sine_wave</span><span class="p">,</span> <span class="n">sawtooth_wave</span><span class="p">,</span> <span class="n">AudioSignal</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">audio_lib.synthesis.note_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">note_to_frequency</span><span class="p">,</span> <span class="n">note_name_to_number</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">audio_lib.notebook</span><span class="w"> </span><span class="kn">import</span> <span class="n">play_sound</span><span class="p">,</span> <span class="n">plot_waveform</span>
+</code></pre></div>
+<p>これで準備完了です。</p>
+<hr />
+<h2 id="11">1.1 音とは何か<a class="headerlink" href="#11" title="Permanent link">&para;</a></h2>
+<p>音とは<strong>空気の振動</strong>です。物体が振動すると周囲の空気に疎密の波が生じ、それが耳に届いて「音」として知覚されます。</p>
+<p>この振動を最も単純な数式で表したものが<strong>サイン波</strong>（正弦波）です。</p>
+<div class="arithmatex">\[y(t) = \sin(2\pi f t)\]</div>
+<ul>
+<li><span class="arithmatex">\(f\)</span>: <strong>周波数</strong> (Hz) — 1秒間に振動する回数。音の高さを決めます</li>
+<li><span class="arithmatex">\(t\)</span>: 時刻 (秒)</li>
+<li>振動の大きさ（<strong>振幅</strong>）は音の大きさ（音量）を決めます</li>
+</ul>
+<p>周波数が大きいほど高い音、振幅が大きいほど大きい音になります。</p>
+<hr />
+<h2 id="12">1.2 最初の音を鳴らそう<a class="headerlink" href="#12" title="Permanent link">&para;</a></h2>
+<p>まずは audio_lib を使って、たった1行で音を作ってみましょう。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># 440Hz（ラの音）のサイン波を1秒間生成</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">signal</span> <span class="o">=</span> <span class="n">sine_wave</span><span class="p">(</span><span class="n">frequency</span><span class="o">=</span><span class="mi">440</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+</code></pre></div>
+<p><code>sine_wave()</code> は周波数と長さを指定するだけでサイン波を生成する関数です。戻り値の <code>signal</code> は <code>AudioSignal</code> というオブジェクトで、音のデータとサンプリングレート（後述）をセットで保持しています。</p>
+<p>生成した音を確認してみましょう。<code>f"..."</code> は <strong>f-string</strong> と呼ばれる書き方で、<code>{}</code> の中に変数や式を埋め込めます（Python 3.6 以降の機能）。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;データの長さ: </span><span class="si">{</span><span class="n">signal</span><span class="o">.</span><span class="n">num_samples</span><span class="si">}</span><span class="s2"> サンプル&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;サンプリングレート: </span><span class="si">{</span><span class="n">signal</span><span class="o">.</span><span class="n">sample_rate</span><span class="si">}</span><span class="s2"> Hz&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;長さ: </span><span class="si">{</span><span class="n">signal</span><span class="o">.</span><span class="n">duration</span><span class="si">}</span><span class="s2"> 秒&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>データの長さ: 44100 サンプル
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>サンプリングレート: 44100 Hz
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>長さ: 1.0 秒
+</code></pre></div>
+<p>44100個の数値で1秒間の音が表現されています。この数値の並びが音の正体です。</p>
+<h3 id="_3">波形を見る<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<p>音のデータをグラフに描くと波形が見えます。最初の0.01秒（約4.4周期分）を表示してみましょう。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">plot_waveform</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;440Hz サイン波&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>きれいに上下を繰り返す曲線が見えるはずです（図1.1）。これがサイン波の波形で、0.01秒の間に約4.4回振動しています（440Hz × 0.01秒 = 4.4回）。</p>
+<p><img alt="440Hz サイン波（最初の0.01秒）" src="../../figures/ch01/fig1_sine_wave.png" /></p>
+<h3 id="_4">音を再生する<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<p>セルを実行すると、再生プレーヤーが表示されます。再生ボタンを押して聞いてみましょう。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">display</span><span class="p">(</span><span class="n">play_sound</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="s2">&quot;440Hz サイン波（ラの音）&quot;</span><span class="p">))</span>
+</code></pre></div>
+<p>純粋で素朴な「ピー」という音が聞こえます。これが最も基本的な音であるサイン波です。</p>
+<hr />
+<h2 id="13">1.3 中身を見てみよう — サイン波の原理<a class="headerlink" href="#13" title="Permanent link">&para;</a></h2>
+<p><code>sine_wave(440, 1.0)</code> の中では何が起きているのでしょうか。audio_lib を使わずに書いてみましょう。</p>
+<p>ここで <strong>NumPy</strong> というライブラリが登場します。NumPy は大量の数値をまとめて効率よく扱うためのライブラリで、音のように何万個もの数値を扱うプログラミングでは欠かせない道具です。セットアップセルで <code>import numpy as np</code> と読み込んであるので、<code>np.〜</code> の形で使えます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">sample_rate</span> <span class="o">=</span> <span class="mi">44100</span>          <span class="c1"># 1秒あたりのサンプル数</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="n">duration</span> <span class="o">=</span> <span class="mf">1.0</span>               <span class="c1"># 長さ（秒）</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="n">frequency</span> <span class="o">=</span> <span class="mi">440</span>              <span class="c1"># 周波数（Hz）</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="c1"># 時間軸の配列を作る</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">sample_rate</span> <span class="o">*</span> <span class="n">duration</span><span class="p">),</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="c1"># サイン波の数式をそのまま書く</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">frequency</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span>
+</code></pre></div>
+<p>たったこれだけです。ポイントを順に見ていきましょう。</p>
+<h3 id="_5">時間軸の配列<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">sample_rate</span> <span class="o">*</span> <span class="n">duration</span><span class="p">),</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div>
+<p><code>np.linspace()</code> は、指定した範囲を等間隔に分割した数列を作る関数です。Pythonの <code>range()</code> に似ていますが、小数を扱えるのが特徴です。ここでは0秒から1秒までを44100等分した時刻の配列ができます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>t = [0, 0.0000227, 0.0000454, ..., 0.9999773]  （44100個）
+</code></pre></div>
+<p>これは「1秒間を44100回サンプリングする」ことに対応しています。</p>
+<h3 id="_6">サイン波の計算<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">frequency</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span>
+</code></pre></div>
+<p>数式 <span class="arithmatex">\(y = \sin(2\pi f t)\)</span> をそのままPythonに写しただけです。ここで NumPy の便利さが発揮されます。<code>t</code> は44100個の数値が入った配列ですが、<code>np.sin()</code> に渡すと<strong>全要素に対してサイン関数が一括で適用</strong>されます。for ループを書く必要はありません。結果は -1.0 から 1.0 の範囲の数値が44100個並んだ配列になります。</p>
+<h3 id="audio_lib">audio_lib との対応<a class="headerlink" href="#audio_lib" title="Permanent link">&para;</a></h3>
+<p>素のPythonで作った <code>data</code>（NumPy配列）と <code>sample_rate</code> を <code>AudioSignal</code> にまとめると、<code>sine_wave()</code> の戻り値と同じものが得られます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">signal_manual</span> <span class="o">=</span> <span class="n">AudioSignal</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">)</span>
+</code></pre></div>
+<p>audio_lib はこのような「配列 + サンプリングレート」のペアを便利に扱うためのラッパーです。原理を理解した上でライブラリを使えば、中身がブラックボックスにならずに済みます。</p>
+<hr />
+<h2 id="14">1.4 アナログとデジタル — 音のデータとは<a class="headerlink" href="#14" title="Permanent link">&para;</a></h2>
+<p>1.1 で「音は空気の振動」と説明しました。現実世界の音は、時間とともに滑らかに変化する連続的な波です。このような連続的な信号を<strong>アナログ信号</strong>といいます。</p>
+<p>一方、コンピュータは連続的なデータを直接扱えません。扱えるのは数値の列、つまり「とびとびの値」だけです。そこで、アナログ信号を一定の時間間隔で「測定」し、その瞬間の値を数値として記録します。このように離散的な数値で表現された信号を<strong>デジタル信号</strong>といいます。</p>
+<p>1.3 で作った <code>data</code> を思い出してください。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">frequency</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span>
+</code></pre></div>
+<p>この <code>data</code> は44100個の数値が並んだ配列です。これこそがデジタル音声の正体で、連続的なサイン波を44100個の「点」で近似したものです。数値の列をつなげると、元の滑らかな波形が再現されます。</p>
+<h3 id="_7">アナログからデジタルへの変換<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
+<p>アナログ信号をデジタル信号に変換する過程には2つのステップがあります。</p>
+<ol>
+<li><strong>サンプリング（標本化）</strong>: 一定の時間間隔で波の値を測定する → 時間軸を離散化</li>
+<li><strong>量子化</strong>: 測定した値を有限の精度の数値で表現する → 振幅を離散化</li>
+</ol>
+<p>図1.2 にこの過程を示します。(a) の連続的な波を一定間隔で測定し（b）、数値の列として記録する（c）という流れです。</p>
+<p><img alt="アナログ信号からデジタル信号への変換。(a) 連続的な波 → (b) 一定間隔で測定 → (c) 数値の列" src="../../figures/ch01/fig2_analog_to_digital.png" /></p>
+<p>CDに録音された音楽も、マイクで拾った音声も、コンピュータ上ではすべてこのような数値の列として扱われています。</p>
+<hr />
+<h2 id="15">1.5 サンプリング<a class="headerlink" href="#15" title="Permanent link">&para;</a></h2>
+<p>ここまでで「サンプリングレート44100」という数字が何度か出てきました。これはサンプリングの間隔を決めるパラメータです。</p>
+<table>
+<thead>
+<tr>
+<th>用語</th>
+<th>説明</th>
+<th>代表的な値</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>サンプリングレート</td>
+<td>1秒間のサンプル数</td>
+<td>44100 Hz（CD品質）</td>
+</tr>
+<tr>
+<td>ナイキスト周波数</td>
+<td>記録可能な最高周波数（サンプリングレートの半分）</td>
+<td>22050 Hz</td>
+</tr>
+<tr>
+<td>ビット深度</td>
+<td>1サンプルあたりの精度（量子化の細かさ）</td>
+<td>16bit, 24bit</td>
+</tr>
+</tbody>
+</table>
+<h3 id="44100hz">なぜ44100Hz なのか<a class="headerlink" href="#44100hz" title="Permanent link">&para;</a></h3>
+<p>人間の耳が聞き取れる周波数の上限はおよそ20000Hz（20kHz）とされています。<strong>ナイキストの定理</strong>によると、ある周波数の音を正確に記録するには、その2倍以上のサンプリングレートが必要です。</p>
+<div class="arithmatex">\[\text{サンプリングレート} \geq 2 \times \text{記録したい最高周波数}\]</div>
+<p>20000Hz の音を記録するには40000Hz 以上のサンプリングレートが必要になります。CD規格の44100Hz は、可聴域を十分カバーしつつ多少の余裕を持たせた値です。</p>
+<h3 id="_8">サンプリングレートの違いを体験する<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
+<p>サンプリングレートを下げるとどうなるか、聞き比べてみましょう。ここではサイン波ではなく<strong>ノコギリ波</strong>を使います。ノコギリ波は Lesson 2 で詳しく扱いますが、サイン波より豊かな成分を含む波形です。サイン波は単純な音なのでサンプリングレートを下げても違いが出にくいのに対し、ノコギリ波なら違いがはっきりと聞き取れます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># CD品質（44100Hz）</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="n">saw_cd</span> <span class="o">=</span> <span class="n">sawtooth_wave</span><span class="p">(</span><span class="mi">440</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="n">sample_rate</span><span class="o">=</span><span class="mi">44100</span><span class="p">)</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="c1"># 電話品質（8000Hz）</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="n">saw_tel</span> <span class="o">=</span> <span class="n">sawtooth_wave</span><span class="p">(</span><span class="mi">440</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="n">sample_rate</span><span class="o">=</span><span class="mi">8000</span><span class="p">)</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="n">display</span><span class="p">(</span><span class="n">play_sound</span><span class="p">(</span><span class="n">saw_cd</span><span class="p">,</span> <span class="s2">&quot;CD品質 (44100Hz) ノコギリ波&quot;</span><span class="p">))</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="n">display</span><span class="p">(</span><span class="n">play_sound</span><span class="p">(</span><span class="n">saw_tel</span><span class="p">,</span> <span class="s2">&quot;電話品質 (8000Hz) ノコギリ波&quot;</span><span class="p">))</span>
+</code></pre></div>
+<p>電話品質の方はこもった音に聞こえるはずです。図1.3 を見ると、8000Hz ではサンプル点がまばらで元の波形を十分に捉えきれていないことがわかります。ナイキスト周波数が4000Hz となり、それ以上の倍音が記録できないためです。</p>
+<p><img alt="同じ440Hzの波形を44100Hz（上）と8000Hz（下）でサンプリングした場合の違い" src="../../figures/ch01/fig3_sampling_rate_comparison.png" /></p>
+<h3 id="_9">エイリアシング<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
+<p>ナイキスト周波数を超える音を無理に記録しようとすると、<strong>エイリアシング</strong>（折り返し歪み）が発生し、元とは異なる周波数の音になってしまいます。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># 5000Hzの音を異なるサンプリングレートで記録</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="n">high_cd</span>  <span class="o">=</span> <span class="n">sine_wave</span><span class="p">(</span><span class="mi">5000</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">sample_rate</span><span class="o">=</span><span class="mi">44100</span><span class="p">)</span>   <span class="c1"># 正確に記録できる</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="n">high_tel</span> <span class="o">=</span> <span class="n">sine_wave</span><span class="p">(</span><span class="mi">5000</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">sample_rate</span><span class="o">=</span><span class="mi">8000</span><span class="p">)</span>     <span class="c1"># エイリアシング発生</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="n">display</span><span class="p">(</span><span class="n">play_sound</span><span class="p">(</span><span class="n">high_cd</span><span class="p">,</span>  <span class="s2">&quot;5000Hz（CD品質: 正確）&quot;</span><span class="p">))</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="n">display</span><span class="p">(</span><span class="n">play_sound</span><span class="p">(</span><span class="n">high_tel</span><span class="p">,</span> <span class="s2">&quot;5000Hz（電話品質: エイリアシング）&quot;</span><span class="p">))</span>
+</code></pre></div>
+<p>5000Hz は8000Hz のナイキスト周波数（4000Hz）を超えているため、電話品質では元とは違う音程に聞こえます。デジタル音声を扱う際には、サンプリングレートの制約を常に意識する必要があります。</p>
+<hr />
+<h2 id="16">1.6 周波数と音の高さ<a class="headerlink" href="#16" title="Permanent link">&para;</a></h2>
+<p>周波数が変わると音の高さが変わることを体験してみましょう。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="n">frequencies</span> <span class="o">=</span> <span class="p">[</span><span class="mi">220</span><span class="p">,</span> <span class="mi">440</span><span class="p">,</span> <span class="mi">880</span><span class="p">,</span> <span class="mi">1760</span><span class="p">]</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="k">for</span> <span class="n">freq</span> <span class="ow">in</span> <span class="n">frequencies</span><span class="p">:</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>    <span class="n">sig</span> <span class="o">=</span> <span class="n">sine_wave</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>    <span class="n">display</span><span class="p">(</span><span class="n">play_sound</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">freq</span><span class="si">}</span><span class="s2">Hz&quot;</span><span class="p">))</span>
+</code></pre></div>
+<p>220Hz → 440Hz → 880Hz → 1760Hz と、周波数が2倍になるごとに音が1<strong>オクターブ</strong>上がります。図1.4 を見ると、同じ時間幅の中で波の数が倍々に増えていく様子がわかります。</p>
+<p><img alt="周波数が2倍になるごとに、同じ時間に含まれる波の数が2倍になる" src="../../figures/ch01/fig4_frequency_comparison.png" /></p>
+<p>オクターブとは「周波数が2倍の関係にある2つの音の間隔」のことです。人間の耳は周波数の比を音程として知覚するため、440Hz と 880Hz の「距離」は、220Hz と 440Hz の「距離」と同じに感じます。</p>
+<hr />
+<h2 id="17">1.7 振幅と音の大きさ<a class="headerlink" href="#17" title="Permanent link">&para;</a></h2>
+<p>振幅を変えると音量が変わります。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="n">volumes</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="k">for</span> <span class="n">vol</span> <span class="ow">in</span> <span class="n">volumes</span><span class="p">:</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>    <span class="n">sig</span> <span class="o">=</span> <span class="n">sine_wave</span><span class="p">(</span><span class="mi">440</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">vol</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>    <span class="n">display</span><span class="p">(</span><span class="n">play_sound</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;440Hz 音量=</span><span class="si">{</span><span class="n">vol</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
+</code></pre></div>
+<p><code>signal * 0.3</code> のように AudioSignal に数値を掛けると、全サンプルの値が一律にスケーリングされます。振幅が小さくなるほど音は小さくなります。</p>
+<hr />
+<h2 id="18-wav">1.8 WAVファイルへの保存<a class="headerlink" href="#18-wav" title="Permanent link">&para;</a></h2>
+<p>Colab 上では <code>play_sound()</code> ですぐに音を聞けますが、生成した音をファイルとして保存しておくと便利な場面があります。たとえば後のレッスンで Sonic Pi に読み込ませたり、手元にダウンロードしたりする場合です。</p>
+<h3 id="audio_lib_1">audio_lib で保存<a class="headerlink" href="#audio_lib_1" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="n">signal</span> <span class="o">=</span> <span class="n">sine_wave</span><span class="p">(</span><span class="mi">440</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="n">signal</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;my_sine.wav&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p><code>AudioSignal</code> の <code>save()</code> メソッドを呼ぶだけでWAVファイルが作られます。Colab の場合、左側のファイルパネルからダウンロードできます。</p>
+<h3 id="python">素のPythonで保存<a class="headerlink" href="#python" title="Permanent link">&para;</a></h3>
+<p>内部では何が起きているか確認してみましょう。ここでは <strong>SciPy</strong> というライブラリの <code>scipy.io.wavfile</code> モジュールを使います。SciPy は NumPy を土台にした科学技術計算ライブラリで、WAVファイルの読み書きや信号処理など幅広い機能を提供しています。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scipy.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">wavfile</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="n">sample_rate</span> <span class="o">=</span> <span class="mi">44100</span>
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mi">440</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mi">44100</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a><span class="c1"># -1.0〜1.0 の float を 16bit 整数に変換</span>
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="n">audio_16bit</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span> <span class="o">*</span> <span class="mi">32767</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">)</span>
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a><span class="n">wavfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;my_sine_raw.wav&quot;</span><span class="p">,</span> <span class="n">sample_rate</span><span class="p">,</span> <span class="n">audio_16bit</span><span class="p">)</span>
+</code></pre></div>
+<p><code>.astype(np.int16)</code> は NumPy 配列の型を変換するメソッドです。ポイントは次の2つです。</p>
+<ol>
+<li><strong>16bit整数への変換</strong>: WAVファイルは通常16bitの整数値（-32768 〜 32767）で音を記録します。Pythonの計算では -1.0 〜 1.0 の小数で扱い、保存時に変換します</li>
+<li><strong>サンプリングレートの指定</strong>: ファイルにはサンプリングレートの情報も一緒に書き込まれます。再生ソフトはこの情報を読んで正しい速度で再生します</li>
+</ol>
+<hr />
+<h2 id="19">1.9 音名と周波数<a class="headerlink" href="#19" title="Permanent link">&para;</a></h2>
+<p>音楽で使われる音名（ド、レ、ミ…）はそれぞれ決まった周波数に対応しています。この対応関係は<strong>平均律</strong>という仕組みで定められており、詳しくは Lesson 6 で扱います。ここでは予告として、ドレミファソラシドの周波数を確認しておきましょう。</p>
+<p>audio_lib には音名と周波数を変換する関数が用意されています。</p>
+<ul>
+<li><code>note_name_to_number("A4")</code> — 音名（"A4" など）を <strong>MIDI番号</strong>（0〜127の整数）に変換します</li>
+<li><code>note_to_frequency(69)</code> — MIDI番号を周波数（Hz）に変換します</li>
+</ul>
+<p>MIDI番号は音の高さを整数で表す業界標準の番号で、A4（ラ）が69番です。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="n">note_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;C4&quot;</span><span class="p">,</span> <span class="s2">&quot;D4&quot;</span><span class="p">,</span> <span class="s2">&quot;E4&quot;</span><span class="p">,</span> <span class="s2">&quot;F4&quot;</span><span class="p">,</span> <span class="s2">&quot;G4&quot;</span><span class="p">,</span> <span class="s2">&quot;A4&quot;</span><span class="p">,</span> <span class="s2">&quot;B4&quot;</span><span class="p">,</span> <span class="s2">&quot;C5&quot;</span><span class="p">]</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="n">jp_names</span>   <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ド&quot;</span><span class="p">,</span> <span class="s2">&quot;レ&quot;</span><span class="p">,</span> <span class="s2">&quot;ミ&quot;</span><span class="p">,</span> <span class="s2">&quot;ファ&quot;</span><span class="p">,</span> <span class="s2">&quot;ソ&quot;</span><span class="p">,</span> <span class="s2">&quot;ラ&quot;</span><span class="p">,</span> <span class="s2">&quot;シ&quot;</span><span class="p">,</span> <span class="s2">&quot;ド&quot;</span><span class="p">]</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;音名  | 日本名 | MIDI番号 | 周波数 (Hz)&quot;</span><span class="p">)</span>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">45</span><span class="p">)</span>
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="c1"># zip() は2つのリストから要素を1つずつ取り出してペアにする関数</span>
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">jp</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">note_names</span><span class="p">,</span> <span class="n">jp_names</span><span class="p">):</span>
+<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a>    <span class="n">midi_num</span> <span class="o">=</span> <span class="n">note_name_to_number</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a>    <span class="n">freq</span> <span class="o">=</span> <span class="n">note_to_frequency</span><span class="p">(</span><span class="n">midi_num</span><span class="p">)</span>
+<a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">  |  </span><span class="si">{</span><span class="n">jp</span><span class="si">:</span><span class="s2">2s</span><span class="si">}</span><span class="s2">  |    </span><span class="si">{</span><span class="n">midi_num</span><span class="si">}</span><span class="s2">    | </span><span class="si">{</span><span class="n">freq</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>音名  | 日本名 | MIDI番号 | 周波数 (Hz)
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>---------------------------------------------
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a> C4  |  ド  |    60    | 261.63
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a> D4  |  レ  |    62    | 293.66
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a> E4  |  ミ  |    64    | 329.63
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a> F4  |  ファ  |    65    | 349.23
+<a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a> G4  |  ソ  |    67    | 392.00
+<a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a> A4  |  ラ  |    69    | 440.00
+<a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a> B4  |  シ  |    71    | 493.88
+<a id="__codelineno-20-10" name="__codelineno-20-10" href="#__codelineno-20-10"></a> C5  |  ド  |    72    | 523.25
+</code></pre></div>
+<p>A4（ラ）が440Hz であること、C4（ド）からC5（高いド）で周波数がちょうど2倍になっていること（261.63 × 2 ≈ 523.25）を確認してみてください。</p>
+<hr />
+<h2 id="_10">まとめ<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h2>
+<p>このレッスンで学んだことを整理します。</p>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>音の正体</td>
+<td>空気の振動。サイン波が最も基本的な波形</td>
+</tr>
+<tr>
+<td>周波数 (Hz)</td>
+<td>1秒間の振動回数。大きいほど高い音</td>
+</tr>
+<tr>
+<td>振幅</td>
+<td>振動の大きさ。大きいほど大きい音</td>
+</tr>
+<tr>
+<td>アナログとデジタル</td>
+<td>音は本来連続的（アナログ）。コンピュータでは数値の列（デジタル）として扱う</td>
+</tr>
+<tr>
+<td>サンプリングと量子化</td>
+<td>時間軸を等間隔で区切り（サンプリング）、振幅を数値で表す（量子化）</td>
+</tr>
+<tr>
+<td>サンプリングレート</td>
+<td>1秒間のサンプル数。CD品質は44100Hz</td>
+</tr>
+<tr>
+<td>ナイキストの定理</td>
+<td>サンプリングレートの半分の周波数までしか正確に記録できない</td>
+</tr>
+<tr>
+<td>エイリアシング</td>
+<td>ナイキスト周波数を超えた音を記録しようとすると起きる歪み</td>
+</tr>
+<tr>
+<td>オクターブ</td>
+<td>周波数が2倍の関係。人間の耳は周波数の比を音程として知覚する</td>
+</tr>
+</tbody>
+</table>
+<h3 id="audio_lib_2">使った audio_lib の関数<a class="headerlink" href="#audio_lib_2" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>関数・クラス</th>
+<th>役割</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sine_wave(freq, duration)</code></td>
+<td>サイン波を生成</td>
+</tr>
+<tr>
+<td><code>sawtooth_wave(freq, duration)</code></td>
+<td>ノコギリ波を生成</td>
+</tr>
+<tr>
+<td><code>AudioSignal(data, sample_rate)</code></td>
+<td>音データとサンプリングレートをまとめるクラス</td>
+</tr>
+<tr>
+<td><code>signal.save(filename)</code></td>
+<td>WAVファイルとして保存</td>
+</tr>
+<tr>
+<td><code>plot_waveform(signal, duration)</code></td>
+<td>波形をグラフ表示</td>
+</tr>
+<tr>
+<td><code>play_sound(signal, title)</code></td>
+<td>音を再生</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_11">次回予告<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h3>
+<p>Lesson 2 では<strong>波形と音色</strong>を扱います。サイン波以外の波形（矩形波、ノコギリ波、三角波）を生成し、波形の違いが音色の違いになることを体験します。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  ページトップへ戻る
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["content.code.copy", "navigation.sections", "navigation.top", "search.highlight", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u30b3\u30d4\u30fc\u3057\u307e\u3057\u305f", "clipboard.copy": "\u30af\u30ea\u30c3\u30d7\u30dc\u30fc\u30c9\u3078\u30b3\u30d4\u30fc", "search.result.more.one": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3082\u30461\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.more.other": "\u3053\u306e\u30da\u30fc\u30b8\u5185\u306b\u3042\u3068#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.none": "\u4f55\u3082\u898b\u3064\u304b\u308a\u307e\u305b\u3093\u3067\u3057\u305f", "search.result.one": "1\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.other": "#\u4ef6\u898b\u3064\u304b\u308a\u307e\u3057\u305f", "search.result.placeholder": "\u691c\u7d22\u30ad\u30fc\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044", "search.result.term.missing": "\u691c\u7d22\u306b\u542b\u307e\u308c\u306a\u3044", "select.version": "\u30d0\u30fc\u30b8\u30e7\u30f3\u5207\u308a\u66ff\u3048"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
