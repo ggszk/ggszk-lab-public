@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>高校生のためのデータサイエンス（2026）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-primary: #a04000;
+  --color-accent: #d35400;
+  --color-light: #fdebd0;
+  --color-bg: #fafbfc;
+  --color-text: #2c3e50;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  color: var(--color-text);
+  background: var(--color-bg);
+  line-height: 1.7;
+}
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+header {
+  background: var(--color-primary);
+  color: white;
+  padding: 1.5rem 0;
+  margin-bottom: 2rem;
+}
+header .container {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+header h1 {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+header .subtitle {
+  font-size: 0.9rem;
+  opacity: 0.85;
+  margin-top: 0.25rem;
+}
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+.breadcrumb {
+  font-size: 0.85rem;
+  margin-bottom: 1.5rem;
+  color: #888;
+}
+.breadcrumb a { color: #888; }
+.breadcrumb a:hover { color: var(--color-accent); }
+.news {
+  margin-bottom: 2rem;
+  padding: 1rem 1.2rem;
+  background: #fffbe6;
+  border: 1px solid #f0e68c;
+  border-radius: 6px;
+}
+.news h2 {
+  font-size: 1rem;
+  color: var(--color-primary);
+  margin-bottom: 0.5rem;
+}
+.news ul { list-style: none; font-size: 0.9rem; }
+.news li { margin-bottom: 0.2rem; }
+.news .date { color: #888; margin-right: 0.5rem; }
+.lecture-list { list-style: none; }
+.lecture-list li { margin-bottom: 0.5rem; }
+.lecture-card {
+  display: block;
+  padding: 0.9rem 1.2rem;
+  background: white;
+  border: 1px solid #e0e6ed;
+  border-radius: 6px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+a.lecture-card:hover {
+  border-color: var(--color-accent);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  text-decoration: none;
+}
+.lecture-card .num {
+  font-weight: 700;
+  color: var(--color-primary);
+}
+.lecture-card .date {
+  font-size: 0.85rem;
+  color: #888;
+  margin-left: 0.5rem;
+}
+.lecture-card .topic {
+  display: block;
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 0.2rem;
+}
+.lecture-card.disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.lecture-card.disabled:hover {
+  border-color: #e0e6ed;
+  box-shadow: none;
+}
+.badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 3px;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+}
+.badge-done { background: #d6eaf8; color: #1f618d; }
+.badge-ready { background: #d5f5e3; color: #1e8449; }
+.badge-soon { background: #fdebd0; color: #b9770e; }
+footer {
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e6ed;
+  font-size: 0.8rem;
+  color: #aaa;
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <h1>高校生のためのデータサイエンス</h1>
+    <div class="subtitle">2026年度（高大連携・体験授業）</div>
+  </div>
+</header>
+<div class="container">
+  <div class="breadcrumb"><a href="../">← ポータルに戻る</a></div>
+
+  <div class="news">
+    <h2>お知らせ</h2>
+    <ul>
+      <li><span class="date">2026-05-20</span>第2回（5/21）の資料を公開しました</li>
+      <li><span class="date">2026-05-13</span>第1回（オンライン概要）を実施しました</li>
+    </ul>
+  </div>
+
+  <ul class="lecture-list">
+    <li><a class="lecture-card" href="lesson01/">
+      <span class="num">第1回</span><span class="date">（5/13・オンライン）</span><span class="badge badge-done">実施済</span>
+      <span class="topic">データサイエンス入門（概要講義）</span>
+    </a></li>
+    <li><a class="lecture-card" href="lesson02/">
+      <span class="num">第2回</span><span class="date">（5/21・対面）</span><span class="badge badge-ready">公開中</span>
+      <span class="topic">演習①：CODAP入門・アンケート・観光地・レシート導入</span>
+    </a></li>
+    <li><div class="lecture-card disabled">
+      <span class="num">第3回</span><span class="date">（6/23・対面）</span><span class="badge badge-soon">準備中</span>
+      <span class="topic">演習②：コンビニのレシート分析</span>
+    </div></li>
+  </ul>
+
+  <footer>
+    開志専門職大学 数理・データサイエンスセンター ／ 鈴木研究室
+  </footer>
+</div>
+</body>
+</html>
