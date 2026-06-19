@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIが見つけた「買い方のテーマ」｜第3回</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-primary: #a04000;
+  --color-accent: #d35400;
+  --color-light: #fdebd0;
+  --color-bg: #fafbfc;
+  --color-text: #2c3e50;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  color: var(--color-text);
+  background: var(--color-bg);
+  line-height: 1.7;
+}
+.container { max-width: 820px; margin: 0 auto; padding: 2rem 1.5rem; }
+header { background: var(--color-primary); color: white; padding: 1.5rem 0; margin-bottom: 1.5rem; }
+header .container { padding-top: 0; padding-bottom: 0; }
+header h1 { font-size: 1.4rem; font-weight: 700; }
+header .subtitle { font-size: 0.9rem; opacity: 0.85; margin-top: 0.25rem; }
+a { color: var(--color-accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.breadcrumb { font-size: 0.85rem; margin-bottom: 1.2rem; color: #888; }
+.breadcrumb a { color: #888; }
+h2 {
+  font-size: 1.2rem; color: var(--color-primary);
+  border-bottom: 2px solid var(--color-light);
+  padding-bottom: 0.3rem; margin: 1.8rem 0 0.9rem;
+}
+p { margin-bottom: 0.8rem; }
+.lead { background: var(--color-light); border-radius: 8px; padding: 1rem 1.2rem; margin-bottom: 1rem; }
+table { width: 100%; border-collapse: collapse; margin: 0.8rem 0 1rem; font-size: 0.95rem; }
+th, td { border: 1px solid #ddd; padding: 0.55rem 0.7rem; text-align: left; vertical-align: middle; }
+th { background: #f3e6da; color: var(--color-primary); font-weight: 700; }
+.theme-id { font-weight: 700; white-space: nowrap; background: #faf3ec; width: 5.5rem; }
+.fig { text-align: center; margin: 1rem 0; }
+.fig img { max-width: 100%; border: 1px solid #eee; border-radius: 6px; }
+.fig figcaption { font-size: 0.85rem; color: #777; margin-top: 0.4rem; }
+.callout {
+  border-left: 4px solid var(--color-accent);
+  background: #fff8f2; border-radius: 0 8px 8px 0;
+  padding: 0.9rem 1.1rem; margin: 1rem 0;
+}
+.callout strong { color: var(--color-accent); }
+.note { font-size: 0.85rem; color: #888; margin-top: 1.5rem; }
+footer { margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid #eee; font-size: 0.85rem; color: #888; }
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <h1>AIが見つけた「買い方のテーマ」</h1>
+    <div class="subtitle">第3回（演習②）｜ステップ2：トピック抽出</div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="breadcrumb"><a href="./">← 第3回のページに戻る</a></div>
+
+  <div class="lead">
+    集計では「商品どうしの<strong>組み合わせ</strong>」や「どんな<strong>買い方</strong>か」までは見えにくいですね。
+    そこで <strong>AI（トピック抽出）</strong> の出番です。1,200枚のレシートをAIに読ませると、
+    「よく一緒に買われる商品のまとまり」＝<strong>買い方のテーマ</strong>を、人が指示しなくても自動で見つけてくれます。
+  </div>
+  <p>今回AIは <strong>6つのテーマ</strong> を見つけました。使った技術は <strong>LDA</strong>（トピックモデル）という機械学習の方法です。
+  むずかしい数式はわからなくてOK。<strong>結果に「意味」をつけるのは、みなさん（人間）の仕事</strong>です。</p>
+
+  <h2>① AIが見つけた6つのテーマ</h2>
+  <p>それぞれのテーマで「よく一緒に買われる商品」です。どんな名前がぴったりか考えて、<strong>ワークシート⑦</strong>に書いてみよう。</p>
+  <table>
+    <tr><th>テーマ</th><th>よく一緒に買われる商品</th></tr>
+    <tr><td class="theme-id">テーマ1</td><td>チョコレート・アイス・キャンディ・ガム・炭酸飲料</td></tr>
+    <tr><td class="theme-id">テーマ2</td><td>ポテトチップス・キャンディ・アイス・ガム・炭酸飲料</td></tr>
+    <tr><td class="theme-id">テーマ3</td><td>おにぎり・牛乳・卵・パン・ヨーグルト</td></tr>
+    <tr><td class="theme-id">テーマ4</td><td>カップ麺・冷凍食品・弁当・缶コーヒー・肉まん</td></tr>
+    <tr><td class="theme-id">テーマ5</td><td>歯ブラシ・洗剤・トイレットペーパー・ティッシュ・シャンプー</td></tr>
+    <tr><td class="theme-id">テーマ6</td><td>サンドイッチ・お茶・コーヒー・ジュース・フルーツ</td></tr>
+  </table>
+  <div class="callout">
+    💡 ヒント：たとえば <strong>{おにぎり, パン, コーヒー}</strong> なら「朝の軽食セット」のように、
+    その商品たちを買う場面を想像すると名前がつけやすいよ。
+  </div>
+
+  <h2>② 支店ごとの「個性」</h2>
+  <p>同じAIで、4つの支店それぞれが <strong>どのテーマをよく買っているか</strong> を調べました。
+  支店によって、強いテーマがちがいます。</p>
+  <figure class="fig">
+    <img src="topic_by_store.png" alt="支店ごとのテーマの割合（帯グラフ）">
+    <figcaption>各支店のレシートを、5つのテーマの割合で表したもの（横棒＝合計100％）</figcaption>
+  </figure>
+  <div class="callout">
+    🔍 考えよう：各支店で <strong>一番大きいテーマ</strong> はどれ？　その支店には <strong>どんなお客さん</strong> が多そう？<br>
+    支店の立地（中央区＝オフィス街／北区＝郊外／東区＝工場＋住宅／西区＝住宅街）もヒントにして、
+    <strong>ワークシート⑧・⑨</strong> に書いてみよう。
+  </div>
+
+  <h2>③ 生成AI（Gemini）にも聞いてみよう（使える人は）</h2>
+  <p>同じ分析結果を <strong>生成AI（Gemini）</strong> に渡すと、どんな売上アップ施策を提案するでしょう？
+  下のプロンプト（指示文）をコピーして Gemini に貼り、出てきた施策を <strong>自分の案（ワークシート⑨）と比べて</strong>みよう。
+  ＝ <strong>ワークシート⑩</strong>。</p>
+  <pre style="white-space:pre-wrap;background:#f6f1ec;border:1px solid #e0d5c8;border-radius:6px;padding:0.9rem 1rem;font-size:0.85rem;line-height:1.6;font-family:'SFMono-Regular',Consolas,'Noto Sans JP',monospace;">コンビニチェーンのマーケティング担当者です。N市にある4つの支店のレシートデータ（1,200件）をAI（トピック分析）で分析したところ、以下の6つの買い物パターンが見つかりました。
+
+テーマ1（主な商品: チョコレート, アイス, キャンディ, ガム, 炭酸飲料）
+テーマ2（主な商品: ポテトチップス, キャンディ, アイス, ガム, 炭酸飲料）
+テーマ3（主な商品: おにぎり, 牛乳, 卵, パン, ヨーグルト）
+テーマ4（主な商品: カップ麺, 冷凍食品, 弁当, 缶コーヒー, 肉まん）
+テーマ5（主な商品: 歯ブラシ, 洗剤, トイレットペーパー, ティッシュ, シャンプー）
+テーマ6（主な商品: サンドイッチ, お茶, コーヒー, ジュース, フルーツ）
+
+各支店の特徴：
+- 中央区店（オフィス街、ビジネスパーソン中心、平日の朝・昼がメイン）：テーマ6が強い
+- 西区店（住宅街、学校・公園が近く、学生や主婦が中心）：テーマ1が強い
+- 東区店（工場＋住宅エリア、昼夜問わず多様な人が利用）：テーマ4が強い
+- 北区店（郊外、駅から遠く車中心、家族連れや高齢者が多い）：テーマ5が強い
+
+各支店の売上を伸ばすための施策を、「商品展開」「プロモーション」「サービス」の3つの観点から、それぞれ1つずつ提案してください。高校生にもわかるように簡潔にお願いします。</pre>
+  <div class="callout">
+    🤖 AIは強力な道具。でも、AIの提案が<strong>いつも正しいとは限らない</strong>。
+    「自分と同じ意見は？」「自分になかった視点は？」「逆にAIが見落としていることは？」を考え、
+    <strong>最後に判断するのは人間（君）</strong>だということを確かめよう。
+  </div>
+
+  <p class="note">
+    ※このページの結果は、レシートデータ1,200枚をあらかじめAIで分析したものです（テーマ数＝6）。
+    分析に使ったのは、第2回でも見た「購入商品」の組み合わせです。
+  </p>
+
+  <footer>開志専門職大学 数理・データサイエンスセンター ／ 鈴木研究室</footer>
+</div>
+</body>
+</html>

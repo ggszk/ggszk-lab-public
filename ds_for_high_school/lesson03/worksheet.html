@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>DS入門 第3回 ワークシート</title>
+<style>
+  @page {
+    size: A4;
+    margin: 14mm 16mm;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    font-family: 'Hiragino Sans', 'Yu Gothic', 'Noto Sans JP', 'Noto Sans CJK JP', sans-serif;
+    color: #000;
+    font-size: 10.5pt;
+    line-height: 1.5;
+    background: #fff;
+  }
+  .page {
+    width: 178mm;          /* A4 width 210mm - 2*16mm margin */
+    min-height: 269mm;     /* A4 height 297mm - 2*14mm margin */
+    margin: 0 auto;
+    padding: 0;
+    page-break-after: always;
+  }
+  .page:last-child { page-break-after: auto; }
+
+  /* Header */
+  header.sheet-header {
+    border-bottom: 1.2pt solid #000;
+    padding-bottom: 5pt;
+    margin-bottom: 9pt;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 10pt;
+  }
+  .sheet-title {
+    font-size: 13pt;
+    font-weight: 700;
+  }
+  .name-block {
+    font-size: 9.5pt;
+    flex: 0 0 auto;
+  }
+  .name-line {
+    display: inline-block;
+    border-bottom: 0.6pt solid #000;
+    min-width: 70mm;
+    height: 14pt;
+    margin-left: 4pt;
+  }
+  .date-block { font-size: 9pt; color: #444; }
+
+  /* Step banner */
+  .step {
+    font-size: 9pt;
+    color: #fff;
+    background: #003366;
+    display: inline-block;
+    padding: 1.5pt 7pt;
+    border-radius: 2pt;
+    margin-bottom: 5pt;
+  }
+
+  /* Section */
+  section.dataset {
+    margin-bottom: 9pt;
+    page-break-inside: avoid;
+  }
+  section.dataset > h2 {
+    font-size: 11.5pt;
+    background: #ececec;
+    border-left: 3pt solid #000;
+    padding: 3pt 7pt;
+    margin-bottom: 6pt;
+  }
+
+  /* Task */
+  .task {
+    margin-bottom: 5pt;
+    page-break-inside: avoid;
+  }
+  .task-head {
+    display: flex;
+    align-items: baseline;
+    gap: 5pt;
+    margin-bottom: 2pt;
+  }
+  .task-num {
+    display: inline-block;
+    width: 16pt;
+    height: 16pt;
+    border: 0.7pt solid #000;
+    border-radius: 50%;
+    text-align: center;
+    font-weight: 700;
+    font-size: 9.5pt;
+    line-height: 14.5pt;
+    flex: 0 0 16pt;
+  }
+  .task-title {
+    font-size: 10.5pt;
+    font-weight: 500;
+  }
+  .memo {
+    margin-left: 21pt;
+    margin-top: 3pt;
+  }
+  .memo .line {
+    border-bottom: 0.4pt solid #000;
+    height: 20pt;
+    margin-bottom: 4pt;
+  }
+
+  /* Subtle note */
+  .note {
+    font-size: 8.5pt;
+    color: #444;
+    margin-top: 1pt;
+    margin-left: 21pt;
+  }
+
+  /* Tables for AI part */
+  table.ws {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 3pt 0 4pt 21pt;
+    width: calc(100% - 21pt);
+    font-size: 9.5pt;
+  }
+  table.ws th, table.ws td {
+    border: 0.5pt solid #000;
+    padding: 2.5pt 6pt;
+    vertical-align: middle;
+  }
+  table.ws th {
+    background: #ececec;
+    font-weight: 700;
+    font-size: 9pt;
+  }
+  table.ws td.fill { height: 18pt; }
+  table.ws .prod { color: #333; font-size: 9pt; }
+
+  /* compare box */
+  .compare .row {
+    display: flex;
+    align-items: baseline;
+    gap: 5pt;
+    margin: 3pt 0;
+    margin-left: 21pt;
+  }
+  .compare .tag { flex: 0 0 auto; font-size: 9.5pt; }
+  .compare .cline {
+    flex: 1 1 auto;
+    border-bottom: 0.4pt solid #000;
+    height: 18pt;
+  }
+
+  /* Summary */
+  .summary {
+    border: 0.7pt solid #000;
+    padding: 5pt 7pt;
+    margin-top: 8pt;
+    page-break-inside: avoid;
+  }
+  .summary h3 {
+    font-size: 10.5pt;
+    margin-bottom: 4pt;
+  }
+  .summary .line {
+    border-bottom: 0.4pt solid #000;
+    height: 20pt;
+  }
+
+  /* Screen-only convenience */
+  @media screen {
+    body { background: #f4f4f4; padding: 20px 0; }
+    .page {
+      background: #fff;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      padding: 14mm 16mm;
+      margin-bottom: 16px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- ====== Page 1: Front ｜ ステップ1 集計で全体像（CODAP・自分で操作） ====== -->
+<div class="page">
+  <header class="sheet-header">
+    <div class="sheet-title">DS入門 第3回 ワークシート</div>
+    <div class="name-block">名前<span class="name-line"></span></div>
+    <div class="date-block">2026/06/23</div>
+  </header>
+
+  <p style="margin-bottom:7pt;font-size:10pt;">
+    🎯 <strong>今日のミッション</strong>：君はコンビニチェーンの<strong>マーケティング担当者</strong>。
+    1,200枚のレシートデータから「いつ・誰が・何を買っているか」を読み解き、<strong>売上アップの作戦</strong>を考えよう。
+  </p>
+
+  <span class="step">ステップ1　集計で全体像をつかむ（CODAPで自分で操作）</span>
+
+  <section class="dataset">
+    <h2>【1】 売れ筋をつかむ（〜25分）</h2>
+
+    <div class="task">
+      <div class="task-head"><span class="task-num">1</span><span class="task-title">棒グラフ：商品名 — 売れ筋ランキング</span></div>
+      <div class="note">「レシート商品データ（1行＝1商品）」を使う。多い順に並べてみよう。</div>
+      <div class="memo"><div class="line"></div></div>
+      <div class="note">1位　　　　　　　　　 2位　　　　　　　　　 3位</div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="task-num">2</span><span class="task-title">棒グラフ：カテゴリ — 一番多い2つは？</span></div>
+      <div class="memo"><div class="line"></div></div>
+    </div>
+  </section>
+
+  <section class="dataset">
+    <h2>【2】 いつ・誰が・何を（〜30分）</h2>
+
+    <div class="task">
+      <div class="task-head"><span class="task-num">3</span><span class="task-title">時間帯（朝・昼・夜）× カテゴリ — 売れるものは変わる？</span></div>
+      <div class="memo"><div class="line"></div><div class="line"></div></div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="task-num">4</span><span class="task-title">年代で比べる（10代 と 60代以上）— 買うものは違う？</span></div>
+      <div class="memo"><div class="line"></div><div class="line"></div></div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="task-num">5</span><span class="task-title">（発展）箱ひげ図：金額 — どの属性で客単価に差が出る？</span></div>
+      <div class="note">「レシートデータ（1行＝1枚）」の金額を、支店・時間帯・年代などで比べる。</div>
+      <div class="memo"><div class="line"></div></div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="task-num">6</span><span class="task-title">自由課題：自分で問いを1つ立てて調べよう</span></div>
+      <div class="note">例：夜の売れ筋TOP3は？／1個だけ買う人が多い商品は？／支店ごとに個性はある？</div>
+      <div class="memo"><div class="line"></div><div class="line"></div></div>
+    </div>
+  </section>
+
+  <div class="summary">
+    <h3>集計してみて — 「わかったこと」と、集計だけでは「わからなかったこと」は？</h3>
+    <div class="line"></div>
+    <div class="line"></div>
+  </div>
+</div>
+
+<!-- ====== Page 2: Back ｜ ステップ2 AI ＋ ステップ3 生成AI ====== -->
+<div class="page">
+
+  <span class="step">ステップ2　AIで「隠れたパターン」を見つける（トピック抽出）</span>
+
+  <section class="dataset">
+    <h2>【3】 AIが見つけた「買い方のテーマ」を読み解く（〜20分）</h2>
+    <p class="note" style="margin-bottom:5pt;">
+      AI（トピック抽出）が、1,200枚のレシートから6つの「買い方のテーマ」を自動で見つけた。
+      結果ページを見て、答えよう。<strong>名前をつけるのは人間の仕事！</strong>
+    </p>
+
+    <div class="task">
+      <div class="task-head"><span class="task-num">7</span><span class="task-title">各テーマに「名前」をつけよう</span></div>
+      <table class="ws">
+        <tr><th style="width:13%;">テーマ</th><th style="width:52%;">よく一緒に買われる商品</th><th style="width:35%;">つけた名前</th></tr>
+        <tr><td>テーマ1</td><td class="prod">チョコレート・アイス・キャンディ・ガム・炭酸飲料</td><td class="fill"></td></tr>
+        <tr><td>テーマ2</td><td class="prod">ポテトチップス・キャンディ・アイス・ガム・炭酸飲料</td><td class="fill"></td></tr>
+        <tr><td>テーマ3</td><td class="prod">おにぎり・牛乳・卵・パン・ヨーグルト</td><td class="fill"></td></tr>
+        <tr><td>テーマ4</td><td class="prod">カップ麺・冷凍食品・弁当・缶コーヒー・肉まん</td><td class="fill"></td></tr>
+        <tr><td>テーマ5</td><td class="prod">歯ブラシ・洗剤・トイレットペーパー・ティッシュ・シャンプー</td><td class="fill"></td></tr>
+        <tr><td>テーマ6</td><td class="prod">サンドイッチ・お茶・コーヒー・ジュース・フルーツ</td><td class="fill"></td></tr>
+      </table>
+      <div class="note">例：{おにぎり, パン, コーヒー} →「朝の軽食セット」　※全部に名前をつけなくてOK</div>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="task-num">8</span><span class="task-title">支店の「個性」を読み取ろう</span></div>
+      <table class="ws">
+        <tr><th style="width:22%;">支店</th><th style="width:38%;">一番強いテーマは？</th><th style="width:40%;">どんなお客さんが多そう？</th></tr>
+        <tr><td>中央区店（オフィス街）</td><td class="fill"></td><td class="fill"></td></tr>
+        <tr><td>北区店（郊外）</td><td class="fill"></td><td class="fill"></td></tr>
+        <tr><td>東区店（工場＋住宅）</td><td class="fill"></td><td class="fill"></td></tr>
+        <tr><td>西区店（住宅街）</td><td class="fill"></td><td class="fill"></td></tr>
+      </table>
+    </div>
+
+    <div class="task">
+      <div class="task-head"><span class="task-num">9</span><span class="task-title">売上アップ作戦：1つの支店を選んで、施策を1つ考えよう</span></div>
+      <div class="note">「◯◯店は△△なお客さんが多い → だから □□ したら売れそう！」</div>
+      <div class="memo"><div class="line"></div><div class="line"></div></div>
+    </div>
+  </section>
+
+  <span class="step">ステップ3　生成AIにも聞いてみる → 人間と比べる</span>
+
+  <section class="dataset">
+    <h2>【4】 生成AI（Gemini）の提案と、自分の案を比べよう（〜10分）</h2>
+    <div class="task compare">
+      <div class="task-head"><span class="task-num">10</span><span class="task-title">同じデータを生成AIに渡すと、どんな施策を提案する？</span></div>
+      <div class="row"><span class="tag">🤝 自分と<strong>同じ意見</strong>は？</span><span class="cline"></span></div>
+      <div class="row"><span class="tag">💡 自分に<strong>なかった視点</strong>は？</span><span class="cline"></span></div>
+      <div class="row"><span class="tag">🤔 逆に、AIが<strong>見落としている</strong>ことは？</span><span class="cline"></span></div>
+      <div class="note">AIは強力な道具。でも、<strong>現場を知る人間が最終的に判断する</strong>。</div>
+    </div>
+  </section>
+
+  <div class="summary">
+    <h3>全3回のまとめ — データサイエンスで何ができると思った？（1行で）</h3>
+    <div class="line"></div>
+    <div class="line"></div>
+  </div>
+
+</div>
+
+</body>
+</html>
