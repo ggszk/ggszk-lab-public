@@ -12,8 +12,8 @@
   html, body {
     font-family: 'Hiragino Sans', 'Yu Gothic', 'Noto Sans JP', 'Noto Sans CJK JP', sans-serif;
     color: #000;
-    font-size: 10.5pt;
-    line-height: 1.5;
+    font-size: 10pt;
+    line-height: 1.45;
     background: #fff;
   }
   .page {
@@ -65,7 +65,7 @@
 
   /* Section */
   section.dataset {
-    margin-bottom: 9pt;
+    margin-bottom: 7pt;
     page-break-inside: avoid;
   }
   section.dataset > h2 {
@@ -78,7 +78,7 @@
 
   /* Task */
   .task {
-    margin-bottom: 5pt;
+    margin-bottom: 3pt;
     page-break-inside: avoid;
   }
   .task-head {
@@ -109,8 +109,8 @@
   }
   .memo .line {
     border-bottom: 0.4pt solid #000;
-    height: 20pt;
-    margin-bottom: 4pt;
+    height: 16pt;
+    margin-bottom: 3pt;
   }
 
   /* Subtle note */
@@ -242,6 +242,20 @@
       <div class="note">例：夜の売れ筋TOP3は？／1個だけ買う人が多い商品は？／支店ごとに個性はある？</div>
       <div class="memo"><div class="line"></div><div class="line"></div></div>
     </div>
+
+    <div class="task">
+      <div class="task-head"><span class="task-num">予</span><span class="task-title">支店ごとの売れ筋から、お店の「個性」を予想しよう（あとでAIと答え合わせ）</span></div>
+      <div class="note">棒グラフ（商品名）を「支店」で分けて、各店の売れ筋トップ3を書き出す → どんなお客さんが多いか予想する。<br>
+      ※売れ筋トップは似た顔ぶれになりがち。「この店だけ多い物」に注目すると個性が見える。</div>
+      <table class="ws">
+        <tr><th style="width:22%;">支店</th><th style="width:43%;">売れ筋トップ3（自分で集計）</th><th style="width:35%;">どんなお客さん？（予想）</th></tr>
+        <tr><td>中央区店（オフィス街）</td><td class="fill"></td><td class="fill"></td></tr>
+        <tr><td>北区店（郊外）</td><td class="fill"></td><td class="fill"></td></tr>
+        <tr><td>東区店（工場＋住宅）</td><td class="fill"></td><td class="fill"></td></tr>
+        <tr><td>西区店（住宅街）</td><td class="fill"></td><td class="fill"></td></tr>
+      </table>
+      <div class="note">🔮 この予想を覚えておこう。後半で <strong>AI（LDA）の答え（⑧）</strong> と比べる。</div>
+    </div>
   </section>
 
   <div class="summary">
@@ -267,12 +281,12 @@
       <div class="task-head"><span class="task-num">7</span><span class="task-title">各テーマに「名前」をつけよう</span></div>
       <table class="ws">
         <tr><th style="width:13%;">テーマ</th><th style="width:52%;">よく一緒に買われる商品</th><th style="width:35%;">つけた名前</th></tr>
-        <tr><td>テーマ1</td><td class="prod">チョコレート・アイス・キャンディ・ガム・炭酸飲料</td><td class="fill"></td></tr>
-        <tr><td>テーマ2</td><td class="prod">ポテトチップス・キャンディ・アイス・ガム・炭酸飲料</td><td class="fill"></td></tr>
-        <tr><td>テーマ3</td><td class="prod">おにぎり・牛乳・卵・パン・ヨーグルト</td><td class="fill"></td></tr>
-        <tr><td>テーマ4</td><td class="prod">カップ麺・冷凍食品・弁当・缶コーヒー・肉まん</td><td class="fill"></td></tr>
-        <tr><td>テーマ5</td><td class="prod">歯ブラシ・洗剤・トイレットペーパー・ティッシュ・シャンプー</td><td class="fill"></td></tr>
-        <tr><td>テーマ6</td><td class="prod">サンドイッチ・お茶・コーヒー・ジュース・フルーツ</td><td class="fill"></td></tr>
+        <tr><td>テーマ1</td><td class="prod">弁当・アイス・炭酸飲料・ガム・キャンディ</td><td class="fill"></td></tr>
+        <tr><td>テーマ2</td><td class="prod">おにぎり・コーヒー・お茶・ジュース・卵</td><td class="fill"></td></tr>
+        <tr><td>テーマ3</td><td class="prod">ポテトチップス・チョコレート・冷凍食品・アイス・炭酸飲料</td><td class="fill"></td></tr>
+        <tr><td>テーマ4</td><td class="prod">カップ麺・肉まん・ジュース・お茶・弁当</td><td class="fill"></td></tr>
+        <tr><td>テーマ5</td><td class="prod">ティッシュ・トイレットペーパー・牛乳・歯ブラシ・洗剤</td><td class="fill"></td></tr>
+        <tr><td>テーマ6</td><td class="prod">サラダ・サンドイッチ・ヨーグルト・卵・野菜ジュース</td><td class="fill"></td></tr>
       </table>
       <div class="note">例：{おにぎり, パン, コーヒー} →「朝の軽食セット」　※全部に名前をつけなくてOK</div>
     </div>
@@ -286,6 +300,7 @@
         <tr><td>東区店（工場＋住宅）</td><td class="fill"></td><td class="fill"></td></tr>
         <tr><td>西区店（住宅街）</td><td class="fill"></td><td class="fill"></td></tr>
       </table>
+      <div class="note">🔮 前半の「予」で予想したお店の個性と、AI（LDA）の答えは合っていた？ 違いはどこ？</div>
     </div>
 
     <div class="task">
