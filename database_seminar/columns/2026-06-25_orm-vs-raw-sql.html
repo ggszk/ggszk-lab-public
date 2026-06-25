@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ORMと生SQL，結局どっちを使うのか - データベース演習</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-primary: #1a5e45;
+  --color-accent: #27ae60;
+  --color-light: #eafaf1;
+  --color-bg: #fafbfc;
+  --color-text: #2c3e50;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  color: var(--color-text);
+  background: var(--color-bg);
+  line-height: 1.7;
+}
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+header {
+  background: var(--color-primary);
+  color: white;
+  padding: 1.5rem 0;
+  margin-bottom: 2rem;
+}
+header .container {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+header h1 {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+header .subtitle {
+  font-size: 0.9rem;
+  opacity: 0.85;
+  margin-top: 0.25rem;
+}
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+.breadcrumb {
+  font-size: 0.85rem;
+  margin-bottom: 1.5rem;
+  color: #888;
+}
+.breadcrumb a {
+  color: #888;
+}
+.breadcrumb a:hover {
+  color: var(--color-accent);
+}
+
+.column {
+  background: white;
+  border: 1px solid #e0e6ed;
+  border-radius: 8px;
+  padding: 1.8rem 2rem;
+}
+.column .col-title {
+  font-size: 1.4rem;
+  color: var(--color-primary);
+  line-height: 1.4;
+  margin-bottom: 0.4rem;
+}
+.column .col-date {
+  font-size: 0.85rem;
+  color: #888;
+  margin-bottom: 1.4rem;
+}
+.column h2 {
+  font-size: 1.15rem;
+  color: var(--color-primary);
+  margin: 1.8rem 0 0.6rem;
+}
+.column h3 {
+  font-size: 1.02rem;
+  color: var(--color-primary);
+  margin: 1.4rem 0 0.5rem;
+}
+.column p {
+  margin-bottom: 1rem;
+}
+.column ul {
+  margin: 0 0 1rem 1.4rem;
+}
+.column li {
+  margin-bottom: 0.3rem;
+}
+.column blockquote {
+  margin: 1rem 0;
+  padding: 0.6rem 1rem;
+  background: var(--color-light);
+  border-left: 4px solid var(--color-accent);
+  color: #555;
+  border-radius: 0 4px 4px 0;
+}
+.column code {
+  background: #f3f5f7;
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+.column pre {
+  background: #2c3e50;
+  color: #eaf2f8;
+  padding: 1rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+.column pre code {
+  background: none;
+  padding: 0;
+  color: inherit;
+}
+.column a {
+  font-weight: 700;
+}
+
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <h1>データベース演習</h1>
+    <div class="subtitle">2026年度</div>
+  </div>
+</header>
+<div class="container">
+  <div class="breadcrumb"><a href="../../">ポータル</a> &gt; <a href="../">データベース演習</a> &gt; コラム</div>
+  <article class="column">
+    <h1 class="col-title">ORMと生SQL，結局どっちを使うのか</h1>
+    <div class="col-date">2026-06-25</div>
+    <h2>きっかけ</h2>
+<p>SNS（X）で，ある技術系アカウント（<a href="https://x.com/IT_BOYAKI" target="_blank" rel="noopener">@IT_BOYAKI</a>）が「ORMと生SQL，結局どっちを使えばいいのか」という<a href="https://youtu.be/zehPzwVAu6A" target="_blank" rel="noopener">動画</a>に寄せられたコメントをまとめていました．短いながら現場の肌感がよく出ていて，みなさんがこの演習で学んでいる<strong>SQL</strong>と，第9回で触れた<strong>アプリケーションフレームワーク（ORM）</strong>の関係を考える素材にちょうどよいので，要点を紹介します．</p>
+<p>ここで言う <strong>ORM</strong> とは，Pythonのオブジェクト（クラス）とデータベースの表を対応づけて，SQLを直接書かずにデータを読み書きする仕組みのことです．SQLAlchemy や Django ORM などが代表例です．</p>
+<h2>コメント欄で多かった声</h2>
+<ul><li>一番共感を集めていたのは「<strong>両方が正解</strong>」という結論．ただし投稿者は「その『両方』の中身が人によって全然違う」とも指摘していて，ここが面白いところです．</li><li>多かったのが「<strong>最初はORMが楽．でも次第に生SQLを書く羽目になる</strong>」という成長曲線．「SQLを覚えるまでは面倒だったが，覚えたら自由に書けてほぼ生SQL派になった」という声も．</li><li>ただし同じ人たちが口を揃えて「<strong>ORMのマイグレーション（スキーマ変更の管理）だけは手放せない</strong>」と言う．データの移行漏れを防げるからです．</li><li>「<strong>SELECT（参照）はクエリビルダー，更新系はORM</strong>」のように，役割で線を引く人も多い．</li><li>「凝ったSQLを無理にORMで生成させようとするのは無駄な努力」という割り切りも．</li><li>反ORMの立場もあり，根拠は「<strong>RDBの表とオブジェクトの形は本質的に一致しない</strong>」（O/Rインピーダンスミスマッチ）．中にはロジックをすべてDB側のプロシージャに寄せる設計思想の人も．</li><li>生SQLの弱点「<strong>実行時にしかエラーが出ない</strong>（書き間違えても動かすまで気づかない）」については，最近はエディタ上でスキーマとSQLをAIに照合させて，変更時の書き直し漏れを拾う，という現代的な解決策も話題に．</li></ul>
+<h2>この演習とどうつながるか</h2>
+<p>この演習で生SQLを手で書いているのは，遠回りに見えて実は近道です．コメント欄の多くの人がたどった「ORM → やがて生SQL」という道は，<strong>結局どこかでSQLを理解していないと壁に当たる</strong>ことを示しています．集計・結合・サブクエリといった，いまみなさんが第6回以降で練習している内容は，ORMを使う現場でも「ORMに何を生成させたいか」を考えるための土台になります．</p>
+<p>一方で，実務では生SQLだけで戦うわけでもありません．スキーマ変更の管理（マイグレーション）や，ありふれた更新処理はORMに任せ，複雑な参照系は生SQLで書く——という<strong>役割分担</strong>が定番です．「どちらか一方が正解」ではなく，「どこに何を任せるか」を判断できることが，実務で効いてきます．</p>
+<h2>まとめ</h2>
+<ul><li>まずSQLそのものを自分で書けること．これは何を使うにせよ土台になる．</li><li>ORMは「楽をするため」ではなく「マイグレーションや定型処理を安全に回すため」の道具と捉える．</li><li>「両方が正解」で終わらせず，<strong>自分なりの線の引き方</strong>を持てると一段強い．</li></ul>
+<p>演習で書いているSQLは，将来ORMを使う場面でも必ず生きます．いまは遠慮なく生SQLで手を動かしてください．</p>
+  </article>
+  <footer>
+    提出・連絡は <a href="https://webclass.kaishi-pu.ac.jp/webclass/">WebClass</a> から行ってください．
+  </footer>
+</div>
+</body>
+</html>

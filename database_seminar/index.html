@@ -115,6 +115,50 @@ a:hover {
   background: #a9dfbf;
   text-decoration: none;
 }
+.columns {
+  margin-bottom: 2rem;
+}
+.columns h2 {
+  font-size: 1.1rem;
+  color: var(--color-primary);
+  border-bottom: 2px solid var(--color-light);
+  padding-bottom: 0.4rem;
+  margin-bottom: 0.8rem;
+}
+.columns ul {
+  list-style: none;
+}
+.columns li {
+  margin-bottom: 0.6rem;
+}
+.column-card {
+  display: block;
+  padding: 0.8rem 1.1rem;
+  background: white;
+  border: 1px solid #e0e6ed;
+  border-left: 4px solid var(--color-accent);
+  border-radius: 6px;
+  transition: box-shadow 0.15s;
+}
+.column-card:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  text-decoration: none;
+}
+.column-card .col-ttl {
+  font-weight: 700;
+  color: var(--color-primary);
+}
+.column-card .col-date {
+  font-size: 0.8rem;
+  color: #888;
+  margin-left: 0.5rem;
+}
+.column-card .col-sum {
+  display: block;
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 0.2rem;
+}
 .lecture-list {
   list-style: none;
 }
@@ -176,6 +220,7 @@ footer {
   <div class="news">
   <h2>お知らせ</h2>
   <ul>
+    <li><span class="date">2026-06-25</span>コラム「ORMと生SQL，結局どっちを使うのか」を公開しました（トップページ「コラム／読み物」欄）</li>
     <li><span class="date">2026-06-24</span>第11回資料を公開しました</li>
     <li><span class="date">2026-06-23</span>第10回資料を公開しました</li>
     <li><span class="date">2026-06-22</span>pgAdmin/Supabaseに「syllabus」スキーマ（授業科目・単元・教員のテーブル）を追加しました。`SET search_path TO syllabus;` で利用できます</li>
@@ -204,11 +249,17 @@ footer {
     <li><a href="docs/pgAdmin利用マニュアル.pdf" target="_blank">pgAdmin利用マニュアル</a></li>
   </ul>
 </div>
+  <div class="columns">
+  <h2>📰 コラム／読み物</h2>
+  <ul>
+    <li><a class="column-card" href="columns/2026-06-25_orm-vs-raw-sql.html"><span class="col-ttl">ORMと生SQL，結局どっちを使うのか</span><span class="col-date">2026-06-25</span><span class="col-sum">実務でよく交わされる「ORM対生SQL」論争を，この演習での学びとどうつなげるか．</span></a></li>
+  </ul>
+</div>
   <ul class="lecture-list">
-    <li><a class="lecture-card" href="DS_01/"><span class="num">第1回</span><span class="date">（4/16）</span><span class="topic">授業の進め方とガイダンス・DBMS環境の構築</span><span class="sections">📄 </span></a></li><li><a class="lecture-card" href="DS_02/"><span class="num">第2回</span><span class="date">（4/23）</span><span class="topic">情報システムの構築とデータベース設計</span><span class="sections">📄 📝</span></a></li><li><a class="lecture-card" href="DS_03/"><span class="num">第3回</span><span class="date">（4/30）</span><span class="topic">論理設計とパフォーマンス・DB作成</span><span class="sections">📄 📝</span></a></li><li><a class="lecture-card" href="DS_04/"><span class="num">第4回</span><span class="date">（5/7）</span><span class="topic">概念設計とERモデル</span><span class="sections">📄 </span></a></li><li><a class="lecture-card" href="DS_05/"><span class="num">第5回</span><span class="date">（5/14）</span><span class="topic">要件定義と概念設計</span><span class="sections">📄 📝</span></a></li><li><a class="lecture-card" href="DS_06/"><span class="num">第6回</span><span class="date">（5/21）</span><span class="topic">SQLによるデータ分析</span><span class="sections">📄 📝</span></a></li><li><a class="lecture-card" href="DS_07/"><span class="num">第7回</span><span class="date">（5/28）</span><span class="topic">SQLによる集計</span><span class="sections">📄 📝</span></a></li><li><a class="lecture-card" href="DS_08/"><span class="num">第8回</span><span class="date">（6/4）</span><span class="topic">データベースを活用するアプリケーション構築</span><span class="sections">📄 📝</span></a></li><li><a class="lecture-card" href="DS_09/"><span class="num">第9回</span><span class="date">（6/18）</span><span class="topic">アプリケーション開発フレームワークとデータベース</span><span class="sections">📄 📝</span></a></li><li><a class="lecture-card" href="DS_10/"><span class="num">第10回</span><span class="date">（6/25）</span><span class="topic">SQL応用：関数とジョイン</span><span class="sections">📄 📝</span></a></li><li><a class="lecture-card" href="DS_11/"><span class="num">第11回</span><span class="date">（7/2）</span><span class="topic">SQL応用：様々なジョイン</span><span class="sections">📄 📝</span></a></li>
+    <li><a class="lecture-card" href="DS_01/"><span class="num">第1回</span><span class="date">（4/16）</span><span class="topic">授業の進め方とガイダンス・DBMS環境の構築</span><span class="sections">📄 </span></a></li><li><a class="lecture-card" href="DS_02/"><span class="num">第2回</span><span class="date">（4/23）</span><span class="topic">情報システムの構築とデータベース設計</span><span class="sections">📄 📝</span></a></li><li><a class="lecture-card" href="DS_03/"><span class="num">第3回</span><span class="date">（4/30）</span><span class="topic">論理設計とパフォーマンス・DB作成</span><span class="sections">📄 📝</span></a></li><li><a class="lecture-card" href="DS_04/"><span class="num">第4回</span><span class="date">（5/7）</span><span class="topic">概念設計とERモデル</span><span class="sections">📄 </span></a></li><li><a class="lecture-card" href="DS_05/"><span class="num">第5回</span><span class="date">（5/14）</span><span class="topic">要件定義と概念設計</span><span class="sections">📄 📝</span></a></li><li><a class="lecture-card" href="DS_06/"><span class="num">第6回</span><span class="date">（5/21）</span><span class="topic">SQLによるデータ分析</span><span class="sections">📄 📝</span></a></li><li><a class="lecture-card" href="DS_07/"><span class="num">第7回</span><span class="date">（5/28）</span><span class="topic">SQLによる集計</span><span class="sections">📄 📝</span></a></li><li><a class="lecture-card" href="DS_08/"><span class="num">第8回</span><span class="date">（6/4）</span><span class="topic">データベースを活用するアプリケーション構築</span><span class="sections">📄 📝</span></a></li><li><a class="lecture-card" href="DS_09/"><span class="num">第9回</span><span class="date">（6/18）</span><span class="topic">アプリケーション開発フレームワークとデータベース</span><span class="sections">📄 📝</span></a></li><li><a class="lecture-card" href="DS_10/"><span class="num">第10回</span><span class="date">（6/25）</span><span class="topic">SQL応用：関数とジョイン</span><span class="sections">📄 📝</span></a></li><li><a class="lecture-card" href="DS_11/"><span class="num">第11回</span><span class="date">（7/2）</span><span class="topic">SQL応用：様々なジョイン</span><span class="sections">📄 📝</span></a></li><li><a class="lecture-card" href="DS_12/"><span class="num">第12回</span><span class="date">（7/9）</span><span class="topic">SQL応用：サブクエリとウィンドウ関数</span><span class="sections">📄 📝</span></a></li><li><a class="lecture-card" href="DS_13/"><span class="num">第13回</span><span class="date">（7/16）</span><span class="topic">SQL応用：SQLを用いたデータ分析事例</span><span class="sections">📄 📝</span></a></li><li><a class="lecture-card" href="DS_14/"><span class="num">第14回</span><span class="date">（7/23）</span><span class="topic">総合課題：データベースの設計</span><span class="sections">📄 📝</span></a></li><li><a class="lecture-card" href="DS_15/"><span class="num">第15回</span><span class="date">（7/30）</span><span class="topic">総合課題：アプリケーション構築と分析SQL</span><span class="sections">📄 📝</span></a></li>
   </ul>
   <footer>
-    提出・連絡は <a href="https://webclass.kaishi-pu.ac.jp/webclass/">WebClass</a> から行ってください。
+    提出・連絡は <a href="https://webclass.kaishi-pu.ac.jp/webclass/">WebClass</a> から行ってください．
   </footer>
 </div>
 </body>
