@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIでレシートを分析しよう｜体験授業</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Hiragino Sans','Noto Sans JP','Segoe UI',sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh; color: #333;
+}
+.container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+.breadcrumb { font-size: 0.85rem; margin-bottom: 12px; }
+.breadcrumb a { color: #fff; opacity: 0.9; text-decoration: none; }
+.breadcrumb a:hover { text-decoration: underline; }
+header { text-align: center; background: rgba(255,255,255,0.95); padding: 26px; border-radius: 15px; margin-bottom: 18px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
+header h1 { font-size: 2.1em; color: #4a5568; margin-bottom: 8px; }
+header p { font-size: 1.1em; color: #666; }
+.guide { background: rgba(255,255,255,0.95); padding: 18px 22px; border-radius: 12px; margin-bottom: 18px; box-shadow: 0 4px 16px rgba(0,0,0,0.1); border-left: 5px solid #4f46e5; }
+.guide h2 { font-size: 1.15em; color: #4a5568; margin-bottom: 8px; }
+.guide p { margin-bottom: 6px; line-height: 1.6; }
+.guide strong { color: #b3340a; }
+.guide .ws { font-size: 0.92em; color: #444; background: #f3f4ff; border-radius: 8px; padding: 8px 12px; margin-top: 8px; }
+.controls { display: flex; justify-content: center; align-items: center; gap: 18px; flex-wrap: wrap; background: rgba(255,255,255,0.92); padding: 18px; border-radius: 10px; margin-bottom: 18px; box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+.control-group { display: flex; align-items: center; gap: 10px; }
+.control-group label { font-weight: bold; color: #4a5568; }
+select { padding: 8px 12px; border: 2px solid #e2e8f0; border-radius: 5px; font-size: 16px; background: white; }
+button { background: linear-gradient(135deg,#4f46e5,#7c3aed); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: transform .2s, box-shadow .2s; }
+button:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+.results { background: rgba(255,255,255,0.97); padding: 26px; border-radius: 15px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
+.summary { margin-bottom: 24px; padding: 18px; background: #f8fafc; border-radius: 10px; border-left: 4px solid #4f46e5; }
+.summary p { margin: 2px 0; }
+.topics-section, .chart-section, .wordcloud-section { margin-bottom: 26px; }
+.topic-card { background: white; padding: 13px; margin: 9px 0; border-radius: 8px; border-left: 4px solid #10b981; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.topic-card h4 { color: #374151; margin-bottom: 4px; }
+.topic-card .products { color: #555; font-size: 0.95em; }
+.chart-section canvas { max-height: 380px; margin: 14px 0; }
+.insights { background: #fef3c7; padding: 18px; border-radius: 10px; border-left: 4px solid #f59e0b; }
+.insight-item { background: white; padding: 11px; margin: 8px 0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.08); font-size: 0.95em; }
+.insight-item strong { color: #92400e; }
+.wordclouds-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap: 16px; margin-top: 14px; }
+.wordcloud-card { background: white; border-radius: 12px; padding: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 2px solid #e5e7eb; }
+.wordcloud-card h4 { color: #374151; font-size: 1.15em; margin-bottom: 12px; text-align: center; border-bottom: 2px solid #f3f4f6; padding-bottom: 8px; }
+.wordcloud-image { text-align: center; margin-bottom: 12px; background: #f9fafb; border-radius: 8px; padding: 8px; }
+.wordcloud-image img { max-width: 100%; height: auto; border-radius: 6px; }
+.wordcloud-info { font-size: 0.88em; color: #6b7280; }
+.wordcloud-info p { margin-bottom: 6px; }
+.wordcloud-info strong { color: #374151; }
+h2, h3 { color: #374151; }
+h3 { font-size: 1.3em; margin-bottom: 12px; }
+.gemini { background: rgba(255,255,255,0.97); padding: 24px 26px; border-radius: 15px; margin-top: 18px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
+.gemini h3 { color: #4a5568; }
+.gemini p { margin-bottom: 8px; line-height: 1.6; }
+.gemini pre { white-space: pre-wrap; background: #f6f1ec; border: 1px solid #e0d5c8; border-radius: 6px; padding: 14px 16px; font-size: 0.85rem; line-height: 1.6; font-family: 'SFMono-Regular',Consolas,'Noto Sans JP',monospace; color: #333; }
+.gemini .callout { border-left: 4px solid #d35400; background: #fff8f2; border-radius: 0 8px 8px 0; padding: 12px 14px; margin-top: 12px; }
+.gemini .callout strong { color: #d35400; }
+.note { font-size: 0.85rem; color: rgba(255,255,255,0.85); margin-top: 16px; text-align: center; }
+@media (max-width: 768px) { header h1 { font-size: 1.7em; } .controls { flex-direction: column; } }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="breadcrumb"><a href="./">← 授業ページに戻る</a></div>
+
+  <header>
+    <h1>🛒 AIでレシートを分析しよう</h1>
+    <p>4つの支店の「買い方のパターン」を、AIに見つけてもらおう</p>
+  </header>
+
+  <div class="guide">
+    <h2>このページの使い方</h2>
+    <p>集計だけでは「商品どうしの<strong>組み合わせ</strong>」や「どんな<strong>買い方</strong>か」までは見えにくいですね。
+    そこで <strong>AI（トピック抽出・LDA）</strong> が、1,200枚のレシートから「買い方のテーマ」を自動で見つけます。</p>
+    <p>📌 <strong>トピック数を変えて「分析開始！」</strong>を押すと、テーマの分かれ方が変わります。
+    どの数が一番しっくりくるか試してみよう ——「ちょうどよい分け方を選ぶ」のは、まさに<strong>データサイエンティストの仕事</strong>です。</p>
+    <div class="ws">📝 ワークシートでは <strong>6トピック</strong>を使います：⑦各テーマに名前 → ⑧支店の個性を読み取る → ⑨売上アップ作戦。
+    名前をつけるのは人間の仕事！</div>
+  </div>
+
+  <div class="controls">
+    <div class="control-group">
+      <label for="topicCount">トピック数:</label>
+      <select id="topicCount">
+        <option value="3">3トピック</option>
+        <option value="4">4トピック</option>
+        <option value="5">5トピック</option>
+        <option value="6" selected>6トピック</option>
+        <option value="7">7トピック</option>
+      </select>
+    </div>
+    <button id="analyzeBtn" onclick="runAnalysis()">🔍 分析開始！</button>
+  </div>
+
+  <div id="results" class="results" style="display:none;">
+    <div class="summary"><h2>📊 分析結果</h2><div id="summaryInfo"></div></div>
+    <div class="topics-section"><h3>🎯 AIが見つけたテーマ（よく一緒に買われる商品）</h3><div id="topicsInfo"></div></div>
+    <div class="chart-section"><h3>🏪 支店別のテーマ分布</h3><canvas id="storeChart"></canvas></div>
+    <div class="insights"><h3>💡 読み取りのヒント</h3><div id="insights"></div></div>
+    <div class="wordcloud-section"><h3>☁️ 支店別ワードクラウド（よく買われる商品ほど大きく表示）</h3><div id="wordcloudsContainer" class="wordclouds-grid"></div></div>
+  </div>
+
+  <div class="gemini">
+    <h3>🤖 生成AI（Gemini）にも聞いてみよう（使える人は）</h3>
+    <p>同じ分析結果を <strong>生成AI（Gemini）</strong> に渡すと、どんな売上アップ施策を提案するでしょう？
+    下のプロンプトをコピーして Gemini に貼り、出てきた施策を <strong>自分の案（ワークシート⑨）と比べて</strong>みよう ＝ <strong>ワークシート⑩</strong>。
+    <br><span style="font-size:0.85em;color:#777;">※このプロンプトは「6トピック」の結果に対応しています。</span></p>
+    <pre>コンビニチェーンのマーケティング担当者です。N市にある4つの支店のレシートデータ（1,200件）をAI（トピック分析）で分析したところ、以下の6つの買い物パターンが見つかりました。
+
+テーマ1（主な商品: 弁当, アイス, 炭酸飲料, ガム, キャンディ）
+テーマ2（主な商品: おにぎり, コーヒー, お茶, ジュース, 卵）
+テーマ3（主な商品: ポテトチップス, チョコレート, 冷凍食品, アイス, 炭酸飲料）
+テーマ4（主な商品: カップ麺, 肉まん, ジュース, お茶, 弁当）
+テーマ5（主な商品: ティッシュ, トイレットペーパー, 牛乳, 歯ブラシ, 洗剤）
+テーマ6（主な商品: サラダ, サンドイッチ, ヨーグルト, 卵, 野菜ジュース）
+
+各支店の特徴：
+- 中央区店（オフィス街、ビジネスパーソン中心、平日の朝・昼がメイン）：テーマ6が強い
+- 西区店（住宅街、学校・公園が近く、学生や主婦が中心）：テーマ3が強い
+- 東区店（工場＋住宅エリア、昼夜問わず多様な人が利用）：テーマ3が強い（テーマ6も多い）
+- 北区店（郊外、駅から遠く車中心、家族連れや高齢者が多い）：テーマ5が強い（テーマ6も多い）
+
+各支店の売上を伸ばすための施策を、「商品展開」「プロモーション」「サービス」の3つの観点から、それぞれ1つずつ提案してください。高校生にもわかるように簡潔にお願いします。</pre>
+    <div class="callout">🤖 AIは強力な道具。でも、AIの提案が<strong>いつも正しいとは限らない</strong>。
+    「自分と同じ意見は？」「自分になかった視点は？」「逆にAIが見落としていることは？」を考え、
+    <strong>最後に判断するのは人間（君）</strong>だということを確かめよう。</div>
+  </div>
+
+  <p class="note">※このページのAI分析は、レシートデータ1,200枚をあらかじめ計算した結果を表示しています（サーバーは使いません）。</p>
+</div>
+
+<script src="lda_data.js"></script>
+<script>
+let currentChart = null;
+
+function runAnalysis() {
+  const k = document.getElementById('topicCount').value;
+  const data = Object.assign({}, LDA_DATA[k], { store_wordclouds: LDA_DATA.wordclouds });
+  displayResults(data);
+}
+
+function displayResults(data) {
+  displaySummary(data.summary);
+  displayTopics(data.topics);
+  displayChart(data);
+  displayInsights(data);
+  displayWordclouds(data.store_wordclouds);
+  document.getElementById('results').style.display = 'block';
+}
+
+function displaySummary(s) {
+  document.getElementById('summaryInfo').innerHTML =
+    `<p><strong>📋 分析対象:</strong> ${s.total_receipts}件のレシート</p>` +
+    `<p><strong>🛍️ 商品種類:</strong> ${s.total_products}種類</p>` +
+    `<p><strong>🎯 分析トピック数:</strong> ${s.n_topics}トピック</p>`;
+}
+
+function displayTopics(topics) {
+  document.getElementById('topicsInfo').innerHTML = topics.map(t =>
+    `<div class="topic-card"><h4>${t.topic_name}</h4><div class="products">主な商品: ${t.top_products.join('、 ')}</div></div>`
+  ).join('');
+}
+
+function displayChart(data) {
+  const ctx = document.getElementById('storeChart').getContext('2d');
+  if (currentChart) currentChart.destroy();
+  const stores = Object.keys(data.stores);
+  const datasets = data.topics.map((topic, i) => ({
+    label: topic.topic_name,
+    data: stores.map(s => (data.stores[s].topic_ratios[i] * 100).toFixed(1)),
+    backgroundColor: topicColor(i)
+  }));
+  currentChart = new Chart(ctx, {
+    type: 'bar',
+    data: { labels: stores.map(s => s + '店'), datasets },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { title: { display: true, text: '支店別トピック分布（%）', font: { size: 15 } }, legend: { position: 'top' } },
+      scales: { x: { title: { display: true, text: '支店' } }, y: { title: { display: true, text: '割合（%）' }, beginAtZero: true } }
+    }
+  });
+}
+
+function displayInsights(data) {
+  const stores = Object.keys(data.stores);
+  const topics = data.topics;
+  const list = stores.map(store => {
+    const r = data.stores[store].topic_ratios;
+    const mi = r.indexOf(Math.max(...r));
+    return `<div class="insight-item"><strong>${store}店</strong>は<strong>${topics[mi].topic_name}</strong>が最も多く、全体の<strong>${(r[mi]*100).toFixed(1)}%</strong>を占めています</div>`;
+  });
+  document.getElementById('insights').innerHTML = list.join('');
+}
+
+function displayWordclouds(wc) {
+  const order = ['中央区','北区','東区','西区'];
+  document.getElementById('wordcloudsContainer').innerHTML = order.map(store => {
+    const d = wc[store]; if (!d) return '';
+    return `<div class="wordcloud-card"><h4>${store}店</h4>` +
+      `<div class="wordcloud-image"><img src="${d.image}" alt="${store}店のワードクラウド"></div>` +
+      `<div class="wordcloud-info"><p><strong>商品種類:</strong> ${d.product_count}種類</p>` +
+      `<p><strong>上位3商品:</strong> ${d.top_products.slice(0,3).map(x => x[0]).join('、 ')}</p></div></div>`;
+  }).join('');
+}
+
+function topicColor(i) {
+  const c = ['rgba(239,68,68,0.7)','rgba(245,158,11,0.7)','rgba(148,163,184,0.7)','rgba(234,88,12,0.7)','rgba(34,197,94,0.7)','rgba(59,130,246,0.7)','rgba(168,85,247,0.7)'];
+  return c[i % c.length];
+}
+
+window.addEventListener('DOMContentLoaded', runAnalysis);
+</script>
+</body>
+</html>
