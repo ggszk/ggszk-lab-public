@@ -87,5 +87,6 @@
 ## 使うツール・リンク
 
 - [CODAP](https://codap.concord.org/) … ブラウザで使えるデータ分析ツール（日本語対応）
+- [鈴木ゼミHP](https://lab.ggszk.org/) … ゼミ生の研究テーマ紹介
 - [開志専門職大学](https://kaishi-pu.ac.jp/)
-- [開志専門職大学 数理・データサイエンスセンター](https://mdsc.kaishi-pu.ac.jp/)
+- [開志AI・数理データサイエンスセンター](https://mdsc.kaishi-pu.ac.jp/)
