@@ -18,7 +18,9 @@
 
 下のリンクをタップすると、レシートデータが入ったCODAPが開きます（少し時間がかかります）。
 
-### 👉 [レシート分析を開く（CODAP）](https://codap3.concord.org/?url=https://ggszk.github.io/ggszk-lab-public/taiken/2026_iiyama/data/receipt-analysis.codap)
+### <a href="https://codap3.concord.org/?url=https://ggszk.github.io/ggszk-lab-public/taiken/2026_iiyama/data/receipt-analysis.codap" target="_blank" rel="noopener">👉 レシート分析を開く（CODAP）</a>
+
+**新しいタブ**で開きます（このページのタブも残ります）。
 
 > **大事な注意**
 > - **「保存」は押さなくてOK**です。タブを閉じなければ作業は残ります。
@@ -50,7 +52,7 @@
 集計だけでは「商品どうしの**組み合わせ**」や「どんな**買い方**か」までは見えにくいですね。
 そこでAI（トピック抽出）の出番です。
 
-### 👉 [AIが見つけた「買い方のテーマ」を見る](ai_topics.html)
+### <a href="ai_topics.html" target="_blank" rel="noopener">👉 AIが見つけた「買い方のテーマ」を見る</a>
 
 ### ワーク2（ノートにメモ）
 
@@ -68,6 +70,10 @@
 - 逆に、AIが**見落としていること**はない？
 
 ---
+
+## 資料
+
+- [授業スライド（PDF）](スライド.pdf) — 当日の説明用スライド
 
 ## データ（予備）
 
