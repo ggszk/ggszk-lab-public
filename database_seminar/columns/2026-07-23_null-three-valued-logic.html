@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NULLの扱いは実装依存？——SQLの「第3の真偽値」UNKNOWN - データベース演習</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-primary: #1a5e45;
+  --color-accent: #27ae60;
+  --color-light: #eafaf1;
+  --color-bg: #fafbfc;
+  --color-text: #2c3e50;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  color: var(--color-text);
+  background: var(--color-bg);
+  line-height: 1.7;
+}
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+header {
+  background: var(--color-primary);
+  color: white;
+  padding: 1.5rem 0;
+  margin-bottom: 2rem;
+}
+header .container {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+header h1 {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+header .subtitle {
+  font-size: 0.9rem;
+  opacity: 0.85;
+  margin-top: 0.25rem;
+}
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+.breadcrumb {
+  font-size: 0.85rem;
+  margin-bottom: 1.5rem;
+  color: #888;
+}
+.breadcrumb a {
+  color: #888;
+}
+.breadcrumb a:hover {
+  color: var(--color-accent);
+}
+
+.column {
+  background: white;
+  border: 1px solid #e0e6ed;
+  border-radius: 8px;
+  padding: 1.8rem 2rem;
+}
+.column .col-title {
+  font-size: 1.4rem;
+  color: var(--color-primary);
+  line-height: 1.4;
+  margin-bottom: 0.4rem;
+}
+.column .col-date {
+  font-size: 0.85rem;
+  color: #888;
+  margin-bottom: 1.4rem;
+}
+.column h2 {
+  font-size: 1.15rem;
+  color: var(--color-primary);
+  margin: 1.8rem 0 0.6rem;
+}
+.column h3 {
+  font-size: 1.02rem;
+  color: var(--color-primary);
+  margin: 1.4rem 0 0.5rem;
+}
+.column p {
+  margin-bottom: 1rem;
+}
+.column ul {
+  margin: 0 0 1rem 1.4rem;
+}
+.column li {
+  margin-bottom: 0.3rem;
+}
+.column blockquote {
+  margin: 1rem 0;
+  padding: 0.6rem 1rem;
+  background: var(--color-light);
+  border-left: 4px solid var(--color-accent);
+  color: #555;
+  border-radius: 0 4px 4px 0;
+}
+.column code {
+  background: #f3f5f7;
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+.column pre {
+  background: #2c3e50;
+  color: #eaf2f8;
+  padding: 1rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+.column pre code {
+  background: none;
+  padding: 0;
+  color: inherit;
+}
+.column a {
+  font-weight: 700;
+}
+
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <h1>データベース演習</h1>
+    <div class="subtitle">2026年度</div>
+  </div>
+</header>
+<div class="container">
+  <div class="breadcrumb"><a href="../../">ポータル</a> &gt; <a href="../">データベース演習</a> &gt; コラム</div>
+  <article class="column">
+    <h1 class="col-title">NULLの扱いは実装依存？——SQLの「第3の真偽値」UNKNOWN</h1>
+    <div class="col-date">2026-07-23</div>
+    <h2>エラーにならないのに，1行も返ってこない</h2>
+<p>次のSQL，何が返ってくるでしょうか．上司がいない（上司IDがNULLの）社員を探したいつもりです．</p>
+<pre><code>SELECT * FROM 社員 WHERE 上司ID = NULL;</code></pre>
+<p>答えは「<strong>常に0行</strong>」です．エラーにはなりません．どんなにNULLの行があっても，1行も返ってきません．正しくは <code>IS NULL</code> を使います．</p>
+<pre><code>SELECT * FROM 社員 WHERE 上司ID IS NULL;</code></pre>
+<p>「= NULL と書いたら文法エラーにしてくれればいいのに」と思いますよね．なぜエラーにならず，なぜ0行なのか．その鍵が今回の主役，<strong>UNKNOWN</strong> です．</p>
+<h2>SQLの真偽値は3つある</h2>
+<p>多くのプログラミング言語では，条件式の結果はTRUEかFALSEの2択です．しかしSQLでは，真偽値は3つあります．</p>
+<ul><li><strong>TRUE</strong>（真）</li><li><strong>FALSE</strong>（偽）</li><li><strong>UNKNOWN</strong>（不明）</li></ul>
+<p>これは<strong>SQL標準</strong>（最初期の規格から）で決められた仕様で，「3値論理」と呼ばれます．ルールはシンプルです．</p>
+<ul><li><strong>NULLが絡む比較の結果は，すべてUNKNOWNになる</strong></li></ul>
+<p><code>1 = NULL</code> も <code>1 &lt;&gt; NULL</code> も，さらには <code>NULL = NULL</code> すらUNKNOWNです．NULLは「値がない・不明」を表す印なので，「不明なもの同士が等しいかどうかは，不明」というわけです．</p>
+<p>そして，もうひとつの重要ルールがこれです．</p>
+<ul><li><strong>WHERE句はTRUEの行だけを残す</strong>（FALSEもUNKNOWNも捨てられる）</li></ul>
+<p>冒頭の <code>= NULL</code> が0行になる理由がこれで説明できます．<code>上司ID = NULL</code> はどの行でもUNKNOWNになり，UNKNOWNの行はWHEREで全部捨てられる．だからエラーではなく「静かに0行」なのです．エラーで止まってくれるバグより，動いているように見えるバグのほうがタチが悪い——というのはプログラミング全般の教訓ですが，<code>= NULL</code> はその典型例です．</p>
+<h2>AND・ORにもUNKNOWNは伝播する</h2>
+<p>UNKNOWNは論理演算にも顔を出します．「UNKNOWNは，あとでTRUEにもFALSEにもなり得る保留値」と考えると，次の結果が導けます．</p>
+<ul><li><code>FALSE AND UNKNOWN</code> → FALSE（片方がFALSEなら，もう片方が何であれ結果は確定）</li><li><code>TRUE AND UNKNOWN</code> → UNKNOWN（もう片方次第なので保留）</li><li><code>TRUE OR UNKNOWN</code> → TRUE（片方がTRUEなら確定）</li><li><code>FALSE OR UNKNOWN</code> → UNKNOWN</li><li><code>NOT UNKNOWN</code> → UNKNOWN（不明の否定は，やっぱり不明）</li></ul>
+<p>最後の <code>NOT UNKNOWN</code> → UNKNOWN が，次の罠につながります．</p>
+<h2>NOT INの罠：リストにNULLが1つあると必ず0件</h2>
+<p>第12回で学んだ副問合せと組み合わせた，実務でも有名な罠を紹介します．社員テーブルで「部下を持たない社員」（＝誰の上司でもない社員）を数えてみます．</p>
+<pre><code>SELECT COUNT(*) FROM 社員
+  WHERE 社員ID NOT IN (SELECT 上司ID FROM 社員);</code></pre>
+<p>一見正しそうですが，このクエリは上司IDにNULLが1件でもあると<strong>必ず0件</strong>を返します．部下を持たない社員が実際には何人いても，です．</p>
+<p>種明かしをすると，<code>x NOT IN (a, b, NULL)</code> は次の式と等価です．</p>
+<pre><code>x &lt;&gt; a AND x &lt;&gt; b AND x &lt;&gt; NULL</code></pre>
+<p>最後の <code>x &lt;&gt; NULL</code> は常にUNKNOWN．すると全体は「TRUE AND TRUE AND UNKNOWN」のような形になり，<strong>決してTRUEになりません</strong>（FALSEかUNKNOWNのみ）．WHEREはTRUEしか残さないので，結果は必ず0件です．</p>
+<p>対策は，副問合せの結果からNULLを除外しておくことです．</p>
+<pre><code>SELECT COUNT(*) FROM 社員
+  WHERE 社員ID NOT IN (
+    SELECT 上司ID FROM 社員 WHERE 上司ID IS NOT NULL
+  );</code></pre>
+<p>怖いのは，このバグが「0件」というもっともらしい結果を返すことです．「該当なし，よかった」と誤読しても，どこからもエラーは出ません．<strong>NOT INと副問合せを組み合わせるときは，NULLの除外を習慣にする</strong>のがおすすめです．</p>
+<h2>どこまでが標準で，どこからが実装依存か</h2>
+<p>「NULLの挙動は処理系依存なんでしょ？」という印象を持っている人は少なくありません（私も長らくそう思っていました）．実はNULLまわりは「<strong>評価のコアはSQL標準で一枚岩，周辺の挙動は実装依存</strong>」という混在地帯で，この印象は半分だけ正しいのです．</p>
+<p><strong>標準で決まっていて，どの処理系でも同じ</strong></p>
+<ul><li>3値論理（NULLとの比較はUNKNOWN，WHEREはTRUEのみ残す）——今回の話はすべてここ</li><li>集約関数（COUNT(列名)，SUMなど）はNULLを無視する</li><li>GROUP BYやDISTINCTでは，NULL同士は同じグループとして扱われる</li></ul>
+<p><strong>実装依存，または処理系によって差がある</strong></p>
+<ul><li><strong>ORDER BYでNULLが先頭に来るか末尾に来るか</strong>．標準は決めておらず，SQLiteは昇順で先頭，PostgreSQLは昇順で末尾に来ます．第13回の資料でSQLiteとPostgreSQLの並び順の違いに注記を入れたのは，まさにこれが理由です</li><li>UNIQUE制約の列に複数のNULLを入れられるか（SQLiteやPostgreSQLは入れられる．入れられない処理系もある）</li><li>Oracleでは空文字列 <code>&#x27;&#x27;</code> がNULL扱いになる（移植で踏みやすい有名な仕様）</li></ul>
+<p>つまり「並び順や制約まわりは処理系ごとに確認が必要．でも<strong>比較と論理演算のルールを疑う必要はない</strong>」が正確な世界観です．</p>
+<h2>Colabで試してみよう</h2>
+<p>演習環境（SQLite）で，次の3つを実行してみてください．</p>
+<pre><code>SELECT NULL = NULL;   -- NULL（UNKNOWNの意味）が返る．TRUEではない
+SELECT 1 WHERE NULL = NULL;   -- 0行．WHEREはTRUEしか残さない
+SELECT 1 WHERE NULL IS NULL;  -- 1行返る．NULL判定はIS NULLで</code></pre>
+<p>SQLiteにはBOOLEAN型がないため，UNKNOWNは結果上NULLとして表示されます（PostgreSQLでも同様にNULLが返ります）．「真偽値が3つある」ことを一度体で覚えておくと，<code>= NULL</code> やNOT INの罠に，この先の実務で引っかからずに済みます．</p>
+  </article>
+  <footer>
+    提出・連絡は <a href="https://webclass.kaishi-pu.ac.jp/webclass/">WebClass</a> から行ってください．
+  </footer>
+</div>
+</body>
+</html>
