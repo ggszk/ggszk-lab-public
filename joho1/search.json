@@ -1,0 +1,100 @@
+[
+  {
+    "objectID": "slides01.html#今日のテーマ",
+    "href": "slides01.html#今日のテーマ",
+    "title": "擬似言語と Python",
+    "section": "今日のテーマ",
+    "text": "今日のテーマ\n共通テスト「情報Ⅰ」のプログラミング問題\n\n出題は擬似言語（共通テスト用プログラム表記）\n授業で使った言語が何であっても，本番で読むのは擬似言語\n作戦：Python で動かして納得 → 擬似言語で読み直す"
+  },
+  {
+    "objectID": "slides01.html#擬似言語を読む",
+    "href": "slides01.html#擬似言語を読む",
+    "title": "擬似言語と Python",
+    "section": "擬似言語を読む",
+    "text": "擬似言語を読む\n5人の得点の合計を求めるプログラム：\nTokuten = [65, 80, 72, 58, 90]\ngokei = 0\ni を 0 から 4 まで 1 ずつ増やしながら繰り返す：\n⎿ gokei = gokei + Tokuten[i]\n表示する(gokei)\nポイント：「4 まで」は 4 を含む"
+  },
+  {
+    "objectID": "slides01.html#python-で動かす",
+    "href": "slides01.html#python-で動かす",
+    "title": "擬似言語と Python",
+    "section": "Python で動かす",
+    "text": "Python で動かす\nスライドの中でも実行できます："
+  },
+  {
+    "objectID": "slides01.html#対応関係",
+    "href": "slides01.html#対応関係",
+    "title": "擬似言語と Python",
+    "section": "対応関係",
+    "text": "対応関係\n\n\n\n擬似言語\nPython\n\n\n\n\ni を 0 から 4 まで繰り返す\nfor i in range(5):\n\n\n⎿\nインデント\n\n\n表示する(...)\nprint(...)\n\n\n\nrange(5) は 5 を含まない — 最初のつまずきどころ"
+  },
+  {
+    "objectID": "slides01.html#まとめ",
+    "href": "slides01.html#まとめ",
+    "title": "擬似言語と Python",
+    "section": "まとめ",
+    "text": "まとめ\n\n教材ページとこのスライドは同じソース（Markdown）から生成\n解説はページで，授業・解説会はスライドで，正本は1つ"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "情報Ⅰ オンライン教材（デモ）",
+    "section": "",
+    "text": "これは Quarto + Quarto Live で情報Ⅰの受験対策教材を作った場合の技術デモです． 教材そのものではなく，「この作り方で行けるか」を確かめ，プラットフォーム選定 （センターサイト / ゼミサイト / OLS / 独自）の判断材料にするために作っています．\nまずは 第1回 を開いて，ページ内の Python を実際に動かしてみてください．"
+  },
+  {
+    "objectID": "index.html#このデモで確認できること",
+    "href": "index.html#このデモで確認できること",
+    "title": "情報Ⅰ オンライン教材（デモ）",
+    "section": "このデモで確認できること",
+    "text": "このデモで確認できること\n\n解説ページ：Markdown が正本．数式・図・コードの見た目（→ 第1回）\nページ内で動く Python：サーバ不要．ブラウザ内（WebAssembly）で実行される\n演習ブロック：穴埋め問題＋ヒント＋解答を教材内に埋め込める\n同じソースからスライドも生成：（→ スライド版）"
+  },
+  {
+    "objectID": "index.html#この構成の位置づけ",
+    "href": "index.html#この構成の位置づけ",
+    "title": "情報Ⅰ オンライン教材（デモ）",
+    "section": "この構成の位置づけ",
+    "text": "この構成の位置づけ\n\n\n\n\n\n\n\n項目\n内容\n\n\n\n\n正本\ngit 管理の .qmd（Markdown）ファイル\n\n\nホスティング\n静的サイト（GitHub Pages / センターサイト等）でそのまま公開可\n\n\n実行環境\nPyodide（ブラウザ内 WASM）．閲覧時に CDN から読み込むため通信は必要\n\n\n向く用途\n解説・読み物・実行しながら学ぶ演習\n\n\n向かない用途\n受講管理・成績蓄積（→ OLS の担当領域）"
+  },
+  {
+    "objectID": "index.html#現状と今後",
+    "href": "index.html#現状と今後",
+    "title": "情報Ⅰ オンライン教材（デモ）",
+    "section": "現状と今後",
+    "text": "現状と今後\n\nできているのは，ここにある3ページだけです．内容は仕組みを見せるための仮のもので，教材としての精度は問うていません\n確認済み：ページ内 Python 実行，穴埋め演習，同一ソースからのスライド生成，静的サイトとしての公開\n未着手：教材本体の設計と執筆，擬似言語表記の正確な準拠，受講管理をどこまで持つかの切り分け\n\n\n\n\n\n\n\nノート\n\n\n\nこのデモの擬似言語表記は共通テスト用プログラム表記の「雰囲気」を再現したものです． 実教材化の際は大学入試センターの最新の公表資料に合わせます．"
+  },
+  {
+    "objectID": "lesson01.html",
+    "href": "lesson01.html",
+    "title": "第1回：擬似言語と Python — 配列と繰り返し",
+    "section": "",
+    "text": "共通テスト「情報Ⅰ」のプログラミング問題は，特定の言語ではなく共通テスト用プログラム表記（日本語ベースの擬似言語）で出題されます． この教材では，擬似言語のコードを読み解き，同じ処理を Python で動かして確認します．"
+  },
+  {
+    "objectID": "lesson01.html#問題の擬似言語を読む",
+    "href": "lesson01.html#問題の擬似言語を読む",
+    "title": "第1回：擬似言語と Python — 配列と繰り返し",
+    "section": "1. 問題の擬似言語を読む",
+    "text": "1. 問題の擬似言語を読む\n次のプログラムは，5人の生徒の得点の合計を求めるものです．\nTokuten = [65, 80, 72, 58, 90]\ngokei = 0\ni を 0 から 4 まで 1 ずつ増やしながら繰り返す：\n⎿ gokei = gokei + Tokuten[i]\n表示する(gokei)\n読むときのポイント：\n\nTokuten = [...] — 配列（Python のリストに相当）\ni を 0 から 4 まで…繰り返す — 4 を含むことに注意（Python の range(5) に相当）\n⎿ — 繰り返しの中身（インデント）を表す"
+  },
+  {
+    "objectID": "lesson01.html#同じ処理を-python-で動かす",
+    "href": "lesson01.html#同じ処理を-python-で動かす",
+    "title": "第1回：擬似言語と Python — 配列と繰り返し",
+    "section": "2. 同じ処理を Python で動かす",
+    "text": "2. 同じ処理を Python で動かす\n下のコードはこのページの中で実行できます．「Run Code」を押してみてください． 数値を書き換えて再実行することもできます．\n\n\n\n\n\n\n\n\n\n\n\n\nヒント対応関係\n\n\n\n\n\n\n\n\n\n\n擬似言語\nPython\n\n\n\n\ni を 0 から 4 まで 1 ずつ増やしながら繰り返す\nfor i in range(5):\n\n\n⎿（繰り返しの中身）\nインデント\n\n\n表示する(gokei)\nprint(gokei)\n\n\n\n「まで」はその値を含む，range() は終わりの値を含まない．ここが最初のつまずきどころです．"
+  },
+  {
+    "objectID": "lesson01.html#演習平均を求める",
+    "href": "lesson01.html#演習平均を求める",
+    "title": "第1回：擬似言語と Python — 配列と繰り返し",
+    "section": "3. 演習：平均を求める",
+    "text": "3. 演習：平均を求める\n合計 gokei から平均を求めて表示するように，____ を埋めてください．\n平均は次の式で求められます：\n\\[\n\\bar{x} = \\frac{1}{n} \\sum_{i=0}^{n-1} x_i\n\\]\n\n\n\n\n\n\n\n\n\n\n\n\n\nノートヒント\n\n\n\n\n\n合計を人数で割ります．人数は len(tokuten) で求められます．\n\n\n\n\n\n解答例：\n\ntokuten = [65, 80, 72, 58, 90]\ngokei = 0\nfor i in range(5):\n    gokei = gokei + tokuten[i]\nheikin = gokei / len(tokuten)\nprint(heikin)\ntokuten = [65, 80, 72, 58, 90]\ngokei = 0\nfor i in range(5):\n    gokei = gokei + tokuten[i]\nheikin = gokei / len(tokuten)\nprint(heikin)"
+  },
+  {
+    "objectID": "lesson01.html#発展擬似言語に戻る",
+    "href": "lesson01.html#発展擬似言語に戻る",
+    "title": "第1回：擬似言語と Python — 配列と繰り返し",
+    "section": "4. 発展：擬似言語に戻る",
+    "text": "4. 発展：擬似言語に戻る\nPython で動きを確認したら，同じ処理を擬似言語で書くとどうなるか考えてみましょう．\nTokuten = [65, 80, 72, 58, 90]\ngokei = 0\ni を 0 から 4 まで 1 ずつ増やしながら繰り返す：\n⎿ gokei = gokei + Tokuten[i]\nheikin = gokei ÷ 要素数(Tokuten)\n表示する(heikin)\n試験本番で読むのは擬似言語です．「Python で動かして納得 → 擬似言語で読み直す」という往復が，この教材の基本パターンです．"
+  }
+]
