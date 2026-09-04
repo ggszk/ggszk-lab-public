@@ -108,7 +108,7 @@ ul.task-list li input[type="checkbox"] {
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./lesson01.html"> 
-<span class="menu-text">第1回：擬似言語と Python</span></a>
+<span class="menu-text">第1回：プログラム表記を読む</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./slides01.html"> 
@@ -131,6 +131,7 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#このデモで確認できること" id="toc-このデモで確認できること" class="nav-link active" data-scroll-target="#このデモで確認できること">このデモで確認できること</a></li>
+  <li><a href="#教材設計の方針このデモが示していること" id="toc-教材設計の方針このデモが示していること" class="nav-link" data-scroll-target="#教材設計の方針このデモが示していること">教材設計の方針（このデモが示していること）</a></li>
   <li><a href="#この構成の位置づけ" id="toc-この構成の位置づけ" class="nav-link" data-scroll-target="#この構成の位置づけ">この構成の位置づけ</a></li>
   <li><a href="#現状と今後" id="toc-現状と今後" class="nav-link" data-scroll-target="#現状と今後">現状と今後</a></li>
   </ul>
@@ -159,15 +160,22 @@ ul.task-list li input[type="checkbox"] {
 
 
 <p>これは <strong>Quarto + Quarto Live</strong> で情報Ⅰの受験対策教材を作った場合の<strong>技術デモ</strong>です． 教材そのものではなく，「この作り方で行けるか」を確かめ，プラットフォーム選定 （センターサイト / ゼミサイト / OLS / 独自）の判断材料にするために作っています．</p>
-<p>まずは <a href="./lesson01.html">第1回</a> を開いて，ページ内の Python を実際に動かしてみてください．</p>
+<p>まずは <a href="./lesson01.html">第1回</a> を開いて，<strong>擬似言語のプログラムをそのまま動かして</strong>みてください．</p>
 <section id="このデモで確認できること" class="level2">
 <h2 class="anchored" data-anchor-id="このデモで確認できること">このデモで確認できること</h2>
 <ul>
-<li><strong>解説ページ</strong>：Markdown が正本．数式・図・コードの見た目（→ <a href="./lesson01.html">第1回</a>）</li>
-<li><strong>ページ内で動く Python</strong>：サーバ不要．ブラウザ内（WebAssembly）で実行される</li>
+<li><strong>共通テスト用プログラム表記がページ内で動く</strong>：試験と同じ表記のまま実行・書き換えができる（→ <a href="./lesson01.html">第1回</a>）</li>
+<li><strong>変数のトレース表</strong>：値の変化を1行ずつ表で出せる．試験本番でやる作業をそのまま可視化する</li>
+<li><strong>解説ページ</strong>：Markdown が正本．数式・図・表の見た目</li>
 <li><strong>演習ブロック</strong>：穴埋め問題＋ヒント＋解答を教材内に埋め込める</li>
 <li><strong>同じソースからスライドも生成</strong>：（→ <a href="./slides01.html">スライド版</a>）</li>
 </ul>
+</section>
+<section id="教材設計の方針このデモが示していること" class="level2">
+<h2 class="anchored" data-anchor-id="教材設計の方針このデモが示していること">教材設計の方針（このデモが示していること）</h2>
+<p>共通テストは特定のプログラミング言語を前提にせず，<strong>共通テスト用プログラム表記</strong>で出題されます． 一方この表記は<strong>教科書には基本的に載っておらず，本番の問題冊子にも説明が付きません</strong>． 授業で Python を使ったか JavaScript を使ったかにかかわらず， 受験生にとってこの表記は<strong>ほぼ初見</strong>です．</p>
+<p>したがって教材の主役は「Python を教えること」ではなく， <strong>擬似言語そのものを読めるようにすること</strong>に置きます． Python・JavaScript との対応表は，既習者向けの補助線として折りたたみに置く方針です．</p>
+<p>この方針を実装するため，擬似言語を解釈して実行する小さな処理系（<code>dncl.py</code>）を自作し， ブラウザ内（Pyodide）で動かしています．センターが公表している二分探索の例示が そのまま実行できることを確認済みです．</p>
 </section>
 <section id="この構成の位置づけ" class="level2">
 <h2 class="anchored" data-anchor-id="この構成の位置づけ">この構成の位置づけ</h2>
@@ -185,7 +193,7 @@ ul.task-list li input[type="checkbox"] {
 <tbody>
 <tr class="odd">
 <td>正本</td>
-<td>git 管理の <code>.qmd</code>（Markdown）ファイル</td>
+<td>git 管理の <code>.qmd</code>（Markdown）ファイルと <code>dncl.py</code></td>
 </tr>
 <tr class="even">
 <td>ホスティング</td>
@@ -210,20 +218,17 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="現状と今後">現状と今後</h2>
 <ul>
 <li><strong>できているのは，ここにある3ページだけ</strong>です．内容は仕組みを見せるための仮のもので，教材としての精度は問うていません</li>
-<li>確認済み：ページ内 Python 実行，穴埋め演習，同一ソースからのスライド生成，静的サイトとしての公開</li>
-<li>未着手：教材本体の設計と執筆，擬似言語表記の正確な準拠，受講管理をどこまで持つかの切り分け</li>
+<li>確認済み：擬似言語のページ内実行，トレース表，穴埋め演習，同一ソースからのスライド生成，静的サイトとしての公開</li>
+<li>未着手：教材本体の設計と執筆，出題傾向に沿った単元の並べ方，受講管理をどこまで持つかの切り分け</li>
 </ul>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-ノート
+<div class="callout-body-container">
+<p>表記は大学入試センター「令和7年度大学入学共通テスト 試作問題『情報』の概要」 （2022年11月公表）の「5．共通テスト用プログラム表記の例示」に準拠しています（2026-09-03 参照）． センターは説明文書に従わない形式で出題することもあると明記しているため， 本番では問題文中の説明が優先されます．</p>
 </div>
-</div>
-<div class="callout-body-container callout-body">
-<p>このデモの擬似言語表記は共通テスト用プログラム表記の「雰囲気」を再現したものです． 実教材化の際は大学入試センターの最新の公表資料に合わせます．</p>
 </div>
 </div>
 
