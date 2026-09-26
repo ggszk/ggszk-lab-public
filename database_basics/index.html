@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026年度 データベースの基礎</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-primary: #3d2b72;
+  --color-accent: #6a4fbf;
+  --color-light: #f0ecf9;
+  --color-bg: #fafbfc;
+  --color-text: #2c3e50;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  color: var(--color-text);
+  background: var(--color-bg);
+  line-height: 1.7;
+}
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+header {
+  background: var(--color-primary);
+  color: white;
+  padding: 1.5rem 0;
+  margin-bottom: 2rem;
+}
+header .container {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+header h1 {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+header .subtitle {
+  font-size: 0.9rem;
+  opacity: 0.85;
+  margin-top: 0.25rem;
+}
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+.breadcrumb {
+  font-size: 0.85rem;
+  margin-bottom: 1.5rem;
+  color: #888;
+}
+.breadcrumb a {
+  color: #888;
+}
+.breadcrumb a:hover {
+  color: var(--color-accent);
+}
+
+.news {
+  margin-bottom: 2rem;
+  padding: 1rem 1.2rem;
+  background: #fffbe6;
+  border: 1px solid #f0e68c;
+  border-radius: 6px;
+}
+.news h2 {
+  font-size: 1rem;
+  color: var(--color-primary);
+  margin-bottom: 0.5rem;
+}
+.news ul {
+  list-style: none;
+  font-size: 0.9rem;
+}
+.news li {
+  margin-bottom: 0.2rem;
+}
+.news .date {
+  color: #888;
+  margin-right: 0.5rem;
+}
+.docs {
+  margin-bottom: 2rem;
+}
+.docs h2 {
+  font-size: 1.1rem;
+  color: var(--color-primary);
+  border-bottom: 2px solid var(--color-light);
+  padding-bottom: 0.4rem;
+  margin-bottom: 0.8rem;
+}
+.docs ul {
+  list-style: none;
+}
+.docs li {
+  margin-bottom: 0.4rem;
+}
+.docs a {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  background: var(--color-light);
+  border-radius: 4px;
+  font-size: 0.95rem;
+  transition: background 0.15s;
+}
+.docs a:hover {
+  background: #d9cff2;
+  text-decoration: none;
+}
+.columns {
+  margin-bottom: 2rem;
+}
+.columns h2 {
+  font-size: 1.1rem;
+  color: var(--color-primary);
+  border-bottom: 2px solid var(--color-light);
+  padding-bottom: 0.4rem;
+  margin-bottom: 0.8rem;
+}
+.columns ul {
+  list-style: none;
+}
+.columns li {
+  margin-bottom: 0.6rem;
+}
+.column-card {
+  display: block;
+  padding: 0.8rem 1.1rem;
+  background: white;
+  border: 1px solid #e0e6ed;
+  border-left: 4px solid var(--color-accent);
+  border-radius: 6px;
+  transition: box-shadow 0.15s;
+}
+.column-card:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  text-decoration: none;
+}
+.column-card .col-ttl {
+  font-weight: 700;
+  color: var(--color-primary);
+}
+.column-card .col-date {
+  font-size: 0.8rem;
+  color: #888;
+  margin-left: 0.5rem;
+}
+.column-card .col-sum {
+  display: block;
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 0.2rem;
+}
+.lecture-list {
+  list-style: none;
+}
+.lecture-list li {
+  margin-bottom: 0.5rem;
+}
+.lecture-card {
+  display: block;
+  padding: 0.9rem 1.2rem;
+  background: white;
+  border: 1px solid #e0e6ed;
+  border-radius: 6px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.lecture-card:hover {
+  border-color: var(--color-accent);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  text-decoration: none;
+}
+.lecture-card .num {
+  font-weight: 700;
+  color: var(--color-primary);
+}
+.lecture-card .date {
+  font-size: 0.85rem;
+  color: #888;
+  margin-left: 0.5rem;
+}
+.lecture-card .topic {
+  display: block;
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 0.2rem;
+}
+.lecture-card .sections {
+  font-size: 0.8rem;
+  color: #aaa;
+  margin-left: 0.75rem;
+}
+footer {
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e6ed;
+  font-size: 0.8rem;
+  color: #aaa;
+}
+
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <h1>データベースの基礎</h1>
+    <div class="subtitle">2026年度</div>
+  </div>
+</header>
+<div class="container">
+  <div class="breadcrumb"><a href="../">← ポータルに戻る</a></div>
+  <div class="news">
+  <h2>お知らせ</h2>
+  <ul>
+    <li><span class="date">2026-09-26</span>講義ルール・持ち込みルール・シラバスを公開しました</li>
+  </ul>
+</div>
+  <div class="docs">
+  <h2>📋 資料</h2>
+  <ul>
+    <li><a href="docs/講義ルール.pdf" target="_blank">講義ルール</a></li>
+    <li><a href="docs/持ち込みルール.pdf" target="_blank">持ち込みルール</a></li>
+    <li><a href="docs/シラバス_DB基礎.pdf" target="_blank">シラバス_DB基礎</a></li>
+  </ul>
+</div>
+  
+  <ul class="lecture-list">
+    
+  </ul>
+  <footer>
+    提出・連絡は <a href="https://webclass.kaishi-pu.ac.jp/webclass/">WebClass</a> から行ってください．
+  </footer>
+</div>
+</body>
+</html>
