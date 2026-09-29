@@ -69,7 +69,7 @@ def fig2_spread_euclidean():
     n_hits = 3
 
     # spread(3, 8) の結果: true の位置
-    hit_positions = [0, 3, 5]  # (ring true, false, false, true, false, true, false, false)
+    hit_positions = [0, 3, 6]  # (ring true, false, false, true, false, false, true, false)
 
     fig, ax = plt.subplots(figsize=(5, 5))
 
