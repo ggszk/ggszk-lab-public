@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026年度 ICT演習（データベーススペシャリスト）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --color-primary: #6b2737;
+  --color-accent: #a8475a;
+  --color-light: #f8ecef;
+  --color-bg: #fafbfc;
+  --color-text: #2c3e50;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Noto Sans JP', sans-serif; color: var(--color-text); background: var(--color-bg); line-height: 1.7; }
+.container { max-width: 800px; margin: 0 auto; padding: 2rem 1.5rem; }
+header { background: var(--color-primary); color: white; padding: 1.5rem 0; margin-bottom: 2rem; }
+header .container { padding-top: 0; padding-bottom: 0; }
+header h1 { font-size: 1.4rem; font-weight: 700; }
+header .subtitle { font-size: 0.9rem; opacity: 0.85; margin-top: 0.25rem; }
+a { color: var(--color-accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.breadcrumb { font-size: 0.85rem; margin-bottom: 1.5rem; color: #888; }
+.breadcrumb a { color: #888; }
+.breadcrumb a:hover { color: var(--color-accent); }
+.news { margin-bottom: 2rem; padding: 1rem 1.2rem; background: #fffbe6; border: 1px solid #f0e68c; border-radius: 6px; }
+.news h2 { font-size: 1rem; color: var(--color-primary); margin-bottom: 0.5rem; }
+.news ul { list-style: none; font-size: 0.9rem; }
+.news li { margin-bottom: 0.2rem; }
+.news .date { color: #888; margin-right: 0.5rem; }
+.docs { margin-bottom: 2rem; }
+h2.sec { font-size: 1.1rem; color: var(--color-primary); border-bottom: 2px solid var(--color-light); padding-bottom: 0.4rem; margin-bottom: 0.8rem; }
+.docs ul { list-style: none; }
+.docs li { margin-bottom: 0.4rem; }
+.docs a, .unit-card .links a { display: inline-block; padding: 0.4rem 0.8rem; background: var(--color-light); border-radius: 4px; font-size: 0.95rem; transition: background 0.15s; }
+.docs a:hover, .unit-card .links a:hover { background: #efd5db; text-decoration: none; }
+.note { font-size: 0.9rem; color: #555; margin-bottom: 0.8rem; }
+.unit-list { list-style: none; }
+.unit-list li { margin-bottom: 0.5rem; }
+.unit-card { padding: 0.9rem 1.2rem; background: white; border: 1px solid #e0e6ed; border-radius: 6px; }
+.unit-card.pending { opacity: 0.55; }
+.unit-card .num { font-weight: 700; color: var(--color-primary); }
+.unit-card .kai { font-size: 0.85rem; color: #888; margin-left: 0.5rem; }
+.unit-card .topic { display: block; font-size: 0.85rem; color: #666; margin-top: 0.2rem; }
+.unit-card .links { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.6rem; }
+footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid #e0e6ed; font-size: 0.8rem; color: #aaa; }
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <h1>ICT演習（データベーススペシャリスト）</h1>
+    <div class="subtitle">2026年度</div>
+  </div>
+</header>
+<div class="container">
+  <div class="breadcrumb"><a href="../">← ポータルに戻る</a></div>
+  <div class="news">
+  <h2>お知らせ</h2>
+  <ul>
+    <li><span class="date">2026-11-14</span>科目ページを開設しました</li>
+  </ul>
+</div>
+  <div class="docs">
+  <h2 class="sec">📋 資料</h2>
+  <ul>
+    <li><a href="docs/DBSP_表記ルール.pdf" target="_blank">表記ルール</a></li>
+  </ul>
+</div>
+  <h2 class="sec">📄 単元ごとの資料</h2>
+  <p class="note">スライドと問題文は，その単元の授業当日に公開します．1単元は2回分（1週）です．</p>
+  <ul class="unit-list">
+    <li><div class="unit-card pending"><span class="num">第1単元</span><span class="kai">（第1-2回）</span><span class="topic">ガイダンス・業務要件の分析・データベースの拡張</span></div></li>
+    <li><div class="unit-card pending"><span class="num">第2単元</span><span class="kai">（第3-4回）</span><span class="topic">SQLの実装・参照制約によるテーブル更新の改善</span></div></li>
+    <li><div class="unit-card pending"><span class="num">第3単元</span><span class="kai">（第5-6回）</span><span class="topic">要件定義（決定表）・概念設計（サブタイプ分析）</span></div></li>
+    <li><div class="unit-card pending"><span class="num">第4単元</span><span class="kai">（第7-8回）</span><span class="topic">概念設計・論理設計</span></div></li>
+    <li><div class="unit-card pending"><span class="num">第5単元</span><span class="kai">（第9-10回）</span><span class="topic">物理設計（データ所要量）・DBサーバの性能見積もり</span></div></li>
+    <li><div class="unit-card pending"><span class="num">第6単元</span><span class="kai">（第11-12回）</span><span class="topic">クラウドサービスの選定・評価</span></div></li>
+    <li><div class="unit-card pending"><span class="num">第7・8単元</span><span class="kai">（第13-15回）</span><span class="topic">最終課題</span></div></li>
+  </ul>
+  <footer>
+    提出・連絡は <a href="https://webclass.kaishi-pu.ac.jp/webclass/">WebClass</a> から行ってください．
+  </footer>
+</div>
+</body>
+</html>
