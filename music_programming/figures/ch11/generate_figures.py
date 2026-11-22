@@ -4,8 +4,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import japanize_matplotlib  # noqa: F401
 
+import os
 import sys
-sys.path.insert(0, "/Users/gsuzuki/projects/writing/simple-sound-programming")
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', 'simple-sound-programming'))
 
 
 def fig1_note_values():

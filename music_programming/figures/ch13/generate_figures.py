@@ -4,8 +4,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import japanize_matplotlib  # noqa: F401
 
+import os
 import sys
-sys.path.insert(0, "/Users/gsuzuki/projects/writing/simple-sound-programming")
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', 'simple-sound-programming'))
 from audio_lib import (
     sine_wave, sawtooth_wave, square_wave, triangle_wave,
     additive_synth, adsr, AudioSignal,
@@ -14,7 +15,7 @@ from audio_lib import (
 from audio_lib.effects.audio_effects import Reverb
 
 SAMPLE_RATE = 44100
-OUTPUT_DIR = "/Users/gsuzuki/projects/writing/music-programming-book/figures/ch13"
+OUTPUT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 def fig1_simple_spectrum():
